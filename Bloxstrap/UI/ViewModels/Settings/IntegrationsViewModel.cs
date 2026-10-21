@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 using Microsoft.Win32;
@@ -123,6 +123,12 @@ namespace Bloxstrap.UI.ViewModels.Settings
         {
             get => App.Settings.Prop.UseDisableAppPatch;
             set => App.Settings.Prop.UseDisableAppPatch = value;
+        }
+
+        public bool MultiInstanceLaunchingEnabled
+        {
+            get => App.Settings.Prop.MultiInstanceLaunching;
+            set => App.Settings.Prop.MultiInstanceLaunching = value;
         }
         public ObservableCollection<CustomIntegration> CustomIntegrations
         {

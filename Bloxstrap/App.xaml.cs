@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Shell;
@@ -16,8 +16,9 @@ namespace Bloxstrap
 #if QA_BUILD
         public const string ProjectName = "Bloxstrap-QA";
 #else
-        public const string ProjectName = "Bloxstrap";
+        public const string ProjectName = "Bloxstrap Gold";
 #endif
+        public const string OriginalProjectName = "Bloxstrap";
         public const string ProjectOwner = "Bloxstrap";
         public const string ProjectRepository = "bloxstraplabs/bloxstrap";
         public const string ProjectDownloadLink = "https://bloxstraplabs.com";

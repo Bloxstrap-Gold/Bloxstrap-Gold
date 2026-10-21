@@ -1,4 +1,4 @@
-﻿using Bloxstrap.Enums;
+using Bloxstrap.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,8 @@ namespace Bloxstrap
         public LaunchFlag MenuFlag                  { get; } = new("preferences,menu,settings");
 
         public LaunchFlag WatcherFlag               { get; } = new("watcher");
+
+        public LaunchFlag MultiInstanceWatcherFlag  { get; } = new("multiinstancewatcher,multiinstance");
 
         public LaunchFlag BackgroundUpdaterFlag     { get; } = new("backgroundupdater");
 

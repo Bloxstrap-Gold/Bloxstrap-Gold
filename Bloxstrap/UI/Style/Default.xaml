@@ -1,8 +1,28 @@
-﻿<ResourceDictionary
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+
+    <!-- Bloxstrap Gold Theme Resources -->
+    <SolidColorBrush x:Key="GoldPrimaryBrush" Color="#FFD700" />
+    <SolidColorBrush x:Key="GoldAccentBrush" Color="#D4AF37" />
+    <SolidColorBrush x:Key="GoldDarkBrush" Color="#996515" />
+    <SolidColorBrush x:Key="GoldLightBrush" Color="#FFE57F" />
+    <SolidColorBrush x:Key="GoldBorderBrush" Color="#B3D4AF37" />
+    <SolidColorBrush x:Key="GoldBackgroundTintBrush" Color="#1E1908" />
+    <LinearGradientBrush x:Key="GoldGradientBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FFE259" Offset="0.0" />
+        <GradientStop Color="#FFA751" Offset="1.0" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GoldDarkGradientBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#2A2207" Offset="0.0" />
+        <GradientStop Color="#181303" Offset="1.0" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GoldExpiredGradientBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#3D2105" Offset="0.0" />
+        <GradientStop Color="#221102" Offset="1.0" />
+    </LinearGradientBrush>
 
     <!--  Taken from DefaultUiCardExpanderStyle  -->
     <Style x:Key="NoUserExpansionCardExpanderStyle" TargetType="{x:Type ui:CardExpander}">

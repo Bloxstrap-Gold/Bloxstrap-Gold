@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace Bloxstrap.Models.Persistable
 {
@@ -22,6 +22,7 @@ namespace Bloxstrap.Models.Persistable
         public bool DebugDisableVersionPackageCleanup { get; set; } = false;
         public string? SelectedCustomTheme { get; set; } = null;
         public WebEnvironment WebEnvironment { get; set; } = WebEnvironment.Production;
+        public bool MultiInstanceLaunching { get; set; } = true;
 
         // integration configuration
         public bool EnableActivityTracking { get; set; } = true;
