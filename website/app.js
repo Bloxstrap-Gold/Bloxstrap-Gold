@@ -297,9 +297,21 @@ document.addEventListener('DOMContentLoaded', () => {
 // =============================================================================
 // 1. RENEWAL PILL CYCLING & 3-CARD SIDE-BY-SIDE RENDERING
 // =============================================================================
+function updatePillGlider(activeBtn) {
+  const track = document.getElementById('pillSliderTrack');
+  if (!track || !activeBtn) return;
+  track.style.width = `${activeBtn.offsetWidth}px`;
+  track.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+}
+
 function setupRenewalPills() {
   const pillBtns = document.querySelectorAll('.renewal-pill-btn');
   if (!pillBtns || pillBtns.length === 0) return;
+
+  const initialActive = document.querySelector('.renewal-pill-btn.active');
+  if (initialActive) {
+    setTimeout(() => updatePillGlider(initialActive), 50);
+  }
 
   pillBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -309,10 +321,16 @@ function setupRenewalPills() {
       // Update active state on buttons
       pillBtns.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
+      updatePillGlider(btn);
 
       currentCycle = targetCycle;
       renderTierCards();
     });
+  });
+
+  window.addEventListener('resize', () => {
+    const currentActive = document.querySelector('.renewal-pill-btn.active');
+    if (currentActive) updatePillGlider(currentActive);
   });
 }
 
@@ -361,7 +379,7 @@ function renderTierCards() {
     }
 
     const card = document.createElement('div');
-    card.className = `pricing-card ${meta.featured ? 'featured' : ''} ${meta.ultra ? 'ultra' : ''}`;
+    card.className = `pricing-card price-anim ${meta.featured ? 'featured' : ''} ${meta.ultra ? 'ultra' : ''}`;
 
     card.innerHTML = `
       ${meta.ribbon ? `<div class="card-ribbon">${meta.ribbon}</div>` : ''}
@@ -410,12 +428,63 @@ function setupPayingWindow() {
   const closeCheckoutBtn = document.getElementById('closeCheckoutBtn');
   const checkoutModal = document.getElementById('checkoutModal');
   const successUnlockVaultBtn = document.getElementById('successUnlockVaultBtn');
+  const scannerBar = document.getElementById('payScannerBar');
 
-  // Input syncing with 3D virtual gold card
+  // Input syncing with 3D flippable virtual gold card
   const cardNameInput = document.getElementById('cardName');
   const cardNumberInput = document.getElementById('cardNumber');
   const cardExpInput = document.getElementById('cardExp');
+  const cardCvcInput = document.getElementById('cardCvc');
+  const virtualGoldCard = document.getElementById('virtualGoldCard');
+  const virtualCardWrapper = document.getElementById('virtualCardWrapper');
+  const cardGlare = document.getElementById('cardGlare');
 
+  // 3D Card Mouse Tilt & Holographic Glare Tracking
+  if (virtualCardWrapper && virtualGoldCard) {
+    virtualCardWrapper.addEventListener('mousemove', (e) => {
+      if (virtualGoldCard.classList.contains('flipped')) return;
+      const rect = virtualCardWrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -12;
+      const rotateY = ((x - centerX) / centerX) * 14;
+      virtualGoldCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+      if (cardGlare) {
+        const glareX = (x / rect.width) * 100;
+        const glareY = (y / rect.height) * 100;
+        cardGlare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.45) 0%, transparent 60%)`;
+      }
+    });
+
+    virtualCardWrapper.addEventListener('mouseleave', () => {
+      if (!virtualGoldCard.classList.contains('flipped')) {
+        virtualGoldCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      }
+    });
+  }
+
+  // CVC Flip Card to Back Face
+  if (cardCvcInput && virtualGoldCard) {
+    cardCvcInput.addEventListener('focus', () => {
+      virtualGoldCard.classList.add('flipped');
+      virtualGoldCard.style.transform = '';
+    });
+    cardCvcInput.addEventListener('blur', () => {
+      virtualGoldCard.classList.remove('flipped');
+      virtualGoldCard.style.transform = '';
+    });
+    cardCvcInput.addEventListener('input', (e) => {
+      let val = e.target.value.replace(/\D/g, '').substring(0, 4);
+      e.target.value = val;
+      const vcCvcDisplay = document.getElementById('vcCvcDisplay');
+      if (vcCvcDisplay) vcCvcDisplay.textContent = val ? val : '•••';
+    });
+  }
+
+  // Cardholder Name live sync
   if (cardNameInput) {
     cardNameInput.addEventListener('input', (e) => {
       const val = e.target.value.trim();
@@ -424,6 +493,7 @@ function setupPayingWindow() {
     });
   }
 
+  // Card Number live formatting & Brand Detection
   if (cardNumberInput) {
     cardNumberInput.addEventListener('input', (e) => {
       let val = e.target.value.replace(/\D/g, '').substring(0, 16);
@@ -431,9 +501,32 @@ function setupPayingWindow() {
       e.target.value = formatted;
       const vcNum = document.getElementById('vcNumber');
       if (vcNum) vcNum.textContent = formatted || '•••• •••• •••• ••••';
+
+      const brandPill = document.getElementById('cardBrandPill');
+      const networkBadge = document.getElementById('vcNetworkBadge');
+      const brandLabel = document.getElementById('vcBrandLabel');
+
+      if (val.startsWith('4')) {
+        if (brandPill) brandPill.textContent = 'VISA';
+        if (networkBadge) networkBadge.innerHTML = '<span class="badge-gold-foil">VISA</span>';
+        if (brandLabel) brandLabel.textContent = 'BLOXSTRAP VISA';
+      } else if (val.startsWith('5')) {
+        if (brandPill) brandPill.textContent = 'MC';
+        if (networkBadge) networkBadge.innerHTML = '<span class="badge-gold-foil">MC</span>';
+        if (brandLabel) brandLabel.textContent = 'BLOXSTRAP MC';
+      } else if (val.startsWith('3')) {
+        if (brandPill) brandPill.textContent = 'AMEX';
+        if (networkBadge) networkBadge.innerHTML = '<span class="badge-gold-foil">AMEX</span>';
+        if (brandLabel) brandLabel.textContent = 'BLOXSTRAP AMEX';
+      } else {
+        if (brandPill) brandPill.textContent = 'VISA / MC';
+        if (networkBadge) networkBadge.innerHTML = '<span class="badge-gold-foil">GOLD</span>';
+        if (brandLabel) brandLabel.textContent = 'BLOXSTRAP GOLD';
+      }
     });
   }
 
+  // Card Expiration live formatting
   if (cardExpInput) {
     cardExpInput.addEventListener('input', (e) => {
       let val = e.target.value.replace(/\D/g, '').substring(0, 4);
@@ -461,65 +554,105 @@ function setupPayingWindow() {
     });
   }
 
-  // REALISTIC PAYMENT PROCESSING LOGIC:
-  // The button stays firmly stationary (no running away).
-  // Clicking simulates real gateway handshakes: ~35% chance card "goes through" (authorizes at $0.00),
-  // otherwise declines with prompt's exact error string.
+  // Unified Payment Processing Simulation (Card, Apple Pay, Google Pay)
+  window.triggerPaymentSimulation = function(gatewayName = 'Clearinghouse') {
+    if (!buyPayBtn || buyPayBtn.classList.contains('processing')) return;
+
+    const originalText = buyPayBtn.innerHTML;
+    buyPayBtn.classList.add('processing');
+    buyPayBtn.style.pointerEvents = 'none';
+
+    if (scannerBar) scannerBar.classList.add('active');
+    const errorBanner = document.getElementById('checkoutErrorBanner');
+    if (errorBanner) errorBanner.classList.remove('show');
+
+    // Stage 1: Network Contact
+    buyPayBtn.innerHTML = `<span class="btn-spinner"></span> Contacting ${gatewayName}...`;
+
+    // Stage 2: Issuer Authorization
+    setTimeout(() => {
+      buyPayBtn.innerHTML = '<span class="btn-spinner"></span> Authorizing with card issuer...';
+    }, 900);
+
+    // Stage 3: 3D Secure / Verification
+    setTimeout(() => {
+      buyPayBtn.innerHTML = '<span class="btn-spinner"></span> Finalizing 3D Secure protocol...';
+    }, 1800);
+
+    // Stage 4: Gate resolution (~35% chance card "goes through", 65% declines)
+    setTimeout(() => {
+      if (scannerBar) scannerBar.classList.remove('active');
+      const isApproved = Math.random() < 0.35;
+
+      if (isApproved) {
+        buyPayBtn.innerHTML = '✓ Payment Approved!';
+        buyPayBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        buyPayBtn.style.borderColor = '#10b981';
+        buyPayBtn.style.color = '#ffffff';
+
+        // Fire celebratory golden confetti!
+        launchConfetti();
+
+        setTimeout(() => {
+          buyPayBtn.classList.remove('processing');
+          buyPayBtn.innerHTML = originalText;
+          buyPayBtn.style.background = '';
+          buyPayBtn.style.borderColor = '';
+          buyPayBtn.style.color = '';
+          buyPayBtn.style.pointerEvents = 'auto';
+          startFreeTrial(true);
+        }, 750);
+      } else {
+        buyPayBtn.classList.remove('processing');
+        buyPayBtn.innerHTML = originalText;
+        buyPayBtn.style.pointerEvents = 'auto';
+
+        // Shake the virtual card
+        if (virtualGoldCard) {
+          virtualGoldCard.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-9px)' },
+            { transform: 'translateX(9px)' },
+            { transform: 'translateX(-5px)' },
+            { transform: 'translateX(0)' }
+          ], { duration: 380, easing: 'ease-in-out' });
+        }
+
+        if (errorBanner) {
+          errorBanner.classList.add('show');
+          errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    }, 2600);
+  };
+
   if (buyPayBtn) {
     buyPayBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (buyPayBtn.classList.contains('processing')) return;
+      window.triggerPaymentSimulation('Payment Network');
+    });
+  }
 
-      const originalText = buyPayBtn.innerHTML;
-      buyPayBtn.classList.add('processing');
-      buyPayBtn.style.pointerEvents = 'none';
+  // Express Checkout Buttons
+  const applePayBtn = document.getElementById('expressApplePayBtn');
+  const googlePayBtn = document.getElementById('expressGooglePayBtn');
+  const gold1ClickBtn = document.getElementById('expressGoldPayBtn');
 
-      const errorBanner = document.getElementById('checkoutErrorBanner');
-      if (errorBanner) errorBanner.classList.remove('show');
+  if (applePayBtn) {
+    applePayBtn.addEventListener('click', () => {
+      window.triggerPaymentSimulation('Apple Pay Enclave');
+    });
+  }
 
-      // Stage 1: Network Contact
-      buyPayBtn.innerHTML = '<span class="btn-spinner"></span> Contacting payment network...';
+  if (googlePayBtn) {
+    googlePayBtn.addEventListener('click', () => {
+      window.triggerPaymentSimulation('Google Pay Gateway');
+    });
+  }
 
-      // Stage 2: Issuer Authorization
-      setTimeout(() => {
-        buyPayBtn.innerHTML = '<span class="btn-spinner"></span> Authorizing with card issuer...';
-      }, 900);
-
-      // Stage 3: 3D Secure / Verification
-      setTimeout(() => {
-        buyPayBtn.innerHTML = '<span class="btn-spinner"></span> Finalizing 3D Secure protocol...';
-      }, 1800);
-
-      // Stage 4: Gate resolution (~35% chance card "goes through", 65% declines)
-      setTimeout(() => {
-        const isApproved = Math.random() < 0.35;
-
-        if (isApproved) {
-          buyPayBtn.innerHTML = '✓ Payment Approved!';
-          buyPayBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-          buyPayBtn.style.borderColor = '#10b981';
-          buyPayBtn.style.color = '#ffffff';
-
-          setTimeout(() => {
-            buyPayBtn.classList.remove('processing');
-            buyPayBtn.innerHTML = originalText;
-            buyPayBtn.style.background = '';
-            buyPayBtn.style.borderColor = '';
-            buyPayBtn.style.color = '';
-            buyPayBtn.style.pointerEvents = 'auto';
-            startFreeTrial(true);
-          }, 700);
-        } else {
-          buyPayBtn.classList.remove('processing');
-          buyPayBtn.innerHTML = originalText;
-          buyPayBtn.style.pointerEvents = 'auto';
-
-          if (errorBanner) {
-            errorBanner.classList.add('show');
-            errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        }
-      }, 2600);
+  if (gold1ClickBtn) {
+    gold1ClickBtn.addEventListener('click', () => {
+      startFreeTrial(false);
     });
   }
 
@@ -552,6 +685,65 @@ function setupPayingWindow() {
   }
 }
 
+// Confetti Particle System
+function launchConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = [];
+  const colors = ['#ffd700', '#f5d796', '#e2c076', '#10b981', '#ffffff', '#caa452'];
+
+  for (let i = 0; i < 65; i++) {
+    particles.push({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 220,
+      y: canvas.height / 2 + (Math.random() - 0.5) * 80,
+      vx: (Math.random() - 0.5) * 14,
+      vy: Math.random() * -12 - 4,
+      size: Math.random() * 8 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 10,
+      life: 1.0,
+      decay: Math.random() * 0.015 + 0.009
+    });
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let active = false;
+
+    particles.forEach((p) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.35;
+      p.rotation += p.rotSpeed;
+      p.life -= p.decay;
+
+      if (p.life > 0 && p.y < canvas.height) {
+        active = true;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+        ctx.restore();
+      }
+    });
+
+    if (active) {
+      requestAnimationFrame(render);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  render();
+}
+
 function openCheckout(tierId = 2, cycle = 'yearly') {
   selectedCheckoutTier = tierId;
   selectedCheckoutCycle = cycle;
@@ -561,6 +753,8 @@ function openCheckout(tierId = 2, cycle = 'yearly') {
   const successView = document.getElementById('checkoutSuccessView');
   const errorBanner = document.getElementById('checkoutErrorBanner');
   const buyPayBtn = document.getElementById('buyPayBtn');
+  const virtualGoldCard = document.getElementById('virtualGoldCard');
+  const scannerBar = document.getElementById('payScannerBar');
 
   if (!modal) return;
 
@@ -568,6 +762,11 @@ function openCheckout(tierId = 2, cycle = 'yearly') {
   if (formView) formView.style.display = '';
   if (successView) successView.classList.remove('show');
   if (errorBanner) errorBanner.classList.remove('show');
+  if (scannerBar) scannerBar.classList.remove('active');
+  if (virtualGoldCard) {
+    virtualGoldCard.classList.remove('flipped');
+    virtualGoldCard.style.transform = '';
+  }
   if (buyPayBtn) {
     buyPayBtn.classList.remove('processing');
     buyPayBtn.style.pointerEvents = 'auto';
@@ -594,10 +793,15 @@ function openCheckout(tierId = 2, cycle = 'yearly') {
   const taxPriceEl = document.getElementById('checkoutTaxPrice');
   const taxLabelEl = document.getElementById('checkoutTaxLabel');
   const totalPriceEl = document.getElementById('checkoutTotalPrice');
+  const receiptLimitEl = document.getElementById('receiptInstanceLimit');
 
   if (summaryTier) summaryTier.textContent = `${meta.name} (${meta.badge})`;
   if (summaryCycle) summaryCycle.textContent = `${cycleData.label} Plan (${cycleData.periodText})`;
   if (basePriceEl) basePriceEl.textContent = `${curr.symbol}${basePrice.toFixed(2)}`;
+
+  if (receiptLimitEl) {
+    receiptLimitEl.textContent = meta.instanceLimit >= 9999 ? 'Infinite Alts' : (meta.instanceLimit >= 999 ? 'Unlimited' : `Up to ${meta.instanceLimit} clients`);
+  }
 
   if (taxPriceEl && taxLabelEl) {
     if (currentRegion === 'us') {
@@ -610,7 +814,12 @@ function openCheckout(tierId = 2, cycle = 'yearly') {
   }
 
   if (totalPriceEl) totalPriceEl.textContent = `${curr.symbol}${totalPrice.toFixed(2)}`;
-  if (buyPayBtn) buyPayBtn.textContent = `Pay ${curr.symbol}${totalPrice.toFixed(2)}`;
+  if (buyPayBtn) {
+    buyPayBtn.innerHTML = `
+      <span class="btn-pay-text" id="btnPayText">Pay ${curr.symbol}${totalPrice.toFixed(2)}</span>
+      <span class="btn-pay-glow"></span>
+    `;
+  }
 
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';

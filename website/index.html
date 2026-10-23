@@ -671,61 +671,157 @@
        DEADPAN LUXURY PAYING WINDOW (CHECKOUT MODAL)
        ========================================== -->
   <div class="modal-overlay" id="checkoutModal">
+    <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
     <div class="modal-content wide-paying-window">
       <button class="modal-close-btn" id="closeCheckoutBtn">&times;</button>
 
       <div id="checkoutFormView" class="checkout-two-column">
-        <!-- Left Column: 3D Virtual Gold Card & Breakdown -->
+        <!-- Left Column: 3D Flippable Virtual Gold Card & Breakdown -->
         <div class="checkout-left-summary">
-          <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--gold-light); letter-spacing: 0.08em; margin-bottom: 0.25rem;">
-            Order Overview
+          <div class="checkout-overview-badge">
+            <span class="live-security-dot"></span>
+            <span>SECURE CLEARINGHOUSE GATEWAY</span>
           </div>
-          <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff;" id="checkoutSummaryTier">Gold Plus (Most Popular)</h3>
-          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;" id="checkoutSummaryCycle">Yearly Plan (/ year)</div>
+          <h3 class="checkout-tier-title" id="checkoutSummaryTier">Gold Plus (Most Popular)</h3>
+          <div class="checkout-cycle-subtitle" id="checkoutSummaryCycle">Yearly Plan (/ year)</div>
 
-          <!-- 3D Virtual Gold Credit Card -->
-          <div class="virtual-card-wrapper">
+          <!-- 3D Flippable Virtual Gold Credit Card -->
+          <div class="virtual-card-wrapper" id="virtualCardWrapper">
             <div class="virtual-gold-card" id="virtualGoldCard">
-              <div class="vc-top-row">
-                <div class="vc-chip"></div>
-                <div class="vc-brand">BLOXSTRAP GOLD</div>
-              </div>
-              <div class="vc-number" id="vcNumber">•••• •••• •••• ••••</div>
-              <div class="vc-bottom-row">
-                <div>
-                  <div style="font-size: 0.65rem; opacity: 0.75;">CARDHOLDER</div>
-                  <div class="vc-holder-name" id="vcName">YOUR NAME</div>
+              <!-- FRONT FACE -->
+              <div class="card-face card-front">
+                <div class="card-glare" id="cardGlare"></div>
+                <div class="vc-top-row">
+                  <div class="vc-chip-group">
+                    <div class="vc-chip">
+                      <div class="vc-chip-line"></div>
+                      <div class="vc-chip-line-v"></div>
+                    </div>
+                    <svg class="vc-contactless-wave" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                      <path d="M7 6a10 10 0 0 1 10 0" opacity="0.4"/>
+                      <path d="M9 9a6 6 0 0 1 6 0" opacity="0.7"/>
+                      <path d="M11 12a2 2 0 0 1 2 0"/>
+                    </svg>
+                  </div>
+                  <div class="vc-brand-container">
+                    <span class="vc-brand-crown">👑</span>
+                    <span class="vc-brand-main" id="vcBrandLabel">BLOXSTRAP GOLD</span>
+                  </div>
                 </div>
-                <div>
-                  <div style="font-size: 0.65rem; opacity: 0.75;">EXPIRES</div>
-                  <div class="vc-exp" id="vcExp">MM/YY</div>
+
+                <div class="vc-number" id="vcNumber">•••• •••• •••• ••••</div>
+
+                <div class="vc-bottom-row">
+                  <div class="vc-col">
+                    <div class="vc-label">CARDHOLDER</div>
+                    <div class="vc-holder-name" id="vcName">YOUR NAME</div>
+                  </div>
+                  <div class="vc-col">
+                    <div class="vc-label">EXPIRES</div>
+                    <div class="vc-exp" id="vcExp">MM/YY</div>
+                  </div>
+                  <div class="vc-network-badge" id="vcNetworkBadge">
+                    <span class="badge-gold-foil">GOLD</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BACK FACE -->
+              <div class="card-face card-back">
+                <div class="mag-stripe"></div>
+                <div class="sig-panel-container">
+                  <div class="sig-panel">
+                    <div class="sig-tamper-text">AUTHORIZED SIGNATURE • BLOXSTRAP GOLD</div>
+                  </div>
+                  <div class="cvc-display-box">
+                    <span class="cvc-tag">CVC</span>
+                    <span class="cvc-digits" id="vcCvcDisplay">•••</span>
+                  </div>
+                </div>
+                <div class="card-back-disclaimer">
+                  This card is non-transferable and remains property of Bloxstrap Gold Sovereign Mint. Unauthorized duplication bypasses Roblox mutex events.
+                </div>
+                <div class="card-back-footer">
+                  <span>👑 SOVEREIGN ENTERPRISE</span>
+                  <span class="hologram-seal">★ VERIFIED</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Pricing summary -->
+          <!-- Luxury Itemized Invoice Summary Box -->
           <div class="checkout-summary-box">
+            <div class="checkout-receipt-header">
+              <span>INCLUDED PRIVILEGES</span>
+              <span>STATUS</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-bullet"></span>
+              <span class="receipt-name">Multi-Instance Engine</span>
+              <span class="receipt-val" id="receiptInstanceLimit">Unlimited</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-bullet"></span>
+              <span class="receipt-name">FastFlag God Vault</span>
+              <span class="receipt-val">Full Ingestion</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-bullet"></span>
+              <span class="receipt-name">Error 273 Bypass</span>
+              <span class="receipt-val">Instant Reconnect</span>
+            </div>
+            <div class="receipt-divider"></div>
+
             <div class="summary-row">
               <span>Subtotal:</span>
-              <span id="checkoutBasePrice" class="tabular">$119.99</span>
+              <span id="checkoutBasePrice" class="tabular">$199.99</span>
             </div>
             <div class="summary-row">
               <span id="checkoutTaxLabel">Estimated Tax:</span>
-              <span id="checkoutTaxPrice" class="tabular">$9.60</span>
+              <span id="checkoutTaxPrice" class="tabular">$16.00</span>
             </div>
             <div class="summary-row total-row">
-              <span>Total:</span>
-              <span class="summary-total-price tabular" id="checkoutTotalPrice">$129.59</span>
+              <span>Total Authorization:</span>
+              <span class="summary-total-price tabular" id="checkoutTotalPrice">$215.99</span>
+            </div>
+
+            <div class="receipt-trial-tag">
+              <span>🛡️ 7-Day Zero-Deposit Trial Guarantee Included</span>
             </div>
           </div>
         </div>
 
-        <!-- Right Column: Form inputs & Pay Buttons -->
+        <!-- Right Column: Express Pay, Form inputs & Pay Buttons -->
         <div class="checkout-right-form">
+          <!-- Express Quick Checkout Buttons -->
+          <div class="express-checkout-wrap">
+            <div class="express-header-row">
+              <span class="express-title">Express Checkout</span>
+              <span class="express-badge">Instant Auth</span>
+            </div>
+            <div class="express-buttons-grid">
+              <button type="button" class="btn-express-apple" id="expressApplePayBtn" title="Express Checkout with Apple Pay">
+                <span class="apple-symbol"></span>Pay
+              </button>
+              <button type="button" class="btn-express-google" id="expressGooglePayBtn" title="Express Checkout with Google Pay">
+                <span class="gpay-g">G</span><span class="gpay-pay">Pay</span>
+              </button>
+              <button type="button" class="btn-express-gold" id="expressGoldPayBtn" title="1-Click Zero Deposit Activation">
+                <span>⚡ 1-Click</span>
+              </button>
+            </div>
+            <div class="express-divider-line">
+              <span>OR PAY WITH CARD</span>
+            </div>
+          </div>
+
           <div class="checkout-security-badge">
-            <span>🔒</span>
-            <span>256-bit encrypted checkout. Multi-instance licenses provisioned instantly.</span>
+            <span class="security-lock-icon">🔒</span>
+            <div class="security-badge-copy">
+              <strong>Bank-Grade 256-Bit SSL Encryption</strong>
+              <span>Zero-deposit invoice simulation. Multi-instance licenses provisioned immediately.</span>
+            </div>
           </div>
 
           <!-- Error Banner with exact message from prompt -->
@@ -736,30 +832,50 @@
           <form onsubmit="return false;" autocomplete="off">
             <div class="form-group">
               <label class="form-label" for="cardName">Cardholder name</label>
-              <input type="text" id="cardName" class="form-input" placeholder="Jane Doe" autocomplete="off">
+              <div class="input-with-icon">
+                <span class="input-icon">👤</span>
+                <input type="text" id="cardName" class="form-input" placeholder="Jane Doe" autocomplete="off">
+              </div>
             </div>
 
             <div class="form-group">
               <label class="form-label" for="cardNumber">Card number</label>
-              <input type="text" id="cardNumber" class="form-input tabular" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="off">
+              <div class="input-with-icon">
+                <span class="input-icon" id="cardTypeIcon">💳</span>
+                <input type="text" id="cardNumber" class="form-input tabular" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="off">
+                <span class="card-brand-pill" id="cardBrandPill">VISA / MC</span>
+              </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="cardExp">Expiration</label>
-                <input type="text" id="cardExp" class="form-input tabular" placeholder="MM/YY" maxlength="5" autocomplete="off">
+                <div class="input-with-icon">
+                  <span class="input-icon">📅</span>
+                  <input type="text" id="cardExp" class="form-input tabular" placeholder="MM/YY" maxlength="5" autocomplete="off">
+                </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="cardCvc">CVC</label>
-                <input type="password" id="cardCvc" class="form-input tabular" placeholder="123" maxlength="4" autocomplete="off">
+                <label class="form-label" for="cardCvc">
+                  CVC <span class="cvc-flip-hint">(flips card)</span>
+                </label>
+                <div class="input-with-icon">
+                  <span class="input-icon">🔒</span>
+                  <input type="password" id="cardCvc" class="form-input tabular" placeholder="123" maxlength="4" autocomplete="off">
+                </div>
               </div>
             </div>
 
             <!-- Pay Buttons -->
             <div class="pay-buttons-container">
               <button type="button" class="btn-buy-pay" id="buyPayBtn">
-                Pay $129.59
+                <span class="btn-pay-text" id="btnPayText">Pay $215.99</span>
+                <span class="btn-pay-glow"></span>
               </button>
+
+              <div class="pay-scanner-bar" id="payScannerBar">
+                <div class="scanner-laser"></div>
+              </div>
 
               <button type="button" class="btn-pay-later" id="payLaterBtn">
                 Pay later
@@ -774,7 +890,11 @@
 
       <!-- Success / Download View -->
       <div class="success-view" id="checkoutSuccessView">
-        <div style="font-size: 3rem; margin-bottom: 0.75rem;">👑</div>
+        <div class="success-crown-wrapper">
+          <div class="success-ripple ring-1"></div>
+          <div class="success-ripple ring-2"></div>
+          <div class="success-crown-icon">👑</div>
+        </div>
         <h3 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;" id="checkoutSuccessTitle">
           Your 7-day free trial has started.
         </h3>
@@ -789,7 +909,7 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 360px; margin: 0 auto;">
-          <a id="deepLinkActivateBtn" href="bloxstrap-gold://activate?key=GOLD-7DAY-8849-F291-C84B-9102-E7A4" class="btn-primary" style="justify-content: center; text-decoration: none; background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); color: #000; font-weight: 800; box-shadow: 0 4px 15px rgba(255,215,0,0.35);">
+          <a id="deepLinkActivateBtn" href="bloxstrap-gold://activate?key=GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN" class="btn-primary" style="justify-content: center; text-decoration: none; background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); color: #000; font-weight: 800; box-shadow: 0 4px 15px rgba(255,215,0,0.35);">
             ⚡ Open in Bloxstrap Gold (1-Click Activate)
           </a>
 
