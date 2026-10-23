@@ -14,7 +14,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             backing: .buffered,
             defer: false
         )
-        window.title = "Bloxstrap Menu"
+        window.title = "Bloxstrap Gold Menu"
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.backgroundColor = NSColor(calibratedRed: 0.122, green: 0.118, blue: 0.149, alpha: 1.0) // Mica Dark #1F1E24
@@ -547,6 +547,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         case "deauthenticate":
             AppState.shared.deauthenticate()
             pushStateToWeb()
+            
+        case "expireTrial":
+            AppState.shared.deauthenticate()
+            AppState.shared.setForceExpired(true)
+            pushStateToWeb()
+            webView.evaluateJavaScript("window.onTrialExpired && window.onTrialExpired();", completionHandler: nil)
             
         case "closeWindow":
             window?.performClose(nil)

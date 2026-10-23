@@ -1649,7 +1649,7 @@
   <div class="titlebar">
     <div class="titlebar-left">
       <img src="Bloxstrap.png" alt="Bloxstrap" class="titlebar-logo">
-      <span class="titlebar-title">Bloxstrap Menu</span>
+      <span class="titlebar-title">Bloxstrap Gold Menu</span>
       <span class="titlebar-tier-badge" id="titleTierBadge">LOCKED</span>
     </div>
     <div class="titlebar-controls">
@@ -2411,12 +2411,12 @@
         </div>
 
         <!-- Debug Action Cards: Simulate Bootstrapper & View Logs -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0 20px 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 12px 0 20px 0;">
           <div class="action-card" id="cardSimulateBootstrapper" style="cursor: pointer; padding: 14px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 6px; display: flex; gap: 12px; align-items: center;">
             <div style="font-size: 20px; color: #f59e0b;">▶</div>
             <div>
               <div style="font-size: 13px; font-weight: 700; color: #ffffff;">Simulate Bootstrapper</div>
-              <div style="font-size: 11px; color: #9897a3; margin-top: 2px;">Test Fluent launch animation &amp; progress bars</div>
+              <div style="font-size: 11px; color: #9897a3; margin-top: 2px;">Test launch animation</div>
             </div>
           </div>
 
@@ -2424,7 +2424,15 @@
             <div style="font-size: 20px; color: #3b82f6;">📄</div>
             <div>
               <div style="font-size: 13px; font-weight: 700; color: #ffffff;">View Diagnostic Logs</div>
-              <div style="font-size: 11px; color: #9897a3; margin-top: 2px;">Open bootstrapper.log in TextEdit / Finder</div>
+              <div style="font-size: 11px; color: #9897a3; margin-top: 2px;">Open bootstrapper.log</div>
+            </div>
+          </div>
+
+          <div class="action-card" id="cardExpireTrialDebug" style="cursor: pointer; padding: 14px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; display: flex; gap: 12px; align-items: center;">
+            <div style="font-size: 20px; color: #ef4444;">⏰</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: #ef4444;">Expire 7-Day Trial</div>
+              <div style="font-size: 11px; color: #9897a3; margin-top: 2px;">Trigger VIP trial end modal</div>
             </div>
           </div>
         </div>
@@ -2590,7 +2598,10 @@
               <span>👑</span>
               <span id="goldTierTitle">BLOXSTRAP GOLD MEMBERSHIP</span>
             </div>
-            <button class="pill-btn gold" id="btnChangeKey">🔑 Enter / Change Key</button>
+            <div style="display: flex; gap: 8px;">
+              <button class="pill-btn danger" id="btnExpireTrial" title="Simulate 7-Day VIP Trial Expiration">⏰ Expire 7-Day Trial</button>
+              <button class="pill-btn gold" id="btnChangeKey">🔑 Enter / Change Key</button>
+            </div>
           </div>
           <div class="gold-card-meta">
             <div>Tier Level: <strong id="goldTierPrice">$199.99/mo</strong> • Lifetime Mutex Isolation Active</div>
@@ -3003,15 +3014,6 @@
           <div class="detected-tier-heading" id="detectedTierHeading">Enter a license key to detect tier</div>
           <div class="detected-tier-sub" id="detectedTierSub">Valid keys begin with GOLD-7DAY- (e.g. GOLD-7DAY-ULTRA-XXXX)</div>
         </div>
-      </div>
-
-      <!-- Sample Test Keys for 1-Click Testing -->
-      <div style="font-size: 11px; color: #8e8d98; margin-bottom: 6px;">Try a sample VIP license key:</div>
-      <div class="quick-keys-row">
-        <button class="quick-key-pill" data-key="GOLD-7DAY-ULTRA-2026-VIP9">👑 Ultra ($199.99/mo)</button>
-        <button class="quick-key-pill" data-key="GOLD-7DAY-DELUXE-4488-X992">🥇 Deluxe ($109.99/mo)</button>
-        <button class="quick-key-pill" data-key="GOLD-7DAY-PLUS-H0SL-8XZY-PIN8">🥈 Plus ($54.99/mo)</button>
-        <button class="quick-key-pill" data-key="GOLD-7DAY-BASIC-1102-M773">🥉 Basic ($24.99/mo)</button>
       </div>
 
       <button class="btn-key-activate" id="btnUnlockKey">
@@ -4352,6 +4354,37 @@
       detectedHeading.innerHTML = "<span style='color: #ef4444;'>Activation Failed</span>";
       detectedSub.textContent = "Invalid key! Keys must begin with GOLD-7DAY- and be at least 14 characters.";
     };
+
+    window.onTrialExpired = function() {
+      keyGateModal.style.display = "flex";
+      keyInput.value = "";
+      detectedIcon.textContent = "⚠️";
+      detectedHeading.innerHTML = "<span style='color: #ef4444; font-weight: 800;'>7-Day VIP Trial Expired!</span>";
+      detectedSub.innerHTML = "<span style='color: #fca5a5;'>Your 7-day trial has ended. Multi-instance Roblox and RAM features are locked. Please enter a valid VIP license key to restore full access.</span>";
+      detectedCard.style.borderColor = "rgba(239, 68, 68, 0.6)";
+      detectedCard.style.background = "rgba(239, 68, 68, 0.12)";
+      keyInput.focus();
+      if (window.playPreviewSoundPreset) {
+        playPreviewSoundPreset("Windows XP Error");
+      }
+      if (window.showToast) {
+        showToast("⚠️ 7-Day VIP Trial has ended! Features locked.");
+      }
+    };
+
+    const triggerExpireTrial = () => {
+      sendToHost("expireTrial");
+    };
+
+    const btnExpireTrial = document.getElementById("btnExpireTrial");
+    if (btnExpireTrial) {
+      btnExpireTrial.addEventListener("click", triggerExpireTrial);
+    }
+
+    const cardExpireTrialDebug = document.getElementById("cardExpireTrialDebug");
+    if (cardExpireTrialDebug) {
+      cardExpireTrialDebug.addEventListener("click", triggerExpireTrial);
+    }
 
     document.getElementById("btnChangeKey").addEventListener("click", () => {
       keyGateModal.style.display = "flex";
