@@ -731,6 +731,101 @@
       gap: 8px;
     }
 
+    .account-card.pinned {
+      border-color: rgba(245, 158, 11, 0.45);
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.08), var(--card-bg));
+    }
+
+    .btn-pin {
+      background: transparent;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+      color: #767582;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-pin:hover {
+      color: #fcd34d;
+      transform: scale(1.15);
+    }
+
+    .btn-pin.active {
+      color: #f59e0b;
+      filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.5));
+    }
+
+    .tag-storage { background: rgba(168, 85, 247, 0.18); border: 1px solid #a855f7; color: #d8b4fe; }
+    .tag-bot { background: rgba(100, 116, 139, 0.18); border: 1px solid #64748b; color: #cbd5e1; }
+
+    .ram-batch-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(176, 132, 249, 0.08);
+      border: 1px solid rgba(176, 132, 249, 0.28);
+      border-radius: 6px;
+      padding: 8px 14px;
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+
+    .place-pill-badge {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #93c5fd;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.12s ease;
+    }
+
+    .place-pill-badge:hover {
+      background: rgba(59, 130, 246, 0.28);
+      border-color: #60a5fa;
+      color: #ffffff;
+    }
+
+    .btn-copy-id {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #a8a7b5;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      padding: 1px 6px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .btn-copy-id:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
+    .cookie-masked-box {
+      background: #141318;
+      border: 1px solid #3c3b49;
+      border-radius: 4px;
+      padding: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      word-break: break-all;
+      max-height: 120px;
+      overflow-y: auto;
+      color: #e5e5e5;
+    }
+
     /* --------------------------------------------------------------------------
        BLOXSTRAP GOLD TAB STYLES
        -------------------------------------------------------------------------- */
@@ -1747,9 +1842,10 @@
             <div class="option-desc">Choose which mouse cursor style Roblox should use.</div>
           </div>
           <select class="fluent-select" id="selectMouseCursor">
-            <option value="Default (2020)" selected>Default (2020)</option>
-            <option value="2006 (Classic)">2006 (Classic)</option>
-            <option value="2013">2013</option>
+            <option value="Default (2020)" selected>Default (2020 Modern)</option>
+            <option value="2006 (Classic)">2006 (Classic Arrow)</option>
+            <option value="2013">2013 (Skeuomorphic)</option>
+            <option value="FPS Crosshair">FPS Crosshair (Competitive Dot)</option>
           </select>
         </div>
 
@@ -1765,14 +1861,23 @@
           </label>
         </div>
 
-        <!-- Old Character Sounds + Preview -->
+        <!-- Custom Character Sounds & Preset Library -->
         <div class="option-card">
           <div class="option-info">
-            <div class="option-title">Old character sounds</div>
-            <div class="option-desc">Replaces modern character sounds with classic sounds, including the original "OOF" death sound.</div>
+            <div class="option-title">Character death sound preset</div>
+            <div class="option-desc">Choose a sound effect to play when your character resets or dies. Includes classic 2006 OOF and meme soundboard.</div>
           </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <button class="pill-btn" id="btnPreviewOof">▶ Preview</button>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <select class="fluent-select" id="selectDeathSoundPreset" style="min-width: 170px;">
+              <option value="Classic OOF (2006)" selected>Classic OOF (2006)</option>
+              <option value="Minecraft Hurt">Minecraft Hurt</option>
+              <option value="Vine Boom">Vine Boom</option>
+              <option value="Metal Pipe">Metal Pipe Falling</option>
+              <option value="Bruh Sound Effect">Bruh Sound Effect #2</option>
+              <option value="Windows XP Error">Windows XP Error</option>
+              <option value="Muted">Muted (No Sound)</option>
+            </select>
+            <button class="pill-btn" id="btnPreviewDeathSound">▶ Preview</button>
             <label class="fluent-toggle">
               <input type="checkbox" id="toggleOof" checked>
               <span class="fluent-toggle-slider"></span>
@@ -1940,6 +2045,57 @@
             <input type="checkbox" id="toggleHideGuis" checked>
             <span class="fluent-toggle-slider"></span>
           </label>
+        </div>
+
+        <!-- In-game Engine HUD FPS Display (FFlagDebugDisplayFPS) -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title-row">
+              <span class="option-title">In-game HUD FPS counter</span>
+              <span class="help-badge" title="Toggles Roblox native green engine FPS overlay">?</span>
+            </div>
+            <div class="option-desc">Displays authentic native engine frames-per-second green overlay in the top-left corner of the Roblox window.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleShowFpsCounter" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Terrain Grass Rendering Distance (FIntFRMMaxGrassDistance) -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title-row">
+              <span class="option-title">Terrain grass rendering distance</span>
+              <span class="help-badge" title="Controls procedural terrain grass draw distance in studs">?</span>
+            </div>
+            <div class="option-desc">Extend procedural terrain grass render distance, or set to 0 to disable grass for competitive PvP FPS boost.</div>
+          </div>
+          <select class="fluent-select" id="selectGrassDistance">
+            <option value="0">Disabled (0 studs / PvP FPS Boost)</option>
+            <option value="150">Low (150 studs)</option>
+            <option value="300" selected>Default (300 studs)</option>
+            <option value="600">High / Lush (600 studs)</option>
+            <option value="1000">Ultra (1000 studs / Max View)</option>
+          </select>
+        </div>
+
+        <!-- Shadow Rendering Intensity (FIntRenderShadowIntensity) -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title-row">
+              <span class="option-title">Shadow rendering intensity</span>
+              <span class="help-badge" title="Adjust the intensity and darkness of world shadows">?</span>
+            </div>
+            <div class="option-desc">Tweak rendered shadow darkness or disable shadows completely to increase performance on low-end systems.</div>
+          </div>
+          <select class="fluent-select" id="selectShadowIntensity">
+            <option value="0">Disabled (0% / No Shadows)</option>
+            <option value="50">Soft Shadows (50%)</option>
+            <option value="100" selected>Standard (100% / Default)</option>
+            <option value="150">Deep Shadows (150%)</option>
+            <option value="200">Cinematic Ultra (200%)</option>
+          </select>
         </div>
       </div>
 
@@ -2112,6 +2268,50 @@
             <input type="checkbox" id="toggleTelemetry">
             <span class="fluent-toggle-slider"></span>
           </label>
+        </div>
+
+        <!-- Streamer Mode -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title-row">
+              <span class="option-title">Streamer Mode (Privacy Protection)</span>
+              <span class="help-badge" title="Masks sensitive account data on screen and in Discord">?</span>
+            </div>
+            <div class="option-desc">Redacts Roblox usernames, user IDs, and private server Job IDs in the UI and Discord Rich Presence to prevent stream sniping.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleStreamerMode">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Disable Roblox Client Telemetry -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title-row">
+              <span class="option-title">Disable client diagnostics telemetry</span>
+              <span class="help-badge" title="Blocks telemetry pings to ephemeral counters">?</span>
+            </div>
+            <div class="option-desc">Blocks Roblox telemetry requests to ephemeralcounters.api.roblox.com and ecsv2.roblox.com (FFlagDebugDisableTelemetry).</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDisableTelemetry">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Background Multi-Instance FPS Throttling -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Background client FPS throttling</div>
+            <div class="option-desc">Limits framerate on inactive/unfocused multi-instance Roblox windows to save CPU, GPU, and battery.</div>
+          </div>
+          <select class="fluent-select" id="selectBackgroundFpsLimit">
+            <option value="0">Uncapped (Match foreground)</option>
+            <option value="15" selected>15 FPS (Battery &amp; GPU Saver)</option>
+            <option value="30">30 FPS (Balanced)</option>
+            <option value="60">60 FPS (Smooth)</option>
+          </select>
         </div>
 
         <div class="section-title">Bootstrapper &amp; Diagnostic Debug Options</div>
@@ -2297,24 +2497,43 @@
         </div>
 
         <!-- RAM Toolbar -->
-        <div class="ram-toolbar">
-          <div class="ram-search-box">
+        <div class="ram-toolbar" style="flex-wrap: wrap;">
+          <div class="ram-search-box" style="min-width: 240px;">
             <span class="ram-search-icon">🔍</span>
-            <input type="text" id="inputAccountSearch" placeholder="Search accounts by username, display name, or notes...">
+            <input type="text" id="inputAccountSearch" placeholder="Search accounts by username, display name, ID, or notes...">
+            <button id="btnClearSearch" style="position: absolute; right: 8px; background: transparent; border: none; color: #8e8d98; cursor: pointer; display: none;">✕</button>
           </div>
           <div class="tag-filter-pills">
             <div class="tag-pill active" data-tag="all">All</div>
+            <div class="tag-pill" data-tag="pinned">📌 Pinned</div>
             <div class="tag-pill" data-tag="Main">Main</div>
             <div class="tag-pill" data-tag="Alt">Alt</div>
             <div class="tag-pill" data-tag="Farming">Farming</div>
             <div class="tag-pill" data-tag="Bank">Bank</div>
             <div class="tag-pill" data-tag="Trading">Trading</div>
+            <div class="tag-pill" data-tag="Storage">Storage</div>
           </div>
-          <div style="display: flex; gap: 8px;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="pill-btn primary" id="btnOpenAddAccountModal">＋ Add Account</button>
             <button class="pill-btn gold" id="btnOpenDirectJoinModal">🌐 Direct Join</button>
-            <button class="pill-btn" id="btnRestoreSampleAlts" title="Load sample accounts with verified Roblox avatars">✨ Reset Sample Alts</button>
             <button class="pill-btn" id="btnLaunchAllAccounts" title="Launch all accounts simultaneously">🚀 Launch All</button>
+            <button class="pill-btn" id="btnOpenImportAccounts" title="Import accounts from JSON">📥 Import</button>
+            <button class="pill-btn" id="btnExportAccounts" title="Export accounts to JSON">📤 Export</button>
+            <button class="pill-btn" id="btnRestoreSampleAlts" title="Reset sample accounts">✨ Reset Alts</button>
+          </div>
+        </div>
+
+        <!-- RAM Batch Action Bar (Shown when accounts are selected) -->
+        <div class="ram-batch-bar" id="ramBatchBar">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 600; color: #ffffff;">
+              <input type="checkbox" id="checkSelectAllAccounts"> Select All
+            </label>
+            <span id="batchCountBadge" style="color: #c5c5c5;">(0 selected)</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="pill-btn gold" id="btnBatchLaunch">🚀 Launch Selected</button>
+            <button class="pill-btn danger" id="btnBatchDelete">🗑 Delete Selected</button>
           </div>
         </div>
 
@@ -2557,6 +2776,8 @@
             <option value="Farming">Farming (Auto-farm)</option>
             <option value="Bank">Bank (Storage/Currency)</option>
             <option value="Trading">Trading (Rare items)</option>
+            <option value="Storage">Storage (Inventory)</option>
+            <option value="Bot">Bot (Automation)</option>
           </select>
         </div>
         <div class="form-group">
@@ -2565,15 +2786,88 @@
         </div>
       </div>
 
+      <!-- Default Place ID -->
       <div class="form-group" style="margin-bottom: 12px;">
-        <div class="form-label">Session Cookie (.ROBLOSECURITY - Optional)</div>
-        <input type="password" class="fluent-input" id="modalCookie" placeholder="_|WARNING:-DO-NOT-SHARE-THIS..." style="width: 100%;">
-        <div style="font-size: 10.5px; color: #8e8d98; margin-top: 2px;">Stored encrypted locally in macOS Application Support for 1-click RAM authentication.</div>
+        <div class="form-label">Default Place ID / Experience (Optional)</div>
+        <input type="text" class="fluent-input mono" id="modalDefaultPlace" placeholder="e.g. 2753915549" style="width: 100%; text-align: left;">
+        <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+          <button type="button" class="tag-pill" data-modal-place="2753915549">Blox Fruits</button>
+          <button type="button" class="tag-pill" data-modal-place="8737899170">Pet Sim 99</button>
+          <button type="button" class="tag-pill" data-modal-place="4924922222">Brookhaven</button>
+          <button type="button" class="tag-pill" data-modal-place="6516141723">Doors</button>
+          <button type="button" class="tag-pill" data-modal-place="189707">Natural Disaster</button>
+          <button type="button" class="tag-pill" data-modal-place="6872265039">BedWars</button>
+          <button type="button" class="tag-pill" data-modal-place="13772394625">Blade Ball</button>
+        </div>
       </div>
+
+      <!-- Session Cookie with Eye Toggle & Paste -->
+      <div class="form-group" style="margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="form-label">Session Cookie (.ROBLOSECURITY - Optional)</span>
+          <span style="font-size: 10.5px; color: #10b981;">🔒 Encrypted Locally Only</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="password" class="fluent-input" id="modalCookie" placeholder="_|WARNING:-DO-NOT-SHARE-THIS..." style="flex: 1;">
+          <button type="button" class="pill-btn" id="btnToggleCookieVisibility" title="Show / Hide Cookie">👁</button>
+          <button type="button" class="pill-btn" id="btnPasteCookie" title="Paste from clipboard">📋 Paste</button>
+        </div>
+        <div style="font-size: 10.5px; color: #8e8d98; margin-top: 3px;">Stored strictly locally in macOS Application Support for 1-click RAM authentication.</div>
+      </div>
+
+      <!-- Pin Checkbox -->
+      <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #fcd34d; margin-bottom: 16px; cursor: pointer;">
+        <input type="checkbox" id="modalPinAccount"> 📌 Pin this account to the top of the manager
+      </label>
 
       <div class="modal-actions">
         <button class="pill-btn" id="btnCancelAccountModal">Cancel</button>
         <button class="pill-btn primary" id="btnSaveAccountModal">Save Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: VIEW / EDIT COOKIE (.ROBLOSECURITY)
+       ======================================================================== -->
+  <div class="modal-overlay" id="cookieViewModal" style="display: none; z-index: 1350;">
+    <div class="modal-card">
+      <div class="modal-title" id="cookieViewTitle">Session Cookie (.ROBLOSECURITY)</div>
+      <div class="modal-desc" id="cookieViewDesc">Inspect or update the authentication cookie for this account profile.</div>
+
+      <div class="form-group" style="margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span class="form-label">Cookie Value</span>
+          <button class="pill-btn" id="btnToggleCookieViewMask" style="padding: 2px 8px; font-size: 11px;">👁 Toggle Mask</button>
+        </div>
+        <div class="cookie-masked-box" id="cookieViewContent">●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●</div>
+      </div>
+
+      <div class="modal-actions" style="justify-content: space-between;">
+        <button class="pill-btn danger" id="btnClearAccountCookie">Clear Cookie</button>
+        <div style="display: flex; gap: 8px;">
+          <button class="pill-btn" id="btnCloseCookieView">Close</button>
+          <button class="pill-btn gold" id="btnCopyViewCookie">📋 Copy Cookie</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: IMPORT ACCOUNTS JSON
+       ======================================================================== -->
+  <div class="modal-overlay" id="importAccountsModal" style="display: none; z-index: 1350;">
+    <div class="modal-card">
+      <div class="modal-title">Import Roblox Accounts (JSON)</div>
+      <div class="modal-desc">Paste accounts JSON from a backup or ic3w0lf Roblox Account Manager export.</div>
+
+      <div class="form-group" style="margin-bottom: 14px;">
+        <textarea id="importAccountsTextarea" class="fluent-input mono" placeholder='[&#10;  { "username": "pizzaboxer", "displayName": "Dev", "userId": "6276777", "tag": "Main" }&#10;]' style="width: 100%; height: 160px; resize: vertical; font-size: 11px; padding: 10px;"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="pill-btn" id="btnCancelImportModal">Cancel</button>
+        <button class="pill-btn primary" id="btnExecuteImportAccounts">📥 Import Accounts</button>
       </div>
     </div>
   </div>
@@ -2862,27 +3156,34 @@
       vipKey: "",
       hasSeenWelcomeIntro: false,
       
-      // FastFlags
+      // FastFlags & Graphics Tweaks
       targetFps: 9999,
       preferredLighting: "Future (Phase 3)",
       escapeMenuVersion: "Version 4 (2023)",
       hideGuisEnabled: true,
+      showFpsCounter: true,
+      grassDistance: 300,
+      shadowIntensity: 100,
       
       // Mods & Modern Engine Settings
       preserveRenderingQualityDpi: true,
       textureQuality: "Default",
       customDeathSound: true,
+      deathSoundPreset: "Classic OOF (2006)",
       mouseCursor: "Default (2020)",
       oldAvatarBackground: false,
       emojiFont: "Default",
+      titlebarDelay: 350,
       
-      // Integrations
+      // Integrations & Privacy
       activityTrackingEnabled: true,
       showServerDetailsEnabled: true,
       dontExitToDesktopApp: true,
       discordActivityEnabled: true,
       discordActivityJoinEnabled: true,
       discordAccountOnProfile: true,
+      streamerMode: false,
+      backgroundFpsLimit: 15,
       
       // Appearance
       theme: "Dark (Windows 11 Mica)",
@@ -2897,6 +3198,7 @@
       backgroundUpdates: true,
       forceRobloxReinstall: false,
       telemetryEnabled: false,
+      disableTelemetry: false,
       
       // Bootstrapper Debug Options
       developerMode: false,
@@ -2918,6 +3220,10 @@
     let activeTagFilter = "all";
     let activeSearchQuery = "";
     let lookupDebounceTimer = null;
+    let selectedAccountIds = new Set();
+    let viewingCookieAccountId = null;
+    let cookieIsMasked = true;
+    let audioCtx = null;
 
     // Post message to Swift host
     function sendToHost(action, payload = {}) {
@@ -2977,6 +3283,12 @@
       document.getElementById("selectLighting").value = appState.preferredLighting;
       document.getElementById("selectEscapeMenu").value = appState.escapeMenuVersion;
       document.getElementById("toggleHideGuis").checked = appState.hideGuisEnabled;
+      const toggleFpsCounter = document.getElementById("toggleShowFpsCounter");
+      if (toggleFpsCounter) toggleFpsCounter.checked = appState.showFpsCounter !== false;
+      const selectGrass = document.getElementById("selectGrassDistance");
+      if (selectGrass) selectGrass.value = String(appState.grassDistance !== undefined ? appState.grassDistance : 300);
+      const selectShadow = document.getElementById("selectShadowIntensity");
+      if (selectShadow) selectShadow.value = String(appState.shadowIntensity !== undefined ? appState.shadowIntensity : 100);
 
       // Mods & Modern Engine Settings Tab
       const preserveDpiToggle = document.getElementById("togglePreserveDpi");
@@ -2984,10 +3296,14 @@
       const textureQualitySelect = document.getElementById("selectTextureQuality");
       if (textureQualitySelect) textureQualitySelect.value = appState.textureQuality || "Default";
 
-      document.getElementById("toggleOof").checked = appState.customDeathSound;
+      document.getElementById("toggleOof").checked = appState.customDeathSound !== false;
+      const selectDeathSound = document.getElementById("selectDeathSoundPreset");
+      if (selectDeathSound) selectDeathSound.value = appState.deathSoundPreset || "Classic OOF (2006)";
       document.getElementById("selectMouseCursor").value = appState.mouseCursor || "Default (2020)";
       document.getElementById("toggleOldAvatarBg").checked = !!appState.oldAvatarBackground;
       document.getElementById("selectEmojiFont").value = appState.emojiFont || "Default";
+      const selectDelay = document.getElementById("selectTitlebarDelay");
+      if (selectDelay) selectDelay.value = String(appState.titlebarDelay !== undefined ? appState.titlebarDelay : 350);
 
       // Integrations Tab
       document.getElementById("toggleActivityTracking").checked = appState.activityTrackingEnabled !== false;
@@ -3010,6 +3326,12 @@
       document.getElementById("toggleBackgroundUpdates").checked = appState.backgroundUpdates !== false;
       document.getElementById("toggleForceReinstall").checked = !!appState.forceRobloxReinstall;
       document.getElementById("toggleTelemetry").checked = !!appState.telemetryEnabled;
+      const toggleStreamer = document.getElementById("toggleStreamerMode");
+      if (toggleStreamer) toggleStreamer.checked = !!appState.streamerMode;
+      const toggleDisTelem = document.getElementById("toggleDisableTelemetry");
+      if (toggleDisTelem) toggleDisTelem.checked = appState.disableTelemetry !== false;
+      const selectBgFps = document.getElementById("selectBackgroundFpsLimit");
+      if (selectBgFps) selectBgFps.value = String(appState.backgroundFpsLimit !== undefined ? appState.backgroundFpsLimit : 15);
 
       // Bootstrapper Debug Options
       const toggleDev = document.getElementById("toggleDeveloperMode");
@@ -3036,6 +3358,103 @@
       // Render Instances & Accounts
       renderInstancesList();
       renderAccountsList();
+    }
+
+    function maskIfStreamer(str, isUsername = false) {
+      if (!appState.streamerMode) return str;
+      if (!str) return "";
+      if (isUsername) return "@***";
+      if (str.length <= 2) return "**";
+      return str[0] + "***" + str[str.length - 1];
+    }
+
+    function playPreviewSoundPreset(preset) {
+      if (preset === "Muted") {
+        showToast("🔇 Audio is muted (no sound)");
+        return;
+      }
+      if (preset === "Classic OOF (2006)") {
+        sendToHost("playOof");
+        return;
+      }
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        const now = audioCtx.currentTime;
+        
+        if (preset === "Vine Boom") {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(80, now);
+          osc.frequency.exponentialRampToValueAtTime(20, now + 0.8);
+          gain.gain.setValueAtTime(0.9, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 1.2);
+        } else if (preset === "Metal Pipe") {
+          [440, 880, 1320, 1760, 2200].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = idx % 2 === 0 ? "sawtooth" : "square";
+            osc.frequency.setValueAtTime(freq + (Math.random() * 15), now);
+            gain.gain.setValueAtTime(0.12 / (idx + 1), now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9 + idx * 0.15);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 1.2);
+          });
+        } else if (preset === "Minecraft Hurt") {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(170, now);
+          osc.frequency.exponentialRampToValueAtTime(55, now + 0.28);
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.32);
+        } else if (preset === "Bruh Sound Effect") {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.exponentialRampToValueAtTime(120, now + 0.55);
+          gain.gain.setValueAtTime(0.45, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.65);
+        } else if (preset === "Windows XP Error") {
+          [370, 554].forEach(f => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(f, now);
+            gain.gain.setValueAtTime(0.25, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.55);
+          });
+        } else {
+          sendToHost("playOof");
+        }
+      } catch (err) {
+        console.warn("WebAudio synthesis error:", err);
+        sendToHost("playOof");
+      }
     }
 
     function renderInstancesList() {
@@ -3095,38 +3514,69 @@
         document.getElementById("btnEmptySample")?.addEventListener("click", () => sendToHost("resetSampleAccounts"));
 
         quickContainer.innerHTML = '<div style="color: #686774; font-size: 11px; padding: 6px;">No saved accounts. Click "+ Add Alt Profile".</div>';
+        const batchBar = document.getElementById("ramBatchBar");
+        if (batchBar) batchBar.style.display = "none";
         return;
       }
 
+      // Sort accounts: pinned first, then alphabetical by displayName
+      const sortedAccounts = [...accounts].sort((a, b) => {
+        const aPinned = a.isPinned ? 1 : 0;
+        const bPinned = b.isPinned ? 1 : 0;
+        if (bPinned !== aPinned) return bPinned - aPinned;
+        return (a.displayName || a.username || "").localeCompare(b.displayName || b.username || "");
+      });
+
       // Filter accounts based on query and tag
-      const filtered = accounts.filter(acc => {
-        const matchesTag = (activeTagFilter === "all" || (acc.tag && acc.tag.toLowerCase() === activeTagFilter.toLowerCase()));
+      const filtered = sortedAccounts.filter(acc => {
+        let matchesTag = false;
+        if (activeTagFilter === "all") {
+          matchesTag = true;
+        } else if (activeTagFilter === "pinned") {
+          matchesTag = !!acc.isPinned;
+        } else {
+          matchesTag = (acc.tag && acc.tag.toLowerCase() === activeTagFilter.toLowerCase());
+        }
         const matchesQuery = (!activeSearchQuery || 
           (acc.username && acc.username.toLowerCase().includes(activeSearchQuery)) ||
           (acc.displayName && acc.displayName.toLowerCase().includes(activeSearchQuery)) ||
+          (acc.userId && acc.userId.toLowerCase().includes(activeSearchQuery)) ||
+          (acc.defaultPlaceId && acc.defaultPlaceId.toLowerCase().includes(activeSearchQuery)) ||
           (acc.note && acc.note.toLowerCase().includes(activeSearchQuery))
         );
         return matchesTag && matchesQuery;
       });
 
+      // Update Batch Bar
+      const batchBar = document.getElementById("ramBatchBar");
+      const batchCount = document.getElementById("batchCountBadge");
+      const checkSelectAll = document.getElementById("checkSelectAllAccounts");
+      if (batchBar && batchCount) {
+        batchCount.textContent = `(${selectedAccountIds.size} selected)`;
+        batchBar.style.display = selectedAccountIds.size > 0 ? "flex" : "none";
+        if (checkSelectAll) {
+          checkSelectAll.checked = (filtered.length > 0 && selectedAccountIds.size === filtered.length);
+        }
+      }
+
       if (filtered.length === 0) {
         fullContainer.innerHTML = '<div class="option-card" style="color: #8e8d98; font-size: 13px; text-align: center; padding: 24px;">No accounts match your filter criteria.</div>';
       }
 
-      accounts.forEach(acc => {
-        // Quick panel item in Gold Tab
+      // Quick Panel in Gold Tab
+      sortedAccounts.forEach(acc => {
         const qItem = document.createElement("div");
         qItem.className = "instance-item";
         qItem.innerHTML = `
           <div class="instance-item-title">
-            <span>👤</span>
-            <span>${escapeHtml(acc.displayName)} (@${escapeHtml(acc.username)})</span>
+            <span>${acc.isPinned ? '📌' : '👤'}</span>
+            <span>${escapeHtml(appState.streamerMode ? maskIfStreamer(acc.displayName) : acc.displayName)} (${escapeHtml(appState.streamerMode ? maskIfStreamer(acc.username, true) : '@' + acc.username)})</span>
             <span class="account-tag-badge tag-${(acc.tag || 'alt').toLowerCase()}">${escapeHtml(acc.tag || 'Alt')}</span>
           </div>
           <button class="pill-btn primary" style="padding: 2px 8px; font-size: 10.5px;">▶ Launch Alt</button>
         `;
         qItem.querySelector("button").addEventListener("click", () => {
-          sendToHost("launchAccount", { id: acc.id, username: acc.username });
+          sendToHost("launchAccount", { id: acc.id, username: acc.username, placeId: acc.defaultPlaceId });
         });
         quickContainer.appendChild(qItem);
 
@@ -3137,53 +3587,117 @@
         joinSelect.appendChild(opt);
       });
 
+      // Full Cards in RAM Tab
       filtered.forEach(acc => {
         const card = document.createElement("div");
-        card.className = "account-card";
+        card.className = "account-card" + (acc.isPinned ? " pinned" : "");
         const tagClass = `tag-${(acc.tag || 'alt').toLowerCase()}`;
         const avatarSrc = acc.avatarUrl && acc.avatarUrl.length > 10 ? acc.avatarUrl : `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter`;
 
+        const displayNameText = appState.streamerMode ? maskIfStreamer(acc.displayName) : acc.displayName;
+        const usernameText = appState.streamerMode ? maskIfStreamer(acc.username, true) : `@${acc.username}`;
+        const userIdText = appState.streamerMode ? "[REDACTED]" : (acc.userId || "1");
+
         card.innerHTML = `
           <div class="account-card-left">
+            <input type="checkbox" class="ram-card-checkbox" data-id="${escapeHtml(acc.id)}" ${selectedAccountIds.has(acc.id) ? "checked" : ""} style="cursor: pointer; margin-right: 4px;">
             <img class="account-avatar" src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(acc.username)}" onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter'">
             <div class="account-meta">
               <div class="account-title-row">
-                <span class="account-display-name">${escapeHtml(acc.displayName)}</span>
-                <span class="account-username">@${escapeHtml(acc.username)}</span>
+                ${acc.isPinned ? '<span style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 700;">📌 PINNED</span>' : ''}
+                <span class="account-display-name">${escapeHtml(displayNameText)}</span>
+                <span class="account-username">${escapeHtml(usernameText)}</span>
                 <span class="account-tag-badge ${tagClass}">${escapeHtml(acc.tag || 'Alt')}</span>
-                <span style="font-size: 10px; color: #767582; font-family: var(--font-mono);">ID: ${escapeHtml(acc.userId || '1')}</span>
+                <span style="font-size: 10px; color: #767582; font-family: var(--font-mono);">ID: ${escapeHtml(userIdText)}</span>
               </div>
               <div class="account-note">${escapeHtml(acc.note || 'No notes specified')}</div>
               <div class="account-status-row">
-                <div class="account-status-dot"></div>
-                <span style="color: #10b981; font-weight: 600;">Ready for launch</span>
+                <div class="account-status-dot" style="${acc.status === 'In Game' ? 'background: #3b82f6;' : ''}"></div>
+                <span style="color: ${acc.status === 'In Game' ? '#60a5fa' : '#10b981'}; font-weight: 600;">${escapeHtml(acc.status || 'Ready for launch')}</span>
+                <span style="color: #8e8d98; font-size: 11px;">• Last: ${escapeHtml(acc.lastLaunched || 'Never')}</span>
+                ${acc.cookie ? '<span style="color: #10b981; font-size: 11px; margin-left: 6px;">🔒 Cookie Saved</span>' : ''}
               </div>
+              ${acc.defaultPlaceId ? `
+                <div style="margin-top: 6px;">
+                  <button class="pill-btn gold btn-card-default-place" title="1-Click Launch into default place" style="padding: 2px 8px; font-size: 10.5px;">🎮 Join Place: ${escapeHtml(acc.defaultPlaceId)}</button>
+                </div>
+              ` : ''}
             </div>
           </div>
           <div class="account-actions">
+            <button class="pill-btn btn-card-pin" style="${acc.isPinned ? 'background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #fcd34d;' : ''}">${acc.isPinned ? '📌 Pinned' : '📌 Pin'}</button>
             <button class="pill-btn primary btn-card-launch">▶ Launch</button>
-            <button class="pill-btn gold btn-card-join">🌐 Join Place</button>
+            <button class="pill-btn gold btn-card-join">🌐 Join</button>
+            <button class="pill-btn btn-card-cookie" title="View / Edit Session Cookie">🔒 Cookie</button>
+            <button class="pill-btn btn-card-copy" title="Copy Profile URL">📋 Copy</button>
             <button class="pill-btn btn-card-edit">✏ Edit</button>
             <button class="pill-btn danger btn-card-delete">🗑</button>
           </div>
         `;
 
-        card.querySelector(".btn-card-launch").addEventListener("click", () => {
-          sendToHost("launchAccount", { id: acc.id, username: acc.username });
+        // Checkbox toggle
+        card.querySelector(".ram-card-checkbox").addEventListener("change", (e) => {
+          if (e.target.checked) {
+            selectedAccountIds.add(acc.id);
+          } else {
+            selectedAccountIds.delete(acc.id);
+          }
+          const bBar = document.getElementById("ramBatchBar");
+          const bCount = document.getElementById("batchCountBadge");
+          const cAll = document.getElementById("checkSelectAllAccounts");
+          if (bBar && bCount) {
+            bCount.textContent = `(${selectedAccountIds.size} selected)`;
+            bBar.style.display = selectedAccountIds.size > 0 ? "flex" : "none";
+            if (cAll) cAll.checked = (filtered.length > 0 && selectedAccountIds.size === filtered.length);
+          }
         });
 
+        // Pin Button
+        card.querySelector(".btn-card-pin").addEventListener("click", () => {
+          acc.isPinned = !acc.isPinned;
+          sendToHost("togglePinAccount", { id: acc.id });
+          renderAccountsList();
+        });
+
+        // Launch
+        card.querySelector(".btn-card-launch").addEventListener("click", () => {
+          sendToHost("launchAccount", { id: acc.id, username: acc.username, placeId: acc.defaultPlaceId });
+        });
+
+        // Default Place Pill
+        const defaultPlaceBtn = card.querySelector(".btn-card-default-place");
+        if (defaultPlaceBtn) {
+          defaultPlaceBtn.addEventListener("click", () => {
+            sendToHost("launchAccount", { id: acc.id, username: acc.username, placeId: acc.defaultPlaceId });
+          });
+        }
+
+        // Direct Join
         card.querySelector(".btn-card-join").addEventListener("click", () => {
           openDirectJoinModal(acc.id);
         });
 
+        // Cookie Modal
+        card.querySelector(".btn-card-cookie").addEventListener("click", () => {
+          openCookieViewModal(acc);
+        });
+
+        // Copy Profile URL
+        card.querySelector(".btn-card-copy").addEventListener("click", () => {
+          const profileUrl = `https://www.roblox.com/users/${acc.userId}/profile`;
+          sendToHost("copyToClipboard", { text: profileUrl, label: `@${acc.username}'s Profile URL` });
+        });
+
+        // Edit
         card.querySelector(".btn-card-edit").addEventListener("click", () => {
           openEditAccountModal(acc);
         });
 
+        // Delete
         card.querySelector(".btn-card-delete").addEventListener("click", () => {
           if (confirm(`Are you sure you want to delete profile @${acc.username}?`)) {
-            // Immediate local update
             appState.accounts = (appState.accounts || []).filter(a => a.id !== acc.id);
+            selectedAccountIds.delete(acc.id);
             renderAccountsList();
             sendToHost("deleteAccount", { id: acc.id });
           }
@@ -3218,11 +3732,26 @@
       document.querySelector('[data-tab="accounts"]').click();
     });
 
-    // --- RAM TOOLBAR INTERACTIONS ---
-    document.getElementById("inputAccountSearch").addEventListener("input", (e) => {
+    // --- RAM TOOLBAR & SEARCH INTERACTIONS ---
+    const searchInput = document.getElementById("inputAccountSearch");
+    const clearSearchBtn = document.getElementById("btnClearSearch");
+
+    searchInput.addEventListener("input", (e) => {
       activeSearchQuery = e.target.value.trim().toLowerCase();
+      if (clearSearchBtn) {
+        clearSearchBtn.style.display = activeSearchQuery.length > 0 ? "block" : "none";
+      }
       renderAccountsList();
     });
+
+    if (clearSearchBtn) {
+      clearSearchBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        activeSearchQuery = "";
+        clearSearchBtn.style.display = "none";
+        renderAccountsList();
+      });
+    }
 
     document.querySelectorAll(".tag-pill").forEach(pill => {
       if (pill.dataset.tag) {
@@ -3248,9 +3777,143 @@
         return;
       }
       accounts.forEach(acc => {
-        sendToHost("launchAccount", { id: acc.id, username: acc.username });
+        sendToHost("launchAccount", { id: acc.id, username: acc.username, placeId: acc.defaultPlaceId });
       });
       showToast(`🚀 Launched ${accounts.length} isolated account instances!`);
+    });
+
+    // --- RAM BATCH CONTROLS ---
+    const selectAllCheckbox = document.getElementById("checkSelectAllAccounts");
+    if (selectAllCheckbox) {
+      selectAllCheckbox.addEventListener("change", (e) => {
+        const checked = e.target.checked;
+        const accounts = appState.accounts || [];
+        if (checked) {
+          accounts.forEach(a => selectedAccountIds.add(a.id));
+        } else {
+          selectedAccountIds.clear();
+        }
+        renderAccountsList();
+      });
+    }
+
+    const batchLaunchBtn = document.getElementById("btnBatchLaunch");
+    if (batchLaunchBtn) {
+      batchLaunchBtn.addEventListener("click", () => {
+        if (selectedAccountIds.size === 0) return;
+        const toLaunch = (appState.accounts || []).filter(a => selectedAccountIds.has(a.id));
+        const payload = toLaunch.map(a => ({ id: a.id, username: a.username, placeId: a.defaultPlaceId }));
+        sendToHost("launchSelectedAccounts", { accounts: payload });
+        showToast(`🚀 Launching ${toLaunch.length} selected accounts...`);
+      });
+    }
+
+    const batchDeleteBtn = document.getElementById("btnBatchDelete");
+    if (batchDeleteBtn) {
+      batchDeleteBtn.addEventListener("click", () => {
+        if (selectedAccountIds.size === 0) return;
+        if (confirm(`Are you sure you want to delete ${selectedAccountIds.size} selected accounts?`)) {
+          const ids = Array.from(selectedAccountIds);
+          appState.accounts = (appState.accounts || []).filter(a => !selectedAccountIds.has(a.id));
+          selectedAccountIds.clear();
+          renderAccountsList();
+          sendToHost("deleteMultipleAccounts", { ids });
+        }
+      });
+    }
+
+    // --- COOKIE VIEW MODAL ---
+    function openCookieViewModal(acc) {
+      viewingCookieAccountId = acc.id;
+      cookieIsMasked = true;
+      document.getElementById("cookieViewTitle").textContent = `Session Cookie (@${acc.username})`;
+      document.getElementById("cookieViewDesc").textContent = `Local .ROBLOSECURITY token for ${acc.displayName} (User ID: ${acc.userId})`;
+      updateCookieViewDisplay(acc.cookie || "");
+      document.getElementById("cookieViewModal").style.display = "flex";
+    }
+
+    function updateCookieViewDisplay(cookie) {
+      const content = document.getElementById("cookieViewContent");
+      if (!cookie) {
+        content.textContent = "(No session cookie stored for this account)";
+        content.style.color = "#8e8d98";
+      } else if (cookieIsMasked) {
+        content.textContent = "●".repeat(Math.min(52, cookie.length));
+        content.style.color = "#c5c5c5";
+      } else {
+        content.textContent = cookie;
+        content.style.color = "#10b981";
+      }
+    }
+
+    document.getElementById("btnToggleCookieViewMask")?.addEventListener("click", () => {
+      cookieIsMasked = !cookieIsMasked;
+      const acc = (appState.accounts || []).find(a => a.id === viewingCookieAccountId);
+      if (acc) updateCookieViewDisplay(acc.cookie || "");
+    });
+
+    document.getElementById("btnCopyViewCookie")?.addEventListener("click", () => {
+      const acc = (appState.accounts || []).find(a => a.id === viewingCookieAccountId);
+      if (acc && acc.cookie) {
+        sendToHost("copyToClipboard", { text: acc.cookie, label: `@${acc.username}'s Session Cookie` });
+      } else {
+        showToast("No cookie stored to copy.");
+      }
+    });
+
+    document.getElementById("btnClearAccountCookie")?.addEventListener("click", () => {
+      if (confirm("Remove saved session cookie for this profile?")) {
+        const acc = (appState.accounts || []).find(a => a.id === viewingCookieAccountId);
+        if (acc) {
+          acc.cookie = "";
+          updateCookieViewDisplay("");
+          sendToHost("updateAccountCookie", { id: acc.id, cookie: "" });
+          renderAccountsList();
+        }
+      }
+    });
+
+    document.getElementById("btnCloseCookieView")?.addEventListener("click", () => {
+      document.getElementById("cookieViewModal").style.display = "none";
+    });
+
+    // --- IMPORT / EXPORT ACCOUNTS ---
+    document.getElementById("btnOpenImportAccounts")?.addEventListener("click", () => {
+      document.getElementById("importAccountsTextarea").value = "";
+      document.getElementById("importAccountsModal").style.display = "flex";
+    });
+
+    document.getElementById("btnCancelImportModal")?.addEventListener("click", () => {
+      document.getElementById("importAccountsModal").style.display = "none";
+    });
+
+    document.getElementById("btnExecuteImportAccounts")?.addEventListener("click", () => {
+      const raw = document.getElementById("importAccountsTextarea").value.trim();
+      if (!raw) {
+        alert("Please paste valid accounts JSON.");
+        return;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) {
+          alert("JSON must be an array of account objects.");
+          return;
+        }
+        sendToHost("importAccountsJson", { json: raw });
+        document.getElementById("importAccountsModal").style.display = "none";
+      } catch (err) {
+        alert("Invalid JSON: " + err.message);
+      }
+    });
+
+    document.getElementById("btnExportAccounts")?.addEventListener("click", () => {
+      const accounts = appState.accounts || [];
+      if (accounts.length === 0) {
+        showToast("No accounts to export.");
+        return;
+      }
+      const jsonStr = JSON.stringify(accounts, null, 2);
+      sendToHost("copyToClipboard", { text: jsonStr, label: "Roblox Accounts JSON" });
     });
 
     // --- ACCOUNT MODAL ---
@@ -3266,7 +3929,9 @@
     const modalUserId = document.getElementById("modalUserId");
     const modalTag = document.getElementById("modalTag");
     const modalNote = document.getElementById("modalNote");
+    const modalDefaultPlace = document.getElementById("modalDefaultPlace");
     const modalCookie = document.getElementById("modalCookie");
+    const modalPinAccount = document.getElementById("modalPinAccount");
 
     function openAddAccountModal() {
       accountModalTitle.textContent = "Add Account Profile";
@@ -3281,7 +3946,9 @@
       modalUserId.value = "1";
       modalTag.value = "Alt";
       modalNote.value = "";
-      modalCookie.value = "";
+      if (modalDefaultPlace) modalDefaultPlace.value = "";
+      if (modalCookie) modalCookie.value = "";
+      if (modalPinAccount) modalPinAccount.checked = false;
       accountModal.style.display = "flex";
       modalUsername.focus();
     }
@@ -3299,10 +3966,35 @@
       modalUserId.value = acc.userId || "1";
       modalTag.value = acc.tag || "Alt";
       modalNote.value = acc.note || "";
-      modalCookie.value = "";
+      if (modalDefaultPlace) modalDefaultPlace.value = acc.defaultPlaceId || "";
+      if (modalCookie) modalCookie.value = acc.cookie || "";
+      if (modalPinAccount) modalPinAccount.checked = !!acc.isPinned;
       accountModal.style.display = "flex";
       modalDisplayName.focus();
     }
+
+    // Modal place preset buttons
+    document.querySelectorAll("[data-modal-place]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (modalDefaultPlace) modalDefaultPlace.value = btn.dataset.modalPlace;
+      });
+    });
+
+    // Cookie visibility toggle & paste
+    document.getElementById("btnToggleCookieVisibility")?.addEventListener("click", () => {
+      if (modalCookie) {
+        modalCookie.type = modalCookie.type === "password" ? "text" : "password";
+      }
+    });
+
+    document.getElementById("btnPasteCookie")?.addEventListener("click", async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && modalCookie) modalCookie.value = text.trim();
+      } catch (e) {
+        if (modalCookie) modalCookie.focus();
+      }
+    });
 
     // Auto-lookup Roblox user as user types
     modalUsername.addEventListener("input", (e) => {
@@ -3367,20 +4059,32 @@
       const avatarUrl = modalAvatarUrl.value.trim() || modalAvatarPreview.src;
       const tag = modalTag.value;
       const note = modalNote.value.trim();
+      const defaultPlaceId = modalDefaultPlace ? modalDefaultPlace.value.trim() : "";
+      const cookie = modalCookie ? modalCookie.value.trim() : "";
+      const isPinned = modalPinAccount ? modalPinAccount.checked : false;
       const id = modalAccountId.value;
 
       // Immediate local UI update for instantaneous response
       if (id) {
         const idx = (appState.accounts || []).findIndex(a => a.id === id);
         if (idx >= 0) {
-          appState.accounts[idx] = { id, username, displayName, userId, avatarUrl, tag, note, addedDate: "2026-10-23" };
+          appState.accounts[idx] = { 
+            id, username, displayName, userId, avatarUrl, tag, note,
+            defaultPlaceId, cookie, isPinned,
+            status: appState.accounts[idx].status || "Ready",
+            lastLaunched: appState.accounts[idx].lastLaunched || "Never",
+            addedDate: appState.accounts[idx].addedDate || "2026-10-23" 
+          };
         }
-        sendToHost("editAccount", { id, username, displayName, userId, avatarUrl, tag, note });
+        sendToHost("editAccount", { id, username, displayName, userId, avatarUrl, tag, note, defaultPlaceId, cookie, isPinned });
       } else {
         const newId = "acc_" + Date.now();
         if (!appState.accounts) appState.accounts = [];
-        appState.accounts.push({ id: newId, username, displayName, userId, avatarUrl, tag, note, addedDate: "2026-10-23" });
-        sendToHost("addAccount", { username, displayName, userId, avatarUrl, tag, note });
+        appState.accounts.push({ 
+          id: newId, username, displayName, userId, avatarUrl, tag, note,
+          defaultPlaceId, cookie, isPinned, status: "Ready", lastLaunched: "Never", addedDate: "2026-10-23" 
+        });
+        sendToHost("addAccount", { username, displayName, userId, avatarUrl, tag, note, defaultPlaceId, cookie, isPinned });
       }
 
       renderAccountsList();
@@ -3542,26 +4246,33 @@
     document.getElementById("btnCancel").addEventListener("click", () => sendToHost("closeWindow"));
     document.getElementById("btnSave").addEventListener("click", () => {
       sendToHost("saveSettings", {
-        // FastFlags
+        // FastFlags & Graphics Tweaks
         targetFps: parseInt(document.getElementById("inputFps").value) || 9999,
         preferredLighting: document.getElementById("selectLighting").value,
         escapeMenuVersion: document.getElementById("selectEscapeMenu").value,
         hideGuisEnabled: document.getElementById("toggleHideGuis").checked,
+        showFpsCounter: document.getElementById("toggleShowFpsCounter") ? document.getElementById("toggleShowFpsCounter").checked : true,
+        grassDistance: parseInt(document.getElementById("selectGrassDistance") ? document.getElementById("selectGrassDistance").value : "300") || 0,
+        shadowIntensity: parseInt(document.getElementById("selectShadowIntensity") ? document.getElementById("selectShadowIntensity").value : "100") || 0,
         
         // Mods & Modern Engine Settings
         preserveRenderingQualityDpi: document.getElementById("togglePreserveDpi") ? document.getElementById("togglePreserveDpi").checked : true,
         textureQuality: document.getElementById("selectTextureQuality") ? document.getElementById("selectTextureQuality").value : "Default",
+        deathSoundPreset: document.getElementById("selectDeathSoundPreset") ? document.getElementById("selectDeathSoundPreset").value : "Classic OOF (2006)",
         mouseCursor: document.getElementById("selectMouseCursor").value,
         oldAvatarBackground: document.getElementById("toggleOldAvatarBg").checked,
         emojiFont: document.getElementById("selectEmojiFont").value,
+        titlebarDelay: parseInt(document.getElementById("selectTitlebarDelay") ? document.getElementById("selectTitlebarDelay").value : "350") || 350,
         
-        // Integrations
+        // Integrations & Privacy
         activityTrackingEnabled: document.getElementById("toggleActivityTracking").checked,
         showServerDetailsEnabled: document.getElementById("toggleShowServerDetails").checked,
         dontExitToDesktopApp: document.getElementById("toggleDontExit").checked,
         discordActivityEnabled: document.getElementById("toggleDiscordActivity").checked,
         discordActivityJoinEnabled: document.getElementById("toggleDiscordJoin").checked,
         discordAccountOnProfile: document.getElementById("toggleDiscordAccount").checked,
+        streamerMode: document.getElementById("toggleStreamerMode") ? document.getElementById("toggleStreamerMode").checked : false,
+        backgroundFpsLimit: parseInt(document.getElementById("selectBackgroundFpsLimit") ? document.getElementById("selectBackgroundFpsLimit").value : "15") || 0,
         
         // Appearance
         theme: document.getElementById("selectTheme").value,
@@ -3576,6 +4287,7 @@
         backgroundUpdates: document.getElementById("toggleBackgroundUpdates").checked,
         forceRobloxReinstall: document.getElementById("toggleForceReinstall").checked,
         telemetryEnabled: document.getElementById("toggleTelemetry").checked,
+        disableTelemetry: document.getElementById("toggleDisableTelemetry") ? document.getElementById("toggleDisableTelemetry").checked : false,
         
         // Bootstrapper Debug Options
         developerMode: document.getElementById("toggleDeveloperMode") ? document.getElementById("toggleDeveloperMode").checked : false,
@@ -3592,7 +4304,11 @@
     });
 
     // --- BUTTON ACTIONS ---
-    document.getElementById("btnPreviewOof").addEventListener("click", () => sendToHost("playOof"));
+    document.getElementById("btnPreviewOof")?.addEventListener("click", () => sendToHost("playOof"));
+    document.getElementById("btnPreviewDeathSound")?.addEventListener("click", () => {
+      const preset = document.getElementById("selectDeathSoundPreset")?.value || "Classic OOF (2006)";
+      playPreviewSoundPreset(preset);
+    });
     document.getElementById("toggleOof").addEventListener("change", (e) => {
       sendToHost("toggleOof", { enabled: e.target.checked });
     });

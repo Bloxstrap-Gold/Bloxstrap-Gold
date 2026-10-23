@@ -73,6 +73,14 @@ public class FastFlagManager {
             category: "Graphics"
         ),
         AllowedFlag(
+            key: "FIntRenderShadowIntensity",
+            name: "Shadow Rendering Intensity",
+            description: "Controls the darkness and intensity of rendered shadows (0 = off, 100 = default, 200 = max).",
+            defaultValue: 100,
+            isAllowed: true,
+            category: "Graphics"
+        ),
+        AllowedFlag(
             key: "DFIntCanHideGuiGroupId",
             name: "Hide GUI Developer Group ID",
             description: "Permits hiding user interface elements for cinematic screenshots.",
@@ -93,10 +101,10 @@ public class FastFlagManager {
         AllowedFlag(
             key: "FFlagDebugDisableTelemetry",
             name: "Disable Telemetry",
-            description: "Diagnostics packet disable. Ignored by modern client bootstrapper.",
+            description: "Diagnostics packet disable. Blocks ephemeral counters and telemetry pings.",
             defaultValue: true,
-            isAllowed: false,
-            category: "Privacy (Ignored)"
+            isAllowed: true,
+            category: "Privacy"
         ),
         AllowedFlag(
             key: "FFlagNewLightEngine",
@@ -161,6 +169,53 @@ public class FastFlagManager {
     public func removeFlag(key: String) {
         var current = loadSettings()
         current.removeValue(forKey: key)
+        _ = saveSettings(current)
+    }
+    
+    public func applyStateFlags(_ data: AppState.StateData) {
+        var current = loadSettings()
+        current["DFIntTaskSchedulerTargetFps"] = data.targetFps
+        current["FFlagDebugDisplayFPS"] = data.showFpsCounter
+        current["FIntFRMMaxGrassDistance"] = data.grassDistance
+        current["FIntRenderShadowIntensity"] = data.shadowIntensity
+        current["FIntFullscreenTitleBarTriggerDelayMillis"] = data.titlebarDelay
+        
+        if data.preserveRenderingQualityDpi {
+            current["DFFlagDisableDPIScale"] = true
+        } else {
+            current.removeValue(forKey: "DFFlagDisableDPIScale")
+        }
+        
+        if data.hideGuisEnabled {
+            current["DFIntCanHideGuiGroupId"] = 34970455
+        } else {
+            current.removeValue(forKey: "DFIntCanHideGuiGroupId")
+        }
+        
+        switch data.textureQuality {
+        case "Level 0 (Lowest)":
+            current["DFFlagTextureQualityOverrideEnabled"] = true
+            current["DFIntTextureQualityOverride"] = 0
+        case "Level 1":
+            current["DFFlagTextureQualityOverrideEnabled"] = true
+            current["DFIntTextureQualityOverride"] = 1
+        case "Level 2":
+            current["DFFlagTextureQualityOverrideEnabled"] = true
+            current["DFIntTextureQualityOverride"] = 2
+        case "Level 3 (Highest)":
+            current["DFFlagTextureQualityOverrideEnabled"] = true
+            current["DFIntTextureQualityOverride"] = 3
+        default:
+            current.removeValue(forKey: "DFFlagTextureQualityOverrideEnabled")
+            current.removeValue(forKey: "DFIntTextureQualityOverride")
+        }
+        
+        if data.disableTelemetry {
+            current["FFlagDebugDisableTelemetry"] = true
+        } else {
+            current.removeValue(forKey: "FFlagDebugDisableTelemetry")
+        }
+        
         _ = saveSettings(current)
     }
 }

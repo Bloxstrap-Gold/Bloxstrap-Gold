@@ -92,10 +92,9 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             pushStateToWeb()
             
         case "saveSettings":
-            // FastFlags
+            // FastFlags & Graphics Tweaks
             if let targetFps = body["targetFps"] as? Int {
                 AppState.shared.data.targetFps = targetFps
-                FastFlagManager.shared.setFlag(key: "DFIntTaskSchedulerTargetFps", value: targetFps)
             }
             if let lighting = body["preferredLighting"] as? String {
                 AppState.shared.data.preferredLighting = lighting
@@ -105,41 +104,26 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             }
             if let hideGuis = body["hideGuisEnabled"] as? Bool {
                 AppState.shared.data.hideGuisEnabled = hideGuis
-                if hideGuis {
-                    FastFlagManager.shared.setFlag(key: "DFIntCanHideGuiGroupId", value: 34970455)
-                } else {
-                    FastFlagManager.shared.removeFlag(key: "DFIntCanHideGuiGroupId")
-                }
+            }
+            if let showFps = body["showFpsCounter"] as? Bool {
+                AppState.shared.data.showFpsCounter = showFps
+            }
+            if let grassDist = body["grassDistance"] as? Int {
+                AppState.shared.data.grassDistance = grassDist
+            }
+            if let shadowInt = body["shadowIntensity"] as? Int {
+                AppState.shared.data.shadowIntensity = shadowInt
             }
             
             // Mods & Engine (Modern Bloxstrap Spec)
             if let preserveDpi = body["preserveRenderingQualityDpi"] as? Bool {
                 AppState.shared.data.preserveRenderingQualityDpi = preserveDpi
-                if preserveDpi {
-                    FastFlagManager.shared.setFlag(key: "DFFlagDisableDPIScale", value: true)
-                } else {
-                    FastFlagManager.shared.removeFlag(key: "DFFlagDisableDPIScale")
-                }
             }
             if let textureQual = body["textureQuality"] as? String {
                 AppState.shared.data.textureQuality = textureQual
-                switch textureQual {
-                case "Level 0 (Lowest)":
-                    FastFlagManager.shared.setFlag(key: "DFFlagTextureQualityOverrideEnabled", value: true)
-                    FastFlagManager.shared.setFlag(key: "DFIntTextureQualityOverride", value: 0)
-                case "Level 1":
-                    FastFlagManager.shared.setFlag(key: "DFFlagTextureQualityOverrideEnabled", value: true)
-                    FastFlagManager.shared.setFlag(key: "DFIntTextureQualityOverride", value: 1)
-                case "Level 2":
-                    FastFlagManager.shared.setFlag(key: "DFFlagTextureQualityOverrideEnabled", value: true)
-                    FastFlagManager.shared.setFlag(key: "DFIntTextureQualityOverride", value: 2)
-                case "Level 3 (Highest)":
-                    FastFlagManager.shared.setFlag(key: "DFFlagTextureQualityOverrideEnabled", value: true)
-                    FastFlagManager.shared.setFlag(key: "DFIntTextureQualityOverride", value: 3)
-                default:
-                    FastFlagManager.shared.removeFlag(key: "DFFlagTextureQualityOverrideEnabled")
-                    FastFlagManager.shared.removeFlag(key: "DFIntTextureQualityOverride")
-                }
+            }
+            if let soundPreset = body["deathSoundPreset"] as? String {
+                AppState.shared.data.deathSoundPreset = soundPreset
             }
             if let mouseCursor = body["mouseCursor"] as? String {
                 AppState.shared.data.mouseCursor = mouseCursor
@@ -150,8 +134,11 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             if let emojiFont = body["emojiFont"] as? String {
                 AppState.shared.data.emojiFont = emojiFont
             }
+            if let delay = body["titlebarDelay"] as? Int {
+                AppState.shared.data.titlebarDelay = delay
+            }
             
-            // Integrations
+            // Integrations & Privacy
             if let activityTracking = body["activityTrackingEnabled"] as? Bool {
                 AppState.shared.data.activityTrackingEnabled = activityTracking
             }
@@ -169,6 +156,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             }
             if let discordProfile = body["discordAccountOnProfile"] as? Bool {
                 AppState.shared.data.discordAccountOnProfile = discordProfile
+            }
+            if let streamer = body["streamerMode"] as? Bool {
+                AppState.shared.data.streamerMode = streamer
+            }
+            if let bgFps = body["backgroundFpsLimit"] as? Int {
+                AppState.shared.data.backgroundFpsLimit = bgFps
             }
             
             // Appearance
@@ -204,6 +197,9 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             if let telemetry = body["telemetryEnabled"] as? Bool {
                 AppState.shared.data.telemetryEnabled = telemetry
             }
+            if let disTelem = body["disableTelemetry"] as? Bool {
+                AppState.shared.data.disableTelemetry = disTelem
+            }
             
             // Bootstrapper Debug Options
             if let devMode = body["developerMode"] as? Bool {
@@ -234,6 +230,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             }
             
             AppState.shared.save()
+            FastFlagManager.shared.applyStateFlags(AppState.shared.data)
             webView.evaluateJavaScript("window.onSettingsSaved && window.onSettingsSaved();", completionHandler: nil)
             
         case "playOof":
@@ -285,7 +282,21 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             let avatarUrl = body["avatarUrl"] as? String ?? ""
             let tag = body["tag"] as? String ?? "Alt"
             let note = body["note"] as? String ?? ""
-            AppState.shared.addAccount(username: username, displayName: displayName, userId: userId, avatarUrl: avatarUrl, tag: tag, note: note)
+            let isPinned = body["isPinned"] as? Bool ?? false
+            let cookie = body["cookie"] as? String ?? ""
+            let defaultPlaceId = body["defaultPlaceId"] as? String ?? ""
+            
+            AppState.shared.addAccount(
+                username: username,
+                displayName: displayName,
+                userId: userId,
+                avatarUrl: avatarUrl,
+                tag: tag,
+                note: note,
+                isPinned: isPinned,
+                cookie: cookie,
+                defaultPlaceId: defaultPlaceId
+            )
             pushStateToWeb()
             webView.evaluateJavaScript("window.showToast && window.showToast('✓ Account @\(username) added!');", completionHandler: nil)
             
@@ -302,9 +313,39 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 let avatarUrl = body["avatarUrl"] as? String ?? ""
                 let tag = body["tag"] as? String ?? "Alt"
                 let note = body["note"] as? String ?? ""
-                AppState.shared.editAccount(id: id, username: username, displayName: displayName, userId: userId, avatarUrl: avatarUrl, tag: tag, note: note)
+                let isPinned = body["isPinned"] as? Bool
+                let cookie = body["cookie"] as? String
+                let defaultPlaceId = body["defaultPlaceId"] as? String
+                let status = body["status"] as? String
+                
+                AppState.shared.editAccount(
+                    id: id,
+                    username: username,
+                    displayName: displayName,
+                    userId: userId,
+                    avatarUrl: avatarUrl,
+                    tag: tag,
+                    note: note,
+                    isPinned: isPinned,
+                    cookie: cookie,
+                    defaultPlaceId: defaultPlaceId,
+                    status: status
+                )
                 pushStateToWeb()
                 webView.evaluateJavaScript("window.showToast && window.showToast('✓ Account updated!');", completionHandler: nil)
+            }
+            
+        case "togglePinAccount":
+            if let id = body["id"] as? String {
+                AppState.shared.togglePinAccount(id: id)
+                pushStateToWeb()
+            }
+            
+        case "updateAccountCookie":
+            if let id = body["id"] as? String, let cookie = body["cookie"] as? String {
+                AppState.shared.updateAccountCookie(id: id, cookie: cookie)
+                pushStateToWeb()
+                webView.evaluateJavaScript("window.showToast && window.showToast('✓ Session cookie updated');", completionHandler: nil)
             }
             
         case "deleteAccount":
@@ -314,18 +355,89 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 webView.evaluateJavaScript("window.showToast && window.showToast('🗑 Account profile removed');", completionHandler: nil)
             }
             
+        case "deleteMultipleAccounts":
+            if let ids = body["ids"] as? [String] {
+                for id in ids {
+                    AppState.shared.deleteAccount(id: id)
+                }
+                pushStateToWeb()
+                webView.evaluateJavaScript("window.showToast && window.showToast('🗑 Removed \(ids.count) accounts');", completionHandler: nil)
+            }
+            
         case "resetSampleAccounts":
             AppState.shared.resetSampleAccounts()
             pushStateToWeb()
             webView.evaluateJavaScript("window.showToast && window.showToast('✓ Sample RAM accounts loaded!');", completionHandler: nil)
             
         case "launchAccount":
-            _ = MultiInstanceManager.shared.launchNewInstance()
+            let id = body["id"] as? String ?? ""
+            let user = body["username"] as? String ?? "Account"
+            let placeId = body["placeId"] as? String
+            
+            if !id.isEmpty {
+                AppState.shared.updateAccountLastLaunched(id: id, placeId: placeId)
+            }
+            
+            if let place = placeId, !place.isEmpty {
+                let targetUrl = "roblox://experiences/start?placeId=\(place)"
+                if let gameUrl = URL(string: targetUrl) {
+                    NSWorkspace.shared.open(gameUrl)
+                } else {
+                    _ = MultiInstanceManager.shared.launchNewInstance()
+                }
+                webView.evaluateJavaScript("window.showToast && window.showToast('🚀 Launching @\(user) into Place \(place)...');", completionHandler: nil)
+            } else {
+                _ = MultiInstanceManager.shared.launchNewInstance()
+                webView.evaluateJavaScript("window.showToast && window.showToast('🚀 Launching isolated session for @\(user)...');", completionHandler: nil)
+            }
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 self?.pushStateToWeb()
             }
-            let user = body["username"] as? String ?? "Account"
-            webView.evaluateJavaScript("window.showToast && window.showToast('🚀 Launching isolated session for @\(user)...');", completionHandler: nil)
+            
+        case "launchSelectedAccounts":
+            if let accounts = body["accounts"] as? [[String: Any]] {
+                for (index, acc) in accounts.enumerated() {
+                    let id = acc["id"] as? String ?? ""
+                    let place = acc["placeId"] as? String
+                    if !id.isEmpty {
+                        AppState.shared.updateAccountLastLaunched(id: id, placeId: place)
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.4) {
+                        _ = MultiInstanceManager.shared.launchNewInstance()
+                    }
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + Double(accounts.count) * 0.4 + 0.5) { [weak self] in
+                    self?.pushStateToWeb()
+                }
+                webView.evaluateJavaScript("window.showToast && window.showToast('🚀 Launching \(accounts.count) selected accounts with staggered delay...');", completionHandler: nil)
+            }
+            
+        case "copyToClipboard":
+            if let text = body["text"] as? String {
+                let pasteboard = NSPasteboard.general
+                pasteboard.clearContents()
+                pasteboard.setString(text, forType: .string)
+                let label = body["label"] as? String ?? "Text"
+                webView.evaluateJavaScript("window.showToast && window.showToast('📋 Copied \(label) to clipboard!');", completionHandler: nil)
+            }
+            
+        case "openBrowserUrl":
+            if let urlStr = body["url"] as? String, let url = URL(string: urlStr) {
+                NSWorkspace.shared.open(url)
+            }
+            
+        case "importAccountsJson":
+            if let jsonStr = body["json"] as? String,
+               let data = jsonStr.data(using: .utf8),
+               let imported = try? JSONDecoder().decode([AppState.AccountProfile].self, from: data) {
+                AppState.shared.data.accounts = imported
+                AppState.shared.save()
+                pushStateToWeb()
+                webView.evaluateJavaScript("window.showToast && window.showToast('✓ Successfully imported \(imported.count) accounts!');", completionHandler: nil)
+            } else {
+                webView.evaluateJavaScript("window.showToast && window.showToast('❌ Invalid accounts JSON format');", completionHandler: nil)
+            }
             
         case "joinGame":
             let placeId = body["placeId"] as? String ?? ""
@@ -581,7 +693,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 "avatarUrl": acc.avatarUrl,
                 "tag": acc.tag,
                 "note": acc.note,
-                "addedDate": acc.addedDate
+                "addedDate": acc.addedDate,
+                "isPinned": acc.isPinned,
+                "cookie": acc.cookie,
+                "defaultPlaceId": acc.defaultPlaceId,
+                "status": acc.status,
+                "lastLaunched": acc.lastLaunched
             ])
         }
         
@@ -594,11 +711,14 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             
             "hasSeenWelcomeIntro": AppState.shared.data.hasSeenWelcomeIntro,
             
-            // FastFlags
+            // FastFlags & Graphics Tweaks
             "targetFps": AppState.shared.data.targetFps,
             "preferredLighting": AppState.shared.data.preferredLighting,
             "escapeMenuVersion": AppState.shared.data.escapeMenuVersion,
             "hideGuisEnabled": AppState.shared.data.hideGuisEnabled,
+            "showFpsCounter": AppState.shared.data.showFpsCounter,
+            "grassDistance": AppState.shared.data.grassDistance,
+            "shadowIntensity": AppState.shared.data.shadowIntensity,
             
             // Mods & Modern Engine Settings
             "preserveRenderingQualityDpi": AppState.shared.data.preserveRenderingQualityDpi,
@@ -609,17 +729,21 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             "inGameMenuVersion": AppState.shared.data.inGameMenuVersion,
             "disableFullscreenOptimizations": AppState.shared.data.disableFullscreenOptimizations,
             "customDeathSound": AppState.shared.data.customDeathSound,
+            "deathSoundPreset": AppState.shared.data.deathSoundPreset,
             "mouseCursor": AppState.shared.data.mouseCursor,
             "oldAvatarBackground": AppState.shared.data.oldAvatarBackground,
             "emojiFont": AppState.shared.data.emojiFont,
+            "titlebarDelay": AppState.shared.data.titlebarDelay,
             
-            // Integrations
+            // Integrations & Privacy
             "activityTrackingEnabled": AppState.shared.data.activityTrackingEnabled,
             "showServerDetailsEnabled": AppState.shared.data.showServerDetailsEnabled,
             "dontExitToDesktopApp": AppState.shared.data.dontExitToDesktopApp,
             "discordActivityEnabled": AppState.shared.data.discordActivityEnabled,
             "discordActivityJoinEnabled": AppState.shared.data.discordActivityJoinEnabled,
             "discordAccountOnProfile": AppState.shared.data.discordAccountOnProfile,
+            "streamerMode": AppState.shared.data.streamerMode,
+            "backgroundFpsLimit": AppState.shared.data.backgroundFpsLimit,
             
             // Appearance
             "theme": AppState.shared.data.theme,
@@ -634,6 +758,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             "backgroundUpdates": AppState.shared.data.backgroundUpdates,
             "forceRobloxReinstall": AppState.shared.data.forceRobloxReinstall,
             "telemetryEnabled": AppState.shared.data.telemetryEnabled,
+            "disableTelemetry": AppState.shared.data.disableTelemetry,
             
             // Bootstrapper Debug Options
             "developerMode": AppState.shared.data.developerMode,

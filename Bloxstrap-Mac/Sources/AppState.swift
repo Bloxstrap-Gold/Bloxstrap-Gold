@@ -9,9 +9,14 @@ public class AppState {
         public var displayName: String
         public var userId: String
         public var avatarUrl: String
-        public var tag: String // "Main", "Alt", "Farming", "Bank", "Trading"
+        public var tag: String // "Main", "Alt", "Farming", "Bank", "Trading", "Storage", "Bot"
         public var note: String
         public var addedDate: String
+        public var isPinned: Bool
+        public var cookie: String
+        public var defaultPlaceId: String
+        public var status: String // "Ready", "In Game", "Farming", "Offline"
+        public var lastLaunched: String
         
         public init(
             id: String = UUID().uuidString,
@@ -21,7 +26,12 @@ public class AppState {
             avatarUrl: String = "",
             tag: String = "Main",
             note: String = "",
-            addedDate: String = "2026-10-23"
+            addedDate: String = "2026-10-23",
+            isPinned: Bool = false,
+            cookie: String = "",
+            defaultPlaceId: String = "",
+            status: String = "Ready",
+            lastLaunched: String = "Never"
         ) {
             self.id = id
             self.username = username
@@ -31,10 +41,16 @@ public class AppState {
             self.tag = tag
             self.note = note
             self.addedDate = addedDate
+            self.isPinned = isPinned
+            self.cookie = cookie
+            self.defaultPlaceId = defaultPlaceId
+            self.status = status
+            self.lastLaunched = lastLaunched
         }
         
         enum CodingKeys: String, CodingKey {
             case id, username, displayName, userId, avatarUrl, tag, note, addedDate
+            case isPinned, cookie, defaultPlaceId, status, lastLaunched
         }
         
         public init(from decoder: Decoder) throws {
@@ -47,6 +63,11 @@ public class AppState {
             self.tag = try container.decodeIfPresent(String.self, forKey: .tag) ?? "Main"
             self.note = try container.decodeIfPresent(String.self, forKey: .note) ?? ""
             self.addedDate = try container.decodeIfPresent(String.self, forKey: .addedDate) ?? "2026-10-23"
+            self.isPinned = try container.decodeIfPresent(Bool.self, forKey: .isPinned) ?? false
+            self.cookie = try container.decodeIfPresent(String.self, forKey: .cookie) ?? ""
+            self.defaultPlaceId = try container.decodeIfPresent(String.self, forKey: .defaultPlaceId) ?? ""
+            self.status = try container.decodeIfPresent(String.self, forKey: .status) ?? "Ready"
+            self.lastLaunched = try container.decodeIfPresent(String.self, forKey: .lastLaunched) ?? "Never"
         }
     }
     
@@ -61,19 +82,24 @@ public class AppState {
         public var isFastFlagsUnlocked: Bool = false
         public var multiInstanceEnabled: Bool = true
         
-        // FastFlags
+        // FastFlags & Graphics Tweaks
         public var targetFps: Int = 9999
         public var preferredLighting: String = "Future (Phase 3)"
         public var escapeMenuVersion: String = "Version 4 (2023)"
         public var hideGuisEnabled: Bool = true
+        public var showFpsCounter: Bool = true
+        public var grassDistance: Int = 300
+        public var shadowIntensity: Int = 100
         
         // Mods & Engine (Modern Upstream Bloxstrap Spec)
         public var preserveRenderingQualityDpi: Bool = true
         public var textureQuality: String = "Default"
         public var customDeathSound: Bool = true
-        public var mouseCursor: String = "Default"
+        public var deathSoundPreset: String = "Classic OOF (2006)"
+        public var mouseCursor: String = "Default (2020)"
         public var oldAvatarBackground: Bool = false
         public var emojiFont: String = "Default"
+        public var titlebarDelay: Int = 350
         
         // Legacy fields preserved for backward compatibility
         public var renderingMode: String = "Direct3D 11"
@@ -82,13 +108,15 @@ public class AppState {
         public var inGameMenuVersion: String = "Version 4 (2023)"
         public var disableFullscreenOptimizations: Bool = false
         
-        // Integrations
+        // Integrations & Privacy
         public var activityTrackingEnabled: Bool = true
         public var showServerDetailsEnabled: Bool = true
         public var dontExitToDesktopApp: Bool = true
         public var discordActivityEnabled: Bool = true
         public var discordActivityJoinEnabled: Bool = true
         public var discordAccountOnProfile: Bool = true
+        public var streamerMode: Bool = false
+        public var backgroundFpsLimit: Int = 15
         
         // Appearance
         public var theme: String = "Dark (Windows 11 Mica)"
@@ -103,6 +131,7 @@ public class AppState {
         public var backgroundUpdates: Bool = true
         public var forceRobloxReinstall: Bool = false
         public var telemetryEnabled: Bool = false
+        public var disableTelemetry: Bool = false
         
         // Bootstrapper Debug & Diagnostic Options
         public var developerMode: Bool = false
@@ -125,8 +154,12 @@ public class AppState {
                 userId: "1",
                 avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter",
                 tag: "Main",
-                note: "Primary gaming profile",
-                addedDate: "2026-10-22"
+                note: "Primary gaming profile • Natural Disaster Survival",
+                addedDate: "2026-10-22",
+                isPinned: true,
+                defaultPlaceId: "189707",
+                status: "Ready",
+                lastLaunched: "Today at 2:30 PM"
             ),
             AccountProfile(
                 id: "2",
@@ -135,8 +168,12 @@ public class AppState {
                 userId: "156",
                 avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-635A2AA0A87D473B6136800B5B86F761-Png/150/150/AvatarHeadshot/Png/noFilter",
                 tag: "Farming",
-                note: "Max level 2550 • Auto-farming alt",
-                addedDate: "2026-10-23"
+                note: "Max level 2550 • Auto-farming Third Sea",
+                addedDate: "2026-10-23",
+                isPinned: true,
+                defaultPlaceId: "2753915549",
+                status: "Ready",
+                lastLaunched: "Yesterday"
             ),
             AccountProfile(
                 id: "3",
@@ -145,8 +182,12 @@ public class AppState {
                 userId: "261",
                 avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3B3B81F4602EE5424673376A726F427E-Png/150/150/AvatarHeadshot/Png/noFilter",
                 tag: "Trading",
-                note: "Limiteds & trading hub alt",
-                addedDate: "2026-10-23"
+                note: "Limiteds & trading hub alt • Pet Simulator 99",
+                addedDate: "2026-10-23",
+                isPinned: false,
+                defaultPlaceId: "8737899170",
+                status: "Ready",
+                lastLaunched: "3 days ago"
             ),
             AccountProfile(
                 id: "4",
@@ -155,20 +196,24 @@ public class AppState {
                 userId: "6276777",
                 avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-59378961EA8345F17879FB7148754D1B-Png/150/150/AvatarHeadshot/Png/noFilter",
                 tag: "Alt",
-                note: "Testing & development account",
-                addedDate: "2026-10-23"
+                note: "Testing & development account • Doors Floor 2",
+                addedDate: "2026-10-23",
+                isPinned: false,
+                defaultPlaceId: "6516141723",
+                status: "Ready",
+                lastLaunched: "1 hour ago"
             )
         ]
         
         enum CodingKeys: String, CodingKey {
             case firstRunDate, hasSeenGoldGreeting, forceTrialExpired, isPaymentIgnored, isBannerDismissed
             case vipKey, hasSeenWelcomeIntro, isFastFlagsUnlocked, multiInstanceEnabled
-            case targetFps, preferredLighting, escapeMenuVersion, hideGuisEnabled
-            case preserveRenderingQualityDpi, textureQuality
+            case targetFps, preferredLighting, escapeMenuVersion, hideGuisEnabled, showFpsCounter, grassDistance, shadowIntensity
+            case preserveRenderingQualityDpi, textureQuality, deathSoundPreset, titlebarDelay
             case renderingMode, exclusiveFullscreen, alternateQualitySelector, inGameMenuVersion, disableFullscreenOptimizations, customDeathSound, mouseCursor, oldAvatarBackground, emojiFont
-            case activityTrackingEnabled, showServerDetailsEnabled, dontExitToDesktopApp, discordActivityEnabled, discordActivityJoinEnabled, discordAccountOnProfile
+            case activityTrackingEnabled, showServerDetailsEnabled, dontExitToDesktopApp, discordActivityEnabled, discordActivityJoinEnabled, discordAccountOnProfile, streamerMode, backgroundFpsLimit
             case theme, language, bootstrapperStyle, robloxIcon, customTitle
-            case autoUpdateChecking, confirmLaunches, backgroundUpdates, forceRobloxReinstall, telemetryEnabled
+            case autoUpdateChecking, confirmLaunches, backgroundUpdates, forceRobloxReinstall, telemetryEnabled, disableTelemetry
             case developerMode, robloxChannel, debugDisablePackageCleanup, bypassConnectivityChecks, verboseBootstrapperLogging
             case createDesktopShortcuts, createAppsShortcut, registerUrlHandler
             case accounts
@@ -191,6 +236,10 @@ public class AppState {
             self.preferredLighting = try c.decodeIfPresent(String.self, forKey: .preferredLighting) ?? "Future (Phase 3)"
             self.escapeMenuVersion = try c.decodeIfPresent(String.self, forKey: .escapeMenuVersion) ?? "Version 4 (2023)"
             self.hideGuisEnabled = try c.decodeIfPresent(Bool.self, forKey: .hideGuisEnabled) ?? true
+            self.showFpsCounter = try c.decodeIfPresent(Bool.self, forKey: .showFpsCounter) ?? true
+            self.grassDistance = try c.decodeIfPresent(Int.self, forKey: .grassDistance) ?? 300
+            self.shadowIntensity = try c.decodeIfPresent(Int.self, forKey: .shadowIntensity) ?? 100
+            
             self.preserveRenderingQualityDpi = try c.decodeIfPresent(Bool.self, forKey: .preserveRenderingQualityDpi) ?? true
             self.textureQuality = try c.decodeIfPresent(String.self, forKey: .textureQuality) ?? "Default"
             self.renderingMode = try c.decodeIfPresent(String.self, forKey: .renderingMode) ?? "Direct3D 11"
@@ -199,15 +248,21 @@ public class AppState {
             self.inGameMenuVersion = try c.decodeIfPresent(String.self, forKey: .inGameMenuVersion) ?? "Version 4 (2023)"
             self.disableFullscreenOptimizations = try c.decodeIfPresent(Bool.self, forKey: .disableFullscreenOptimizations) ?? false
             self.customDeathSound = try c.decodeIfPresent(Bool.self, forKey: .customDeathSound) ?? true
-            self.mouseCursor = try c.decodeIfPresent(String.self, forKey: .mouseCursor) ?? "Default"
+            self.deathSoundPreset = try c.decodeIfPresent(String.self, forKey: .deathSoundPreset) ?? "Classic OOF (2006)"
+            self.mouseCursor = try c.decodeIfPresent(String.self, forKey: .mouseCursor) ?? "Default (2020)"
             self.oldAvatarBackground = try c.decodeIfPresent(Bool.self, forKey: .oldAvatarBackground) ?? false
             self.emojiFont = try c.decodeIfPresent(String.self, forKey: .emojiFont) ?? "Default"
+            self.titlebarDelay = try c.decodeIfPresent(Int.self, forKey: .titlebarDelay) ?? 350
+            
             self.activityTrackingEnabled = try c.decodeIfPresent(Bool.self, forKey: .activityTrackingEnabled) ?? true
             self.showServerDetailsEnabled = try c.decodeIfPresent(Bool.self, forKey: .showServerDetailsEnabled) ?? true
             self.dontExitToDesktopApp = try c.decodeIfPresent(Bool.self, forKey: .dontExitToDesktopApp) ?? true
             self.discordActivityEnabled = try c.decodeIfPresent(Bool.self, forKey: .discordActivityEnabled) ?? true
             self.discordActivityJoinEnabled = try c.decodeIfPresent(Bool.self, forKey: .discordActivityJoinEnabled) ?? true
             self.discordAccountOnProfile = try c.decodeIfPresent(Bool.self, forKey: .discordAccountOnProfile) ?? true
+            self.streamerMode = try c.decodeIfPresent(Bool.self, forKey: .streamerMode) ?? false
+            self.backgroundFpsLimit = try c.decodeIfPresent(Int.self, forKey: .backgroundFpsLimit) ?? 15
+            
             self.theme = try c.decodeIfPresent(String.self, forKey: .theme) ?? "Dark (Windows 11 Mica)"
             self.language = try c.decodeIfPresent(String.self, forKey: .language) ?? "System default"
             self.bootstrapperStyle = try c.decodeIfPresent(String.self, forKey: .bootstrapperStyle) ?? "Fluent"
@@ -218,6 +273,7 @@ public class AppState {
             self.backgroundUpdates = try c.decodeIfPresent(Bool.self, forKey: .backgroundUpdates) ?? true
             self.forceRobloxReinstall = try c.decodeIfPresent(Bool.self, forKey: .forceRobloxReinstall) ?? false
             self.telemetryEnabled = try c.decodeIfPresent(Bool.self, forKey: .telemetryEnabled) ?? false
+            self.disableTelemetry = try c.decodeIfPresent(Bool.self, forKey: .disableTelemetry) ?? false
             self.developerMode = try c.decodeIfPresent(Bool.self, forKey: .developerMode) ?? false
             self.robloxChannel = try c.decodeIfPresent(String.self, forKey: .robloxChannel) ?? "LIVE"
             self.debugDisablePackageCleanup = try c.decodeIfPresent(Bool.self, forKey: .debugDisablePackageCleanup) ?? false
@@ -237,8 +293,12 @@ public class AppState {
                         userId: "1",
                         avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter",
                         tag: "Main",
-                        note: "Primary gaming profile",
-                        addedDate: "2026-10-22"
+                        note: "Primary gaming profile • Natural Disaster Survival",
+                        addedDate: "2026-10-22",
+                        isPinned: true,
+                        defaultPlaceId: "189707",
+                        status: "Ready",
+                        lastLaunched: "Today at 2:30 PM"
                     ),
                     AccountProfile(
                         id: "2",
@@ -247,8 +307,12 @@ public class AppState {
                         userId: "156",
                         avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-635A2AA0A87D473B6136800B5B86F761-Png/150/150/AvatarHeadshot/Png/noFilter",
                         tag: "Farming",
-                        note: "Max level 2550 • Auto-farming alt",
-                        addedDate: "2026-10-23"
+                        note: "Max level 2550 • Auto-farming Third Sea",
+                        addedDate: "2026-10-23",
+                        isPinned: true,
+                        defaultPlaceId: "2753915549",
+                        status: "Ready",
+                        lastLaunched: "Yesterday"
                     ),
                     AccountProfile(
                         id: "3",
@@ -257,8 +321,12 @@ public class AppState {
                         userId: "261",
                         avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3B3B81F4602EE5424673376A726F427E-Png/150/150/AvatarHeadshot/Png/noFilter",
                         tag: "Trading",
-                        note: "Limiteds & trading hub alt",
-                        addedDate: "2026-10-23"
+                        note: "Limiteds & trading hub alt • Pet Simulator 99",
+                        addedDate: "2026-10-23",
+                        isPinned: false,
+                        defaultPlaceId: "8737899170",
+                        status: "Ready",
+                        lastLaunched: "3 days ago"
                     ),
                     AccountProfile(
                         id: "4",
@@ -267,8 +335,12 @@ public class AppState {
                         userId: "6276777",
                         avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-59378961EA8345F17879FB7148754D1B-Png/150/150/AvatarHeadshot/Png/noFilter",
                         tag: "Alt",
-                        note: "Testing & development account",
-                        addedDate: "2026-10-23"
+                        note: "Testing & development account • Doors Floor 2",
+                        addedDate: "2026-10-23",
+                        isPinned: false,
+                        defaultPlaceId: "6516141723",
+                        status: "Ready",
+                        lastLaunched: "1 hour ago"
                     )
                 ]
             } else {
@@ -396,7 +468,17 @@ public class AppState {
     
     // MARK: - Account Management (RAM)
     
-    public func addAccount(username: String, displayName: String, userId: String, avatarUrl: String = "", tag: String, note: String) {
+    public func addAccount(
+        username: String,
+        displayName: String,
+        userId: String,
+        avatarUrl: String = "",
+        tag: String,
+        note: String,
+        isPinned: Bool = false,
+        cookie: String = "",
+        defaultPlaceId: String = ""
+    ) {
         let cleanUsername = username.trimmingCharacters(in: .whitespacesAndNewlines)
         let cleanDisplayName = displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? cleanUsername : displayName
         let cleanUserId = userId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "1" : userId
@@ -410,13 +492,30 @@ public class AppState {
             avatarUrl: avatarUrl,
             tag: cleanTag,
             note: note,
-            addedDate: "2026-10-23"
+            addedDate: "2026-10-23",
+            isPinned: isPinned,
+            cookie: cookie,
+            defaultPlaceId: defaultPlaceId,
+            status: "Ready",
+            lastLaunched: "Never"
         )
         data.accounts.append(newAcc)
         save()
     }
     
-    public func editAccount(id: String, username: String, displayName: String, userId: String, avatarUrl: String = "", tag: String, note: String) {
+    public func editAccount(
+        id: String,
+        username: String,
+        displayName: String,
+        userId: String,
+        avatarUrl: String = "",
+        tag: String,
+        note: String,
+        isPinned: Bool? = nil,
+        cookie: String? = nil,
+        defaultPlaceId: String? = nil,
+        status: String? = nil
+    ) {
         if let idx = data.accounts.firstIndex(where: { $0.id == id }) {
             data.accounts[idx].username = username.trimmingCharacters(in: .whitespacesAndNewlines)
             data.accounts[idx].displayName = displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? data.accounts[idx].username : displayName
@@ -426,6 +525,46 @@ public class AppState {
             }
             data.accounts[idx].tag = tag.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Alt" : tag
             data.accounts[idx].note = note
+            if let pin = isPinned {
+                data.accounts[idx].isPinned = pin
+            }
+            if let c = cookie {
+                data.accounts[idx].cookie = c
+            }
+            if let p = defaultPlaceId {
+                data.accounts[idx].defaultPlaceId = p
+            }
+            if let s = status {
+                data.accounts[idx].status = s
+            }
+            save()
+        }
+    }
+    
+    public func togglePinAccount(id: String) {
+        if let idx = data.accounts.firstIndex(where: { $0.id == id }) {
+            data.accounts[idx].isPinned.toggle()
+            save()
+        }
+    }
+    
+    public func updateAccountCookie(id: String, cookie: String) {
+        if let idx = data.accounts.firstIndex(where: { $0.id == id }) {
+            data.accounts[idx].cookie = cookie
+            save()
+        }
+    }
+    
+    public func updateAccountLastLaunched(id: String, placeId: String? = nil) {
+        if let idx = data.accounts.firstIndex(where: { $0.id == id }) {
+            let df = DateFormatter()
+            df.timeStyle = .short
+            df.dateStyle = .none
+            data.accounts[idx].lastLaunched = "Today at " + df.string(from: Date())
+            data.accounts[idx].status = "Active"
+            if let place = placeId, !place.isEmpty {
+                data.accounts[idx].defaultPlaceId = place
+            }
             save()
         }
     }
@@ -444,8 +583,12 @@ public class AppState {
                 userId: "1",
                 avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter",
                 tag: "Main",
-                note: "Primary gaming profile",
-                addedDate: "2026-10-22"
+                note: "Primary gaming profile • Natural Disaster Survival",
+                addedDate: "2026-10-22",
+                isPinned: true,
+                defaultPlaceId: "189707",
+                status: "Ready",
+                lastLaunched: "Today at 2:30 PM"
             ),
             AccountProfile(
                 id: "2",
@@ -454,8 +597,12 @@ public class AppState {
                 userId: "156",
                 avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-635A2AA0A87D473B6136800B5B86F761-Png/150/150/AvatarHeadshot/Png/noFilter",
                 tag: "Farming",
-                note: "Max level 2550 • Auto-farming alt",
-                addedDate: "2026-10-23"
+                note: "Max level 2550 • Auto-farming Third Sea",
+                addedDate: "2026-10-23",
+                isPinned: true,
+                defaultPlaceId: "2753915549",
+                status: "Ready",
+                lastLaunched: "Yesterday"
             ),
             AccountProfile(
                 id: "3",
@@ -464,8 +611,12 @@ public class AppState {
                 userId: "261",
                 avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3B3B81F4602EE5424673376A726F427E-Png/150/150/AvatarHeadshot/Png/noFilter",
                 tag: "Trading",
-                note: "Limiteds & trading hub alt",
-                addedDate: "2026-10-23"
+                note: "Limiteds & trading hub alt • Pet Simulator 99",
+                addedDate: "2026-10-23",
+                isPinned: false,
+                defaultPlaceId: "8737899170",
+                status: "Ready",
+                lastLaunched: "3 days ago"
             ),
             AccountProfile(
                 id: "4",
@@ -474,8 +625,12 @@ public class AppState {
                 userId: "6276777",
                 avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-59378961EA8345F17879FB7148754D1B-Png/150/150/AvatarHeadshot/Png/noFilter",
                 tag: "Alt",
-                note: "Testing & development account",
-                addedDate: "2026-10-23"
+                note: "Testing & development account • Doors Floor 2",
+                addedDate: "2026-10-23",
+                isPinned: false,
+                defaultPlaceId: "6516141723",
+                status: "Ready",
+                lastLaunched: "1 hour ago"
             )
         ]
         save()
