@@ -33,12 +33,12 @@ public class FastFlagManager {
             category: "Rendering"
         ),
         AllowedFlag(
-            key: "FIntDebugForceMSAASamples",
-            name: "Force MSAA Anti-Aliasing",
-            description: "Multisample anti-aliasing level: 1 (Off), 2 (2x MSAA), 4 (4x MSAA).",
-            defaultValue: 4,
+            key: "FIntFullscreenTitleBarTriggerDelayMillis",
+            name: "Fullscreen Titlebar Trigger Delay",
+            description: "Delay in milliseconds before showing the title bar in fullscreen mode (default: 350).",
+            defaultValue: 350,
             isAllowed: true,
-            category: "Anti-Aliasing"
+            category: "UI"
         ),
         AllowedFlag(
             key: "DFFlagTextureQualityOverrideEnabled",
@@ -57,14 +57,6 @@ public class FastFlagManager {
             category: "Textures"
         ),
         AllowedFlag(
-            key: "FFlagHandleAltEnterFullscreenManually",
-            name: "Alt+Enter Fullscreen Handling",
-            description: "Enables manual exclusive fullscreen toggle on Alt+Enter keypress.",
-            defaultValue: true,
-            isAllowed: true,
-            category: "Input"
-        ),
-        AllowedFlag(
             key: "FFlagDebugDisplayFPS",
             name: "Engine HUD FPS Display",
             description: "Displays authentic native engine frames-per-second overlay.",
@@ -73,36 +65,12 @@ public class FastFlagManager {
             category: "Telemetry"
         ),
         AllowedFlag(
-            key: "FFlagDebugGraphicsPreferD3D11",
-            name: "Prefer Direct3D 11",
-            description: "Direct3D 11 rendering pipeline preference (Windows/Wine compatibility).",
-            defaultValue: false,
-            isAllowed: true,
-            category: "Backend"
-        ),
-        AllowedFlag(
-            key: "FFlagDebugGraphicsPreferVulkan",
-            name: "Prefer Vulkan / MoltenVK",
-            description: "Uses Vulkan/MoltenVK translation backend on macOS for smooth pacing.",
-            defaultValue: true,
-            isAllowed: true,
-            category: "Backend"
-        ),
-        AllowedFlag(
             key: "FIntFRMMaxGrassDistance",
             name: "Max Grass Rendering Distance",
             description: "Extends procedural terrain grass draw distance in studs (default: 300).",
             defaultValue: 300,
             isAllowed: true,
             category: "Graphics"
-        ),
-        AllowedFlag(
-            key: "FFlagFixGraphicsQuality",
-            name: "Lock High Quality Rendering",
-            description: "Prevents dynamic resolution reduction and LOD drops during heavy combat.",
-            defaultValue: true,
-            isAllowed: true,
-            category: "Rendering"
         ),
         AllowedFlag(
             key: "DFIntCanHideGuiGroupId",

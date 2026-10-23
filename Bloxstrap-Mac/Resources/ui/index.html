@@ -1026,6 +1026,219 @@
     }
 
     /* --------------------------------------------------------------------------
+       FIRST-TIME WELCOME INTRO WIZARD MODAL
+       -------------------------------------------------------------------------- */
+    .welcome-wizard-card {
+      width: 620px;
+      background: linear-gradient(180deg, #242023 0%, #19181f 100%);
+      border: 1.5px solid rgba(245, 158, 11, 0.45);
+      border-radius: 14px;
+      padding: 32px 36px;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(245, 158, 11, 0.2);
+      position: relative;
+      color: #ffffff;
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .welcome-wizard-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .welcome-wizard-crown {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(252, 211, 77, 0.25) 0%, rgba(245, 158, 11, 0.05) 70%);
+      border: 1.5px solid rgba(245, 158, 11, 0.5);
+      font-size: 38px;
+      margin-bottom: 12px;
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+    }
+
+    .welcome-wizard-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .welcome-wizard-sub {
+      font-size: 13px;
+      color: #a8a7b5;
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+
+    .welcome-step-pane {
+      display: none;
+    }
+
+    .welcome-step-pane.active {
+      display: block;
+      animation: fadeInStep 0.2s ease;
+    }
+
+    @keyframes fadeInStep {
+      from { opacity: 0; transform: translateX(8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .welcome-feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .welcome-feature-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .welcome-feature-card:hover {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .welcome-feature-icon {
+      font-size: 24px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .welcome-feature-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fcd34d;
+      margin-bottom: 3px;
+    }
+
+    .welcome-feature-desc {
+      font-size: 11.5px;
+      color: #c5c4d0;
+      line-height: 1.4;
+    }
+
+    .welcome-dots-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 20px 0 16px 0;
+    }
+
+    .welcome-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3e3d4c;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .welcome-dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #fcd34d, #f59e0b);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    }
+
+    .welcome-footer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 16px;
+      margin-top: 8px;
+    }
+
+    /* --------------------------------------------------------------------------
+       BOOTSTRAPPER SIMULATION DIALOG
+       -------------------------------------------------------------------------- */
+    .bootstrapper-sim-card {
+      width: 480px;
+      background: #1e1d24;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 24px 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
+      color: #ffffff;
+    }
+
+    .bootstrapper-sim-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .bootstrapper-sim-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .bootstrapper-sim-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .bootstrapper-sim-channel {
+      font-size: 11px;
+      color: #f59e0b;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.15);
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 3px;
+    }
+
+    .bootstrapper-sim-progress-track {
+      width: 100%;
+      height: 6px;
+      background: #2a2935;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 14px 0 8px 0;
+      position: relative;
+    }
+
+    .bootstrapper-sim-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fcd34d, #f59e0b);
+      border-radius: 3px;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+    }
+
+    .bootstrapper-sim-status {
+      font-size: 12px;
+      color: #a8a7b5;
+      font-family: var(--font-mono);
+      min-height: 18px;
+      margin-bottom: 18px;
+    }
+
+    /* --------------------------------------------------------------------------
        ABOUT PAGE HERO & CONTRIBUTORS (EXACT SCREENSHOT 3)
        -------------------------------------------------------------------------- */
     .about-hero {
@@ -1457,7 +1670,7 @@
           <div class="integrations-left">
             <div class="integrations-list" id="customIntegrationsList">
               <div class="integration-item selected" data-idx="0">FPS Unlocker Daemon</div>
-              <div class="integration-item" data-idx="1">ReShade Shader Engine</div>
+              <div class="integration-item" data-idx="1">Discord Game Activity Bridge</div>
             </div>
             <div class="integrations-left-actions">
               <button class="pill-btn" id="btnNewIntegration" style="flex: 1; padding: 4px 8px; font-size: 11px;">＋ New</button>
@@ -1593,68 +1806,45 @@
           </div>
         </div>
 
-        <!-- Rendering mode -->
+        <!-- Preserve rendering quality with display scaling -->
         <div class="option-card">
           <div class="option-info">
-            <div class="option-title">Rendering mode</div>
-            <div class="option-desc">Select which renderer Roblox should use. ReShade requires Direct3D 11.</div>
+            <div class="option-title">Preserve rendering quality with display scaling</div>
+            <div class="option-desc">Ensures 1:1 pixel rendering quality on high-DPI and Retina displays without blurry downscaling.</div>
           </div>
-          <select class="fluent-select" id="selectRenderingMode">
-            <option value="Direct3D 11" selected>Direct3D 11</option>
-            <option value="Metal (macOS Default)">Metal (macOS Default)</option>
-            <option value="Vulkan / MoltenVK">Vulkan / MoltenVK</option>
-            <option value="OpenGL">OpenGL</option>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="togglePreserveDpi" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Texture quality -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Texture quality</div>
+            <div class="option-desc">Override dynamic texture downsampling to enforce full-resolution textures.</div>
+          </div>
+          <select class="fluent-select" id="selectTextureQuality">
+            <option value="Default" selected>Default (Automatic)</option>
+            <option value="Level 0 (Lowest)">Level 0 (Lowest / Potato)</option>
+            <option value="Level 1">Level 1 (Medium)</option>
+            <option value="Level 2">Level 2 (High)</option>
+            <option value="Level 3 (Highest)">Level 3 (Highest / Uncompressed)</option>
           </select>
         </div>
 
-        <!-- Use exclusive fullscreen -->
+        <!-- Fullscreen titlebar trigger delay -->
         <div class="option-card">
           <div class="option-info">
-            <div class="option-title">Use exclusive fullscreen</div>
-            <div class="option-desc">Enables using Alt + Enter to enter exclusive fullscreen. Only works with Direct3D 11.</div>
+            <div class="option-title">Fullscreen title bar delay</div>
+            <div class="option-desc">Configures how long the cursor must linger at screen top before showing title bar.</div>
           </div>
-          <label class="fluent-toggle">
-            <input type="checkbox" id="toggleExclusiveFullscreen">
-            <span class="fluent-toggle-slider"></span>
-          </label>
-        </div>
-
-        <!-- Alternate graphics quality selector -->
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Use alternate graphics quality selector</div>
-            <div class="option-desc">Toggle between using the consolidated 1-10 / fine-grained 1-21 graphics quality slider.</div>
-          </div>
-          <label class="fluent-toggle">
-            <input type="checkbox" id="toggleAltQuality">
-            <span class="fluent-toggle-slider"></span>
-          </label>
-        </div>
-
-        <!-- In-game menu version -->
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">In-game menu version</div>
-            <div class="option-desc">Choose which version of the in-game menu to use. Current default is v1.</div>
-          </div>
-          <select class="fluent-select" id="selectInGameMenu">
-            <option value="Default">Default</option>
-            <option value="Version 1 (2015)">Version 1 (2015)</option>
-            <option value="Version 2 (2020)">Version 2 (2020)</option>
-            <option value="Version 3 (2021)" selected>Version 3 (2021)</option>
+          <select class="fluent-select" id="selectTitlebarDelay">
+            <option value="350" selected>350 ms (Default)</option>
+            <option value="0">Immediate (0 ms)</option>
+            <option value="1000">1000 ms (1 second)</option>
+            <option value="3000">3000 ms (Long delay)</option>
           </select>
-        </div>
-
-        <!-- Disable full-screen optimizations -->
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Disable full-screen optimizations</div>
-            <div class="option-desc">A Windows feature that can potentially cause problems - <a id="linkFso">click here for more info</a>.</div>
-          </div>
-          <label class="fluent-toggle">
-            <input type="checkbox" id="toggleDisableFso">
-            <span class="fluent-toggle-slider"></span>
-          </label>
         </div>
       </div>
 
@@ -1924,6 +2114,90 @@
           </label>
         </div>
 
+        <div class="section-title">Bootstrapper &amp; Diagnostic Debug Options</div>
+        <div class="section-subtitle">Developer controls for bootstrapper deployment, package retention, and simulation.</div>
+
+        <!-- Developer Mode -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Developer Mode</div>
+            <div class="option-desc">Enables diagnostic telemetry, unverified FastFlag editing, and developer environments.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDeveloperMode">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Roblox Deployment Channel -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Roblox Deployment Channel</div>
+            <div class="option-desc">Specify which Roblox update channel to fetch packages from.</div>
+          </div>
+          <select class="fluent-select" id="selectRobloxChannel" style="min-width: 190px;">
+            <option value="LIVE" selected>LIVE (Standard Production)</option>
+            <option value="ZCanary">ZCanary (Experimental Preview)</option>
+            <option value="ZIntegration">ZIntegration (Internal QA)</option>
+            <option value="ZChannel1">ZChannel1 (Feature Flight 1)</option>
+          </select>
+        </div>
+
+        <!-- Disable Version Package Cleanup -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Disable version package cleanup</div>
+            <div class="option-desc">Retain previous Roblox build packages in application cache for offline debugging.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDisablePackageCleanup">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Bypass Connectivity Checks -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Bypass connectivity checks</div>
+            <div class="option-desc">Skip pre-launch HTTP availability verification to allow offline play or custom proxy setups.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleBypassConnectivity">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Verbose Bootstrapper Logging -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Verbose bootstrapper logging</div>
+            <div class="option-desc">Write complete execution traces, package hashes, and FastFlag injection logs to bootstrapper.log.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleVerboseLogging">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Debug Action Cards: Simulate Bootstrapper & View Logs -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0 20px 0;">
+          <div class="action-card" id="cardSimulateBootstrapper" style="cursor: pointer; padding: 14px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 6px; display: flex; gap: 12px; align-items: center;">
+            <div style="font-size: 20px; color: #f59e0b;">▶</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: #ffffff;">Simulate Bootstrapper</div>
+              <div style="font-size: 11px; color: #9897a3; margin-top: 2px;">Test Fluent launch animation &amp; progress bars</div>
+            </div>
+          </div>
+
+          <div class="action-card" id="cardViewBootstrapperLogs" style="cursor: pointer; padding: 14px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 6px; display: flex; gap: 12px; align-items: center;">
+            <div style="font-size: 20px; color: #3b82f6;">📄</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 700; color: #ffffff;">View Diagnostic Logs</div>
+              <div style="font-size: 11px; color: #9897a3; margin-top: 2px;">Open bootstrapper.log in TextEdit / Finder</div>
+            </div>
+          </div>
+        </div>
+
         <div class="section-title">Export Data</div>
         <div class="section-subtitle">Export your Bloxstrap configuration and diagnostic logs.</div>
 
@@ -2171,6 +2445,7 @@
           <a class="pill-btn" id="btnRepo" href="https://github.com/Bloxstrap-Gold/Bloxstrap-Gold" target="_blank">&lt;/&gt; GitHub repository</a>
           <a class="pill-btn" id="btnReport" href="https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/issues" target="_blank">⊙ Report an issue</a>
           <a class="pill-btn" id="btnHelpTopics" href="https://bloxstraplabs.com" target="_blank">📖 Help topics</a>
+          <button class="pill-btn gold" id="btnReplayIntro">✨ Replay Welcome Tour</button>
         </div>
 
         <div class="section-title">Contributors</div>
@@ -2399,6 +2674,182 @@
   </div>
 
   <!-- ========================================================================
+       MODAL: FIRST-TIME WELCOME INTRO WIZARD
+       ======================================================================== -->
+  <div class="modal-overlay" id="welcomeIntroModal" style="display: none; z-index: 1500;">
+    <div class="welcome-wizard-card">
+      <div class="welcome-wizard-header">
+        <div class="welcome-wizard-crown">👑</div>
+        <div class="welcome-wizard-title" id="welcomeStepTitle">Welcome to Bloxstrap Gold</div>
+        <div class="welcome-wizard-sub" id="welcomeStepSub">The premier Roblox bootstrapper, reimagined for macOS and Windows.</div>
+      </div>
+
+      <!-- Step 1: Introduction & Highlights -->
+      <div class="welcome-step-pane active" id="welcomeStep1">
+        <div class="welcome-feature-grid">
+          <div class="welcome-feature-card">
+            <div class="welcome-feature-icon">⚡</div>
+            <div>
+              <div class="welcome-feature-title">Native Multi-Instance</div>
+              <div class="welcome-feature-desc">Launch multiple Roblox accounts simultaneously without process collisions or mutex conflicts.</div>
+            </div>
+          </div>
+
+          <div class="welcome-feature-card">
+            <div class="welcome-feature-icon">🎮</div>
+            <div>
+              <div class="welcome-feature-title">Account Manager (RAM)</div>
+              <div class="welcome-feature-desc">Integrated profile manager with live verified 3D headshots and 1-click Place ID server joining.</div>
+            </div>
+          </div>
+
+          <div class="welcome-feature-card">
+            <div class="welcome-feature-icon">🚀</div>
+            <div>
+              <div class="welcome-feature-title">Uncapped Engine FPS</div>
+              <div class="welcome-feature-desc">Bypass the 60 FPS cap safely with native engine FastFlags without external memory injectors.</div>
+            </div>
+          </div>
+
+          <div class="welcome-feature-card">
+            <div class="welcome-feature-icon">💎</div>
+            <div>
+              <div class="welcome-feature-title">Windows 11 Fluent Mica</div>
+              <div class="welcome-feature-desc">Polished luxury gold styling, dark mode glass aesthetics, and 1:1 authentic Bloxstrap parity.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Quick Preferences -->
+      <div class="welcome-step-pane" id="welcomeStep2">
+        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <div class="form-label">Application Theme</div>
+            <select class="fluent-select" id="introThemeSelect" style="width: 100%;">
+              <option value="Dark (Windows 11 Mica)" selected>Dark (Windows 11 Mica / Obsidian)</option>
+              <option value="Light">Fluent Light</option>
+              <option value="System">System Default</option>
+            </select>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: #fff;">Enable Multi-Instance Launching</div>
+              <div style="font-size: 11px; color: #9897a3;">Run multiple Roblox clients side by side</div>
+            </div>
+            <label class="fluent-toggle">
+              <input type="checkbox" id="introMultiInstance" checked>
+              <span class="fluent-toggle-slider"></span>
+            </label>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05);">
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: #fff;">Discord Rich Presence</div>
+              <div style="font-size: 11px; color: #9897a3;">Show your game activity and avatar on Discord</div>
+            </div>
+            <label class="fluent-toggle">
+              <input type="checkbox" id="introDiscord" checked>
+              <span class="fluent-toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Engine & Visual Settings -->
+      <div class="welcome-step-pane" id="welcomeStep3">
+        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <div class="form-label">Target Framerate Limit</div>
+            <input type="number" class="fluent-input mono" id="introFps" value="9999" placeholder="9999" style="width: 100%;">
+            <div style="font-size: 11px; color: #9897a3; margin-top: 3px;">Use 9999 for uncapped, or match your monitor (e.g. 144, 240).</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: #fff;">Preserve Retina / 4K Display Scaling</div>
+              <div style="font-size: 11px; color: #9897a3;">Forces 1:1 crisp pixel rendering without blur</div>
+            </div>
+            <label class="fluent-toggle">
+              <input type="checkbox" id="introPreserveDpi" checked>
+              <span class="fluent-toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="form-group" style="margin-top: 10px;">
+            <div class="form-label">Preferred Lighting Engine</div>
+            <select class="fluent-select" id="introLightingSelect" style="width: 100%;">
+              <option value="Future (Phase 3)" selected>Future (Phase 3 - High Fidelity)</option>
+              <option value="ShadowMap (Phase 2)">ShadowMap (Phase 2)</option>
+              <option value="Voxel (Phase 1)">Voxel (Phase 1 - Legacy)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Ready & VIP Key -->
+      <div class="welcome-step-pane" id="welcomeStep4">
+        <div style="text-align: center; padding: 10px 0 20px 0;">
+          <div style="font-size: 15px; font-weight: 700; color: #fcd34d; margin-bottom: 8px;">You're ready to experience Bloxstrap Gold!</div>
+          <div style="font-size: 12.5px; color: #c5c4d0; max-width: 480px; margin: 0 auto 16px auto; line-height: 1.5;">
+            All essential preferences are configured. You can tweak FastFlags, launch multiple instances, and manage alt accounts at any time from the main dashboard.
+          </div>
+          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #fcd34d;">
+            <span>👑 Edition:</span>
+            <span id="introTierBadge">FREE GUEST</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Dots Indicator -->
+      <div class="welcome-dots-row">
+        <div class="welcome-dot active" data-step="1"></div>
+        <div class="welcome-dot" data-step="2"></div>
+        <div class="welcome-dot" data-step="3"></div>
+        <div class="welcome-dot" data-step="4"></div>
+      </div>
+
+      <!-- Wizard Navigation Footer -->
+      <div class="welcome-footer-actions">
+        <div>
+          <button class="pill-btn" id="btnWelcomeBack" style="display: none;">← Back</button>
+          <button class="pill-btn" id="btnWelcomeSkip" style="background: transparent; border: none; color: #8e8d98; font-size: 11px;">Skip Tour</button>
+        </div>
+        <div>
+          <button class="pill-btn gold" id="btnWelcomeNext">Next →</button>
+          <button class="pill-btn gold" id="btnWelcomeFinish" style="display: none; padding: 6px 20px; font-weight: 800;">🚀 Get Started</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: BOOTSTRAPPER SIMULATION DIALOG
+       ======================================================================== -->
+  <div class="modal-overlay" id="bootstrapperSimModal" style="display: none; z-index: 1600;">
+    <div class="bootstrapper-sim-card">
+      <div class="bootstrapper-sim-head">
+        <img src="Bloxstrap.png" alt="Roblox" class="bootstrapper-sim-logo">
+        <div>
+          <div class="bootstrapper-sim-title">Bloxstrap Bootstrapper</div>
+          <span class="bootstrapper-sim-channel" id="simChannelTag">Channel: LIVE</span>
+        </div>
+      </div>
+
+      <div class="bootstrapper-sim-status" id="simStatusText">Connecting to Roblox deployment servers...</div>
+      
+      <div class="bootstrapper-sim-progress-track">
+        <div class="bootstrapper-sim-progress-bar" id="simProgressBar"></div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+        <button class="pill-btn" id="btnCancelSim">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
        APPLICATION JAVASCRIPT & SWIFT BRIDGE
        ======================================================================== -->
   <script>
@@ -2409,6 +2860,7 @@
       currentTierBadge: "LOCKED",
       currentTierPrice: "$0.00",
       vipKey: "",
+      hasSeenWelcomeIntro: false,
       
       // FastFlags
       targetFps: 9999,
@@ -2416,12 +2868,9 @@
       escapeMenuVersion: "Version 4 (2023)",
       hideGuisEnabled: true,
       
-      // Mods
-      renderingMode: "Direct3D 11",
-      exclusiveFullscreen: false,
-      alternateQualitySelector: false,
-      inGameMenuVersion: "Version 3 (2021)",
-      disableFullscreenOptimizations: false,
+      // Mods & Modern Engine Settings
+      preserveRenderingQualityDpi: true,
+      textureQuality: "Default",
       customDeathSound: true,
       mouseCursor: "Default (2020)",
       oldAvatarBackground: false,
@@ -2442,12 +2891,19 @@
       robloxIcon: "2022 (Modern Silver)",
       customTitle: "Roblox",
       
-      // Behaviour
+      // Behaviour & Core Bootstrapper
       autoUpdateChecking: true,
       confirmLaunches: false,
       backgroundUpdates: true,
       forceRobloxReinstall: false,
       telemetryEnabled: false,
+      
+      // Bootstrapper Debug Options
+      developerMode: false,
+      robloxChannel: "LIVE",
+      debugDisablePackageCleanup: false,
+      bypassConnectivityChecks: false,
+      verboseBootstrapperLogging: false,
       
       // Installation
       createDesktopShortcuts: true,
@@ -2492,6 +2948,15 @@
     };
 
     function renderState() {
+      // First-time Welcome Intro Modal
+      const welcomeModal = document.getElementById("welcomeIntroModal");
+      if (!appState.hasSeenWelcomeIntro) {
+        welcomeModal.style.display = "flex";
+        setIntroStep(1);
+      } else {
+        welcomeModal.style.display = "none";
+      }
+
       // Key Gate modal visibility
       const modal = document.getElementById("keyGateModal");
       if (appState.isAuthenticated) {
@@ -2500,8 +2965,10 @@
         modal.style.display = "flex";
       }
 
-      // Titlebar badge
+      // Titlebar & Intro badges
       document.getElementById("titleTierBadge").textContent = appState.currentTierBadge;
+      const introBadge = document.getElementById("introTierBadge");
+      if (introBadge) introBadge.textContent = appState.currentTierBadge;
 
       // FastFlags Tab
       document.getElementById("inputFps").value = appState.targetFps;
@@ -2509,12 +2976,12 @@
       document.getElementById("selectEscapeMenu").value = appState.escapeMenuVersion;
       document.getElementById("toggleHideGuis").checked = appState.hideGuisEnabled;
 
-      // Mods Tab
-      document.getElementById("selectRenderingMode").value = appState.renderingMode;
-      document.getElementById("toggleExclusiveFullscreen").checked = appState.exclusiveFullscreen;
-      document.getElementById("toggleAltQuality").checked = appState.alternateQualitySelector;
-      document.getElementById("selectInGameMenu").value = appState.inGameMenuVersion;
-      document.getElementById("toggleDisableFso").checked = appState.disableFullscreenOptimizations;
+      // Mods & Modern Engine Settings Tab
+      const preserveDpiToggle = document.getElementById("togglePreserveDpi");
+      if (preserveDpiToggle) preserveDpiToggle.checked = appState.preserveRenderingQualityDpi !== false;
+      const textureQualitySelect = document.getElementById("selectTextureQuality");
+      if (textureQualitySelect) textureQualitySelect.value = appState.textureQuality || "Default";
+
       document.getElementById("toggleOof").checked = appState.customDeathSound;
       document.getElementById("selectMouseCursor").value = appState.mouseCursor || "Default (2020)";
       document.getElementById("toggleOldAvatarBg").checked = !!appState.oldAvatarBackground;
@@ -2541,6 +3008,18 @@
       document.getElementById("toggleBackgroundUpdates").checked = appState.backgroundUpdates !== false;
       document.getElementById("toggleForceReinstall").checked = !!appState.forceRobloxReinstall;
       document.getElementById("toggleTelemetry").checked = !!appState.telemetryEnabled;
+
+      // Bootstrapper Debug Options
+      const toggleDev = document.getElementById("toggleDeveloperMode");
+      if (toggleDev) toggleDev.checked = !!appState.developerMode;
+      const selectChannel = document.getElementById("selectRobloxChannel");
+      if (selectChannel) selectChannel.value = appState.robloxChannel || "LIVE";
+      const toggleNoCleanup = document.getElementById("toggleDisablePackageCleanup");
+      if (toggleNoCleanup) toggleNoCleanup.checked = !!appState.debugDisablePackageCleanup;
+      const toggleBypassPing = document.getElementById("toggleBypassConnectivity");
+      if (toggleBypassPing) toggleBypassPing.checked = !!appState.bypassConnectivityChecks;
+      const toggleVerbose = document.getElementById("toggleVerboseLogging");
+      if (toggleVerbose) toggleVerbose.checked = !!appState.verboseBootstrapperLogging;
 
       // Installation Tab
       document.getElementById("toggleDesktopShortcuts").checked = appState.createDesktopShortcuts !== false;
@@ -3067,12 +3546,9 @@
         escapeMenuVersion: document.getElementById("selectEscapeMenu").value,
         hideGuisEnabled: document.getElementById("toggleHideGuis").checked,
         
-        // Mods
-        renderingMode: document.getElementById("selectRenderingMode").value,
-        exclusiveFullscreen: document.getElementById("toggleExclusiveFullscreen").checked,
-        alternateQualitySelector: document.getElementById("toggleAltQuality").checked,
-        inGameMenuVersion: document.getElementById("selectInGameMenu").value,
-        disableFullscreenOptimizations: document.getElementById("toggleDisableFso").checked,
+        // Mods & Modern Engine Settings
+        preserveRenderingQualityDpi: document.getElementById("togglePreserveDpi") ? document.getElementById("togglePreserveDpi").checked : true,
+        textureQuality: document.getElementById("selectTextureQuality") ? document.getElementById("selectTextureQuality").value : "Default",
         mouseCursor: document.getElementById("selectMouseCursor").value,
         oldAvatarBackground: document.getElementById("toggleOldAvatarBg").checked,
         emojiFont: document.getElementById("selectEmojiFont").value,
@@ -3092,12 +3568,19 @@
         robloxIcon: document.getElementById("selectRobloxIcon").value,
         customTitle: document.getElementById("inputCustomTitle").value,
         
-        // Behaviour
+        // Behaviour & Core Bootstrapper
         autoUpdateChecking: document.getElementById("toggleAutoUpdate").checked,
         confirmLaunches: document.getElementById("toggleConfirmLaunches").checked,
         backgroundUpdates: document.getElementById("toggleBackgroundUpdates").checked,
         forceRobloxReinstall: document.getElementById("toggleForceReinstall").checked,
         telemetryEnabled: document.getElementById("toggleTelemetry").checked,
+        
+        // Bootstrapper Debug Options
+        developerMode: document.getElementById("toggleDeveloperMode") ? document.getElementById("toggleDeveloperMode").checked : false,
+        robloxChannel: document.getElementById("selectRobloxChannel") ? document.getElementById("selectRobloxChannel").value : "LIVE",
+        debugDisablePackageCleanup: document.getElementById("toggleDisablePackageCleanup") ? document.getElementById("toggleDisablePackageCleanup").checked : false,
+        bypassConnectivityChecks: document.getElementById("toggleBypassConnectivity") ? document.getElementById("toggleBypassConnectivity").checked : false,
+        verboseBootstrapperLogging: document.getElementById("toggleVerboseLogging") ? document.getElementById("toggleVerboseLogging").checked : false,
         
         // Installation
         createDesktopShortcuts: document.getElementById("toggleDesktopShortcuts").checked,
@@ -3114,7 +3597,8 @@
 
     document.getElementById("cardOpenModsFolder").addEventListener("click", () => sendToHost("openModsFolder"));
     document.getElementById("cardModdingHelp").addEventListener("click", () => sendToHost("openHelp"));
-    document.getElementById("cardCompatSettings").addEventListener("click", () => sendToHost("openFsoLink"));
+    const compatCard = document.getElementById("cardCompatSettings");
+    if (compatCard) compatCard.addEventListener("click", () => sendToHost("openHelp"));
     document.getElementById("btnOpenInstallFolder").addEventListener("click", () => sendToHost("openInstallationFolder"));
     document.getElementById("cardReRegisterHandlers").addEventListener("click", () => sendToHost("reRegisterHandlers"));
     document.getElementById("btnPreviewBootstrapper").addEventListener("click", () => sendToHost("previewBootstrapper"));
@@ -3130,12 +3614,148 @@
     // FastFlag links & Help
     document.getElementById("cardFastFlagEditor").addEventListener("click", () => sendToHost("openFastFlagEditor"));
     document.getElementById("cardFastFlagHelp").addEventListener("click", () => sendToHost("openFastFlagHelp"));
-    document.getElementById("linkD3D").addEventListener("click", () => sendToHost("openFastFlagHelp"));
-    document.getElementById("linkDPI").addEventListener("click", () => sendToHost("openFastFlagHelp"));
-    document.getElementById("linkShortcuts").addEventListener("click", () => sendToHost("openShortcutsHelp"));
-    document.getElementById("linkGroup").addEventListener("click", () => sendToHost("openGroupLink"));
-    document.getElementById("linkFso").addEventListener("click", () => sendToHost("openFsoLink"));
+    const linkD3D = document.getElementById("linkD3D");
+    if (linkD3D) linkD3D.addEventListener("click", () => sendToHost("openFastFlagHelp"));
+    const linkDPI = document.getElementById("linkDPI");
+    if (linkDPI) linkDPI.addEventListener("click", () => sendToHost("openFastFlagHelp"));
+    const linkShortcuts = document.getElementById("linkShortcuts");
+    if (linkShortcuts) linkShortcuts.addEventListener("click", () => sendToHost("openShortcutsHelp"));
+    const linkGroup = document.getElementById("linkGroup");
+    if (linkGroup) linkGroup.addEventListener("click", () => sendToHost("openGroupLink"));
+    const linkFso = document.getElementById("linkFso");
+    if (linkFso) linkFso.addEventListener("click", () => sendToHost("openHelp"));
     document.getElementById("btnAllContributors").addEventListener("click", () => sendToHost("openContributors"));
+
+    // --- FIRST-TIME WELCOME INTRO WIZARD CONTROLLER ---
+    let currentWelcomeStep = 1;
+    function setIntroStep(step) {
+      currentWelcomeStep = step;
+      for (let i = 1; i <= 4; i++) {
+        const pane = document.getElementById(`welcomeStep${i}`);
+        if (pane) pane.classList.toggle("active", i === step);
+      }
+      document.querySelectorAll(".welcome-dot").forEach((dot, idx) => {
+        dot.classList.toggle("active", idx + 1 === step);
+      });
+      
+      const titles = [
+        "Welcome to Bloxstrap Gold",
+        "Configure Preferences",
+        "Engine & FastFlags",
+        "Setup Complete"
+      ];
+      const subs = [
+        "The premier Roblox bootstrapper, reimagined for macOS and Windows.",
+        "Set up your theme, multi-instance settings, and Discord RPC.",
+        "Fine-tune framerates, lighting, and Retina display clarity.",
+        "You're all set! Enjoy elevated performance and account switching."
+      ];
+      document.getElementById("welcomeStepTitle").textContent = titles[step - 1];
+      document.getElementById("welcomeStepSub").textContent = subs[step - 1];
+      
+      document.getElementById("btnWelcomeBack").style.display = (step > 1) ? "inline-flex" : "none";
+      document.getElementById("btnWelcomeNext").style.display = (step < 4) ? "inline-flex" : "none";
+      document.getElementById("btnWelcomeFinish").style.display = (step === 4) ? "inline-flex" : "none";
+    }
+
+    document.getElementById("btnWelcomeNext").addEventListener("click", () => {
+      if (currentWelcomeStep < 4) setIntroStep(currentWelcomeStep + 1);
+    });
+    document.getElementById("btnWelcomeBack").addEventListener("click", () => {
+      if (currentWelcomeStep > 1) setIntroStep(currentWelcomeStep - 1);
+    });
+    document.querySelectorAll(".welcome-dot").forEach(dot => {
+      dot.addEventListener("click", () => {
+        const s = parseInt(dot.getAttribute("data-step"));
+        if (s) setIntroStep(s);
+      });
+    });
+
+    function finishWelcomeIntro() {
+      // Sync intro controls to main form
+      const introTheme = document.getElementById("introThemeSelect").value;
+      document.getElementById("selectTheme").value = introTheme;
+      document.getElementById("inputFps").value = document.getElementById("introFps").value;
+      if (document.getElementById("togglePreserveDpi")) {
+        document.getElementById("togglePreserveDpi").checked = document.getElementById("introPreserveDpi").checked;
+      }
+      document.getElementById("selectLighting").value = document.getElementById("introLightingSelect").value;
+      document.getElementById("toggleDiscordActivity").checked = document.getElementById("introDiscord").checked;
+      
+      document.getElementById("welcomeIntroModal").style.display = "none";
+      sendToHost("completeWelcomeIntro");
+      showToast("👑 Welcome to Bloxstrap Gold!");
+    }
+
+    document.getElementById("btnWelcomeFinish").addEventListener("click", finishWelcomeIntro);
+    document.getElementById("btnWelcomeSkip").addEventListener("click", finishWelcomeIntro);
+    
+    const btnReplay = document.getElementById("btnReplayIntro");
+    if (btnReplay) {
+      btnReplay.addEventListener("click", () => {
+        document.getElementById("welcomeIntroModal").style.display = "flex";
+        setIntroStep(1);
+      });
+    }
+
+    // --- BOOTSTRAPPER SIMULATION CONTROLLER ---
+    let simTimer = null;
+    window.startBootstrapperSimulation = function(channel = "LIVE") {
+      const modal = document.getElementById("bootstrapperSimModal");
+      const bar = document.getElementById("simProgressBar");
+      const status = document.getElementById("simStatusText");
+      const channelTag = document.getElementById("simChannelTag");
+      
+      channelTag.textContent = `Channel: ${channel}`;
+      modal.style.display = "flex";
+      bar.style.width = "0%";
+      
+      const steps = [
+        { pct: 15, text: `Connecting to Roblox deployment servers (channel: ${channel})...` },
+        { pct: 40, text: "Fetching version manifest & integrity hashes..." },
+        { pct: 65, text: "Verifying client packages & signatures..." },
+        { pct: 85, text: "Injecting FastFlags configuration into ClientAppSettings.json..." },
+        { pct: 100, text: "Roblox is up to date! Starting RobloxPlayerBeta..." }
+      ];
+      
+      let stepIdx = 0;
+      if (simTimer) clearInterval(simTimer);
+      
+      simTimer = setInterval(() => {
+        if (stepIdx < steps.length) {
+          bar.style.width = steps[stepIdx].pct + "%";
+          status.textContent = steps[stepIdx].text;
+          stepIdx++;
+        } else {
+          clearInterval(simTimer);
+          setTimeout(() => {
+            modal.style.display = "none";
+            showToast("✓ Bootstrapper simulation completed successfully!");
+          }, 800);
+        }
+      }, 550);
+    };
+
+    document.getElementById("btnCancelSim").addEventListener("click", () => {
+      if (simTimer) clearInterval(simTimer);
+      document.getElementById("bootstrapperSimModal").style.display = "none";
+      showToast("Bootstrapper simulation cancelled.");
+    });
+
+    const cardSim = document.getElementById("cardSimulateBootstrapper");
+    if (cardSim) {
+      cardSim.addEventListener("click", () => {
+        const channel = document.getElementById("selectRobloxChannel").value;
+        window.startBootstrapperSimulation(channel);
+      });
+    }
+
+    const cardLogs = document.getElementById("cardViewBootstrapperLogs");
+    if (cardLogs) {
+      cardLogs.addEventListener("click", () => {
+        sendToHost("openBootstrapperLogs");
+      });
+    }
 
     // Inform host we are ready
     sendToHost("appReady");

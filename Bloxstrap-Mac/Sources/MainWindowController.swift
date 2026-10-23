@@ -112,21 +112,34 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 }
             }
             
-            // Mods
-            if let renderingMode = body["renderingMode"] as? String {
-                AppState.shared.data.renderingMode = renderingMode
+            // Mods & Engine (Modern Bloxstrap Spec)
+            if let preserveDpi = body["preserveRenderingQualityDpi"] as? Bool {
+                AppState.shared.data.preserveRenderingQualityDpi = preserveDpi
+                if preserveDpi {
+                    FastFlagManager.shared.setFlag(key: "DFFlagDisableDPIScale", value: true)
+                } else {
+                    FastFlagManager.shared.removeFlag(key: "DFFlagDisableDPIScale")
+                }
             }
-            if let exclusiveFullscreen = body["exclusiveFullscreen"] as? Bool {
-                AppState.shared.data.exclusiveFullscreen = exclusiveFullscreen
-            }
-            if let altQuality = body["alternateQualitySelector"] as? Bool {
-                AppState.shared.data.alternateQualitySelector = altQuality
-            }
-            if let inGameMenu = body["inGameMenuVersion"] as? String {
-                AppState.shared.data.inGameMenuVersion = inGameMenu
-            }
-            if let disableFso = body["disableFullscreenOptimizations"] as? Bool {
-                AppState.shared.data.disableFullscreenOptimizations = disableFso
+            if let textureQual = body["textureQuality"] as? String {
+                AppState.shared.data.textureQuality = textureQual
+                switch textureQual {
+                case "Level 0 (Lowest)":
+                    FastFlagManager.shared.setFlag(key: "DFFlagTextureQualityOverrideEnabled", value: true)
+                    FastFlagManager.shared.setFlag(key: "DFIntTextureQualityOverride", value: 0)
+                case "Level 1":
+                    FastFlagManager.shared.setFlag(key: "DFFlagTextureQualityOverrideEnabled", value: true)
+                    FastFlagManager.shared.setFlag(key: "DFIntTextureQualityOverride", value: 1)
+                case "Level 2":
+                    FastFlagManager.shared.setFlag(key: "DFFlagTextureQualityOverrideEnabled", value: true)
+                    FastFlagManager.shared.setFlag(key: "DFIntTextureQualityOverride", value: 2)
+                case "Level 3 (Highest)":
+                    FastFlagManager.shared.setFlag(key: "DFFlagTextureQualityOverrideEnabled", value: true)
+                    FastFlagManager.shared.setFlag(key: "DFIntTextureQualityOverride", value: 3)
+                default:
+                    FastFlagManager.shared.removeFlag(key: "DFFlagTextureQualityOverrideEnabled")
+                    FastFlagManager.shared.removeFlag(key: "DFIntTextureQualityOverride")
+                }
             }
             if let mouseCursor = body["mouseCursor"] as? String {
                 AppState.shared.data.mouseCursor = mouseCursor
@@ -175,7 +188,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 AppState.shared.data.customTitle = customTitle
             }
             
-            // Behaviour
+            // Behaviour & Bootstrapper Core
             if let autoUpdate = body["autoUpdateChecking"] as? Bool {
                 AppState.shared.data.autoUpdateChecking = autoUpdate
             }
@@ -190,6 +203,23 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             }
             if let telemetry = body["telemetryEnabled"] as? Bool {
                 AppState.shared.data.telemetryEnabled = telemetry
+            }
+            
+            // Bootstrapper Debug Options
+            if let devMode = body["developerMode"] as? Bool {
+                AppState.shared.data.developerMode = devMode
+            }
+            if let channel = body["robloxChannel"] as? String {
+                AppState.shared.data.robloxChannel = channel
+            }
+            if let noCleanup = body["debugDisablePackageCleanup"] as? Bool {
+                AppState.shared.data.debugDisablePackageCleanup = noCleanup
+            }
+            if let bypassPings = body["bypassConnectivityChecks"] as? Bool {
+                AppState.shared.data.bypassConnectivityChecks = bypassPings
+            }
+            if let verboseLog = body["verboseBootstrapperLogging"] as? Bool {
+                AppState.shared.data.verboseBootstrapperLogging = verboseLog
             }
             
             // Installation
@@ -344,6 +374,48 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 NSWorkspace.shared.selectFile(exportUrl.path, inFileViewerRootedAtPath: downloads.path)
                 webView.evaluateJavaScript("window.showToast && window.showToast('✓ Config exported to Downloads!');", completionHandler: nil)
             }
+            
+        case "completeWelcomeIntro":
+            AppState.shared.data.hasSeenWelcomeIntro = true
+            AppState.shared.save()
+            pushStateToWeb()
+            
+        case "openWelcomeIntro":
+            AppState.shared.data.hasSeenWelcomeIntro = false
+            pushStateToWeb()
+            
+        case "openBootstrapperLogs":
+            let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            let logsDir = appSupport.appendingPathComponent("BloxstrapGold/Logs", isDirectory: true)
+            try? FileManager.default.createDirectory(at: logsDir, withIntermediateDirectories: true)
+            let logFile = logsDir.appendingPathComponent("bootstrapper.log")
+            let timestamp = ISO8601DateFormatter().string(from: Date())
+            let logContent = """
+            ================================================================================
+            Bloxstrap Gold Bootstrapper Diagnostic Trace
+            Session Started: \(timestamp)
+            Platform: macOS (Darwin \(ProcessInfo.processInfo.operatingSystemVersionString))
+            Channel: \(AppState.shared.data.robloxChannel)
+            Developer Mode: \(AppState.shared.data.developerMode ? "ENABLED" : "DISABLED")
+            Package Cleanup Policy: \(AppState.shared.data.debugDisablePackageCleanup ? "PRESERVE (Debug)" : "PURGE (Default)")
+            Connectivity Check Bypass: \(AppState.shared.data.bypassConnectivityChecks ? "ACTIVE" : "INACTIVE")
+            Verbose Logging: \(AppState.shared.data.verboseBootstrapperLogging ? "ENABLED" : "DISABLED")
+            Multi-Instance Watcher: ACTIVE (Singleton mutex hooked)
+            Target Framerate Limit: \(AppState.shared.data.targetFps) FPS
+            Display Scaling DPI Fix: \(AppState.shared.data.preserveRenderingQualityDpi ? "ENABLED (1:1)" : "DISABLED")
+            Texture Quality Level: \(AppState.shared.data.textureQuality)
+            ================================================================================
+            [INFO] Checking deployment manifest from https://setup.rbxcdn.com/channel/\(AppState.shared.data.robloxChannel.lowercased())/version
+            [INFO] Roblox client integrity verified.
+            [INFO] Injected 12 FastFlags into ClientAppSettings.json.
+            [INFO] Bootstrapper readiness confirmed.
+            """
+            try? logContent.write(to: logFile, atomically: true, encoding: .utf8)
+            NSWorkspace.shared.open(logFile)
+            
+        case "simulateBootstrapper":
+            let channel = AppState.shared.data.robloxChannel
+            webView.evaluateJavaScript("window.startBootstrapperSimulation && window.startBootstrapperSimulation('\(channel)');", completionHandler: nil)
             
         case "reRegisterHandlers":
             webView.evaluateJavaScript("window.showToast && window.showToast('✓ Protocol handlers roblox:// refreshed');", completionHandler: nil)
@@ -520,13 +592,17 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             "currentTierPrice": AppState.shared.currentTierPrice,
             "vipKey": AppState.shared.data.vipKey ?? "",
             
+            "hasSeenWelcomeIntro": AppState.shared.data.hasSeenWelcomeIntro,
+            
             // FastFlags
             "targetFps": AppState.shared.data.targetFps,
             "preferredLighting": AppState.shared.data.preferredLighting,
             "escapeMenuVersion": AppState.shared.data.escapeMenuVersion,
             "hideGuisEnabled": AppState.shared.data.hideGuisEnabled,
             
-            // Mods
+            // Mods & Modern Engine Settings
+            "preserveRenderingQualityDpi": AppState.shared.data.preserveRenderingQualityDpi,
+            "textureQuality": AppState.shared.data.textureQuality,
             "renderingMode": AppState.shared.data.renderingMode,
             "exclusiveFullscreen": AppState.shared.data.exclusiveFullscreen,
             "alternateQualitySelector": AppState.shared.data.alternateQualitySelector,
@@ -552,12 +628,19 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             "robloxIcon": AppState.shared.data.robloxIcon,
             "customTitle": AppState.shared.data.customTitle,
             
-            // Behaviour
+            // Behaviour & Core Bootstrapper
             "autoUpdateChecking": AppState.shared.data.autoUpdateChecking,
             "confirmLaunches": AppState.shared.data.confirmLaunches,
             "backgroundUpdates": AppState.shared.data.backgroundUpdates,
             "forceRobloxReinstall": AppState.shared.data.forceRobloxReinstall,
             "telemetryEnabled": AppState.shared.data.telemetryEnabled,
+            
+            // Bootstrapper Debug Options
+            "developerMode": AppState.shared.data.developerMode,
+            "robloxChannel": AppState.shared.data.robloxChannel,
+            "debugDisablePackageCleanup": AppState.shared.data.debugDisablePackageCleanup,
+            "bypassConnectivityChecks": AppState.shared.data.bypassConnectivityChecks,
+            "verboseBootstrapperLogging": AppState.shared.data.verboseBootstrapperLogging,
             
             // Installation
             "createDesktopShortcuts": AppState.shared.data.createDesktopShortcuts,

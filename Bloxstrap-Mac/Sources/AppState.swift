@@ -57,6 +57,7 @@ public class AppState {
         public var isPaymentIgnored: Bool = false
         public var isBannerDismissed: Bool = false
         public var vipKey: String? = nil
+        public var hasSeenWelcomeIntro: Bool = false
         public var isFastFlagsUnlocked: Bool = false
         public var multiInstanceEnabled: Bool = true
         
@@ -66,16 +67,20 @@ public class AppState {
         public var escapeMenuVersion: String = "Version 4 (2023)"
         public var hideGuisEnabled: Bool = true
         
-        // Mods & Engine
-        public var renderingMode: String = "Direct3D 11"
-        public var exclusiveFullscreen: Bool = false
-        public var alternateQualitySelector: Bool = false
-        public var inGameMenuVersion: String = "Version 3 (2021)"
-        public var disableFullscreenOptimizations: Bool = false
+        // Mods & Engine (Modern Upstream Bloxstrap Spec)
+        public var preserveRenderingQualityDpi: Bool = true
+        public var textureQuality: String = "Default"
         public var customDeathSound: Bool = true
         public var mouseCursor: String = "Default"
         public var oldAvatarBackground: Bool = false
         public var emojiFont: String = "Default"
+        
+        // Legacy fields preserved for backward compatibility
+        public var renderingMode: String = "Direct3D 11"
+        public var exclusiveFullscreen: Bool = false
+        public var alternateQualitySelector: Bool = false
+        public var inGameMenuVersion: String = "Version 4 (2023)"
+        public var disableFullscreenOptimizations: Bool = false
         
         // Integrations
         public var activityTrackingEnabled: Bool = true
@@ -92,12 +97,19 @@ public class AppState {
         public var robloxIcon: String = "2022 (Modern Silver)"
         public var customTitle: String = "Roblox"
         
-        // Behaviour
+        // Behaviour & Bootstrapper Core
         public var autoUpdateChecking: Bool = true
         public var confirmLaunches: Bool = false
         public var backgroundUpdates: Bool = true
         public var forceRobloxReinstall: Bool = false
         public var telemetryEnabled: Bool = false
+        
+        // Bootstrapper Debug & Diagnostic Options
+        public var developerMode: Bool = false
+        public var robloxChannel: String = "LIVE"
+        public var debugDisablePackageCleanup: Bool = false
+        public var bypassConnectivityChecks: Bool = false
+        public var verboseBootstrapperLogging: Bool = false
         
         // Installation
         public var createDesktopShortcuts: Bool = true
@@ -150,12 +162,14 @@ public class AppState {
         
         enum CodingKeys: String, CodingKey {
             case firstRunDate, hasSeenGoldGreeting, forceTrialExpired, isPaymentIgnored, isBannerDismissed
-            case vipKey, isFastFlagsUnlocked, multiInstanceEnabled
+            case vipKey, hasSeenWelcomeIntro, isFastFlagsUnlocked, multiInstanceEnabled
             case targetFps, preferredLighting, escapeMenuVersion, hideGuisEnabled
+            case preserveRenderingQualityDpi, textureQuality
             case renderingMode, exclusiveFullscreen, alternateQualitySelector, inGameMenuVersion, disableFullscreenOptimizations, customDeathSound, mouseCursor, oldAvatarBackground, emojiFont
             case activityTrackingEnabled, showServerDetailsEnabled, dontExitToDesktopApp, discordActivityEnabled, discordActivityJoinEnabled, discordAccountOnProfile
             case theme, language, bootstrapperStyle, robloxIcon, customTitle
             case autoUpdateChecking, confirmLaunches, backgroundUpdates, forceRobloxReinstall, telemetryEnabled
+            case developerMode, robloxChannel, debugDisablePackageCleanup, bypassConnectivityChecks, verboseBootstrapperLogging
             case createDesktopShortcuts, createAppsShortcut, registerUrlHandler
             case accounts
         }
@@ -170,16 +184,19 @@ public class AppState {
             self.isPaymentIgnored = try c.decodeIfPresent(Bool.self, forKey: .isPaymentIgnored) ?? false
             self.isBannerDismissed = try c.decodeIfPresent(Bool.self, forKey: .isBannerDismissed) ?? false
             self.vipKey = try c.decodeIfPresent(String.self, forKey: .vipKey)
+            self.hasSeenWelcomeIntro = try c.decodeIfPresent(Bool.self, forKey: .hasSeenWelcomeIntro) ?? false
             self.isFastFlagsUnlocked = try c.decodeIfPresent(Bool.self, forKey: .isFastFlagsUnlocked) ?? false
             self.multiInstanceEnabled = try c.decodeIfPresent(Bool.self, forKey: .multiInstanceEnabled) ?? true
             self.targetFps = try c.decodeIfPresent(Int.self, forKey: .targetFps) ?? 9999
             self.preferredLighting = try c.decodeIfPresent(String.self, forKey: .preferredLighting) ?? "Future (Phase 3)"
             self.escapeMenuVersion = try c.decodeIfPresent(String.self, forKey: .escapeMenuVersion) ?? "Version 4 (2023)"
             self.hideGuisEnabled = try c.decodeIfPresent(Bool.self, forKey: .hideGuisEnabled) ?? true
+            self.preserveRenderingQualityDpi = try c.decodeIfPresent(Bool.self, forKey: .preserveRenderingQualityDpi) ?? true
+            self.textureQuality = try c.decodeIfPresent(String.self, forKey: .textureQuality) ?? "Default"
             self.renderingMode = try c.decodeIfPresent(String.self, forKey: .renderingMode) ?? "Direct3D 11"
             self.exclusiveFullscreen = try c.decodeIfPresent(Bool.self, forKey: .exclusiveFullscreen) ?? false
             self.alternateQualitySelector = try c.decodeIfPresent(Bool.self, forKey: .alternateQualitySelector) ?? false
-            self.inGameMenuVersion = try c.decodeIfPresent(String.self, forKey: .inGameMenuVersion) ?? "Version 3 (2021)"
+            self.inGameMenuVersion = try c.decodeIfPresent(String.self, forKey: .inGameMenuVersion) ?? "Version 4 (2023)"
             self.disableFullscreenOptimizations = try c.decodeIfPresent(Bool.self, forKey: .disableFullscreenOptimizations) ?? false
             self.customDeathSound = try c.decodeIfPresent(Bool.self, forKey: .customDeathSound) ?? true
             self.mouseCursor = try c.decodeIfPresent(String.self, forKey: .mouseCursor) ?? "Default"
@@ -201,6 +218,11 @@ public class AppState {
             self.backgroundUpdates = try c.decodeIfPresent(Bool.self, forKey: .backgroundUpdates) ?? true
             self.forceRobloxReinstall = try c.decodeIfPresent(Bool.self, forKey: .forceRobloxReinstall) ?? false
             self.telemetryEnabled = try c.decodeIfPresent(Bool.self, forKey: .telemetryEnabled) ?? false
+            self.developerMode = try c.decodeIfPresent(Bool.self, forKey: .developerMode) ?? false
+            self.robloxChannel = try c.decodeIfPresent(String.self, forKey: .robloxChannel) ?? "LIVE"
+            self.debugDisablePackageCleanup = try c.decodeIfPresent(Bool.self, forKey: .debugDisablePackageCleanup) ?? false
+            self.bypassConnectivityChecks = try c.decodeIfPresent(Bool.self, forKey: .bypassConnectivityChecks) ?? false
+            self.verboseBootstrapperLogging = try c.decodeIfPresent(Bool.self, forKey: .verboseBootstrapperLogging) ?? false
             self.createDesktopShortcuts = try c.decodeIfPresent(Bool.self, forKey: .createDesktopShortcuts) ?? true
             self.createAppsShortcut = try c.decodeIfPresent(Bool.self, forKey: .createAppsShortcut) ?? true
             self.registerUrlHandler = try c.decodeIfPresent(Bool.self, forKey: .registerUrlHandler) ?? true
