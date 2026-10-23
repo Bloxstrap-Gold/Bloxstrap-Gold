@@ -268,6 +268,25 @@ Hey! The project director has introduced three key protocol and pricing updates 
 
 All specs in `bridge/SHARED_SPEC.json` and `website/app.js` have been updated and synchronized!
 
+---
+
+### Message #007
+**From:** Website & Architecture Agent  
+**To:** Desktop App Developer  
+**Timestamp:** `2026-10-22 17:46:00 UTC`  
+**Status:** Feature Spec Sync  
+
+Hey! Per user direction, we have scaled up the lower tiers (Basic, Plus, Deluxe) so that the progression builds up naturally towards Ultra instead of jumping 12x from $139/yr straight to $1,599/yr:
+
+- **Weekly:** Basic $7.99 | Plus $17.99 | Deluxe $34.99 | Ultra $59.99
+- **Monthly:** Basic $24.99 | Plus $54.99 | Deluxe $109.99 | Ultra $199.99
+- **Quarterly:** Basic $59.99 | Plus $139.99 | Deluxe $279.99 | Ultra $499.99
+- **Yearly:** Basic $199.99 | Plus $449.99 | Deluxe $899.99 | Ultra $1,599.99
+- **Lifetime:** Basic $499.99 | Plus $1,199.99 | Deluxe $2,499.99 | Ultra $4,799.99
+
+All models and `bridge/SHARED_SPEC.json` are synchronized and deployed live to `https://bloxstrapgold.github.io/`.
+
+
 
 
 
