@@ -2813,12 +2813,12 @@
       <!-- Wizard Navigation Footer -->
       <div class="welcome-footer-actions">
         <div>
-          <button class="pill-btn" id="btnWelcomeBack" style="display: none;">← Back</button>
-          <button class="pill-btn" id="btnWelcomeSkip" style="background: transparent; border: none; color: #8e8d98; font-size: 11px;">Skip Tour</button>
+          <button type="button" class="pill-btn" id="btnWelcomeBack" style="display: none;">← Back</button>
+          <button type="button" class="pill-btn" id="btnWelcomeSkip" style="background: transparent; border: none; color: #8e8d98; font-size: 11px;">Skip Tour</button>
         </div>
         <div>
-          <button class="pill-btn gold" id="btnWelcomeNext">Next →</button>
-          <button class="pill-btn gold" id="btnWelcomeFinish" style="display: none; padding: 6px 20px; font-weight: 800;">🚀 Get Started</button>
+          <button type="button" class="pill-btn gold" id="btnWelcomeNext">Next →</button>
+          <button type="button" class="pill-btn gold" id="btnWelcomeFinish" style="display: none; padding: 6px 20px; font-weight: 800;">🚀 Get Started</button>
         </div>
       </div>
     </div>
@@ -2951,8 +2951,10 @@
       // First-time Welcome Intro Modal
       const welcomeModal = document.getElementById("welcomeIntroModal");
       if (!appState.hasSeenWelcomeIntro) {
-        welcomeModal.style.display = "flex";
-        setIntroStep(1);
+        if (welcomeModal.style.display !== "flex") {
+          welcomeModal.style.display = "flex";
+          setIntroStep(1);
+        }
       } else {
         welcomeModal.style.display = "none";
       }
@@ -3658,20 +3660,24 @@
       document.getElementById("btnWelcomeFinish").style.display = (step === 4) ? "inline-flex" : "none";
     }
 
-    document.getElementById("btnWelcomeNext").addEventListener("click", () => {
+    document.getElementById("btnWelcomeNext").addEventListener("click", (e) => {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
       if (currentWelcomeStep < 4) setIntroStep(currentWelcomeStep + 1);
     });
-    document.getElementById("btnWelcomeBack").addEventListener("click", () => {
+    document.getElementById("btnWelcomeBack").addEventListener("click", (e) => {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
       if (currentWelcomeStep > 1) setIntroStep(currentWelcomeStep - 1);
     });
     document.querySelectorAll(".welcome-dot").forEach(dot => {
-      dot.addEventListener("click", () => {
+      dot.addEventListener("click", (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
         const s = parseInt(dot.getAttribute("data-step"));
         if (s) setIntroStep(s);
       });
     });
 
-    function finishWelcomeIntro() {
+    function finishWelcomeIntro(e) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
       // Sync intro controls to main form
       const introTheme = document.getElementById("introThemeSelect").value;
       document.getElementById("selectTheme").value = introTheme;
@@ -3683,6 +3689,7 @@
       document.getElementById("toggleDiscordActivity").checked = document.getElementById("introDiscord").checked;
       
       document.getElementById("welcomeIntroModal").style.display = "none";
+      appState.hasSeenWelcomeIntro = true;
       sendToHost("completeWelcomeIntro");
       showToast("👑 Welcome to Bloxstrap Gold!");
     }
@@ -3692,7 +3699,8 @@
     
     const btnReplay = document.getElementById("btnReplayIntro");
     if (btnReplay) {
-      btnReplay.addEventListener("click", () => {
+      btnReplay.addEventListener("click", (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
         document.getElementById("welcomeIntroModal").style.display = "flex";
         setIntroStep(1);
       });
