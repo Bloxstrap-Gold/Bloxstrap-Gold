@@ -9,8 +9,7 @@
  * 5. FastFlags Vault gated by license key starting with "GOLD-"
  * 6. Official Roblox Client FastFlag Allowlist Validator (Sept 2025 allowlist database)
  * 7. Live ClientAppSettings.json builder with Copy and Download JSON
- * 8. Multi-Instance Process Isolation Simulator
- * 9. Bloxstrap App Window Theme & Tab Switcher
+ * 8. Bloxstrap App Window Theme & Tab Switcher
  */
 
 // =============================================================================
@@ -290,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =============================================================================
-// HERO INTRO: PARTICLES, COCKPIT DECK & LIVE TELEMETRY
+// HERO INTRO: PARTICLES & LIVE TELEMETRY
 // =============================================================================
 function setupHeroParticles() {
   const canvas = document.getElementById('heroParticlesCanvas');
