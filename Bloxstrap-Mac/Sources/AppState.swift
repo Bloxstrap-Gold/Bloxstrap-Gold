@@ -22,6 +22,21 @@ public class AppState {
         public var inGameMenuVersion: String = "Version 3 (2021)"
         public var disableFullscreenOptimizations: Bool = false
         public var customDeathSound: Bool = true
+        public var accounts: [AccountProfile] = [
+            AccountProfile(username: "Player1", displayName: "Primary Account", addedDate: "2026-10-22")
+        ]
+    }
+    
+    public struct AccountProfile: Codable {
+        public var username: String
+        public var displayName: String
+        public var addedDate: String
+        
+        public init(username: String, displayName: String, addedDate: String) {
+            self.username = username
+            self.displayName = displayName
+            self.addedDate = addedDate
+        }
     }
     
     private let fileManager = FileManager.default

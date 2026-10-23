@@ -15,7 +15,7 @@
 
     <StackPanel Margin="0,0,14,14">
         <!-- Subtitle -->
-        <TextBlock Margin="0,0,0,12" Text="The ultimate luxury Roblox bootstrapper with built-in multi-instance client support." FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        <TextBlock Margin="0,0,0,12" Text="The ultimate luxury Roblox bootstrapper with built-in multi-instance client support and account management." FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
 
         <!-- VIP Membership Card -->
         <Border Padding="16" CornerRadius="8" BorderThickness="1.5"
@@ -24,54 +24,46 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="👑" FontSize="28" Margin="0,0,10,0" VerticalAlignment="Center" />
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="BLOXSTRAP GOLD MEMBERSHIP" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
-                            <Border Margin="8,0,0,0" Padding="6,1" CornerRadius="4" Background="#33FFD700" BorderBrush="#80FFD700" BorderThickness="1">
-                                <TextBlock Text="{Binding TrialBadgeText}" FontSize="10" FontWeight="Bold" Foreground="{StaticResource GoldLightBrush}" />
-                            </Border>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="👑" FontSize="32" Margin="0,0,12,0" VerticalAlignment="Center" />
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="BLOXSTRAP GOLD MEMBERSHIP" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
+                                <Border Margin="8,0,0,0" Padding="6,1" CornerRadius="4" Background="#33FFD700" BorderBrush="#80FFD700" BorderThickness="1">
+                                    <TextBlock Text="{Binding CurrentTierBadge}" FontSize="10" FontWeight="Bold" Foreground="{StaticResource GoldLightBrush}" />
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="{Binding TrialStatusText}" FontSize="13" Foreground="{StaticResource GoldLightBrush}" Margin="0,3,0,0" />
                         </StackPanel>
-                        <TextBlock Text="{Binding TrialStatusText}" FontSize="13" Foreground="{StaticResource GoldLightBrush}" Margin="0,3,0,0" />
                     </StackPanel>
-                </StackPanel>
 
-                <!-- Fast-forward / Reset trial tester controls -->
-                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <ui:Button Margin="0,0,8,0" Content="⚡ Expire Trial (Demo)" Command="{Binding FastForwardTrialCommand}" ToolTip="Fast-forward time by 7 days to test expired trial behavior" />
-                    <ui:Button Content="↺ Reset Trial (7 Days)" Command="{Binding ResetTrialCommand}" ToolTip="Reset free trial back to 7 days" />
-                </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <ui:Button Content="🔑 Change License Key" Command="{Binding ChangeKeyCommand}" Appearance="Primary" Background="{StaticResource GoldGradientBrush}" Foreground="Black" FontWeight="SemiBold" ToolTip="Re-authenticate or enter a different license key" />
+                    </StackPanel>
+                </Grid>
 
-                <!-- Runaway Pay Button Area -->
-                <Border Grid.Row="1" Grid.ColumnSpan="2" Margin="0,14,0,0" Padding="12" CornerRadius="6" Background="#261E05" BorderBrush="#66D4AF37" BorderThickness="1">
+                <Border Grid.Row="1" Margin="0,12,0,0" Padding="12,10" CornerRadius="6" Background="#261E05" BorderBrush="#66D4AF37" BorderThickness="1">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="260" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                            <TextBlock Text="Subscription Payment Gateway" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GoldPrimaryBrush}" />
-                            <TextBlock Text="Try your best to catch and click the payment button below:" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0" />
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Authenticated License Key:" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                            <TextBlock Text="{Binding CurrentLicenseKey}" FontFamily="Consolas, Courier New, monospace" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource GoldPrimaryBrush}" Margin="0,2,0,0" />
                         </StackPanel>
-
-                        <!-- Evasive Runway Canvas -->
-                        <Canvas x:Name="PagePayCanvas" Grid.Column="1" Height="44" ClipToBounds="False" Background="Transparent"
-                                MouseMove="PagePayCanvas_MouseMove">
-                            <ui:Button x:Name="PagePayButton" Content="💳 PAY FOR IT ($999.99)" Appearance="Primary"
-                                       Background="{StaticResource GoldGradientBrush}" Foreground="Black" FontWeight="Bold"
-                                       BorderBrush="#FFFFFF" BorderThickness="1.5"
-                                       Canvas.Left="20" Canvas.Top="4"
-                                       MouseEnter="PagePayButton_MouseEnter" Click="PagePayButton_Click" />
-                        </Canvas>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Tier Benefits Level:" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                            <TextBlock Text="{Binding CurrentTierPrice}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource GoldLightBrush}" Margin="0,2,0,0" />
+                        </StackPanel>
                     </Grid>
                 </Border>
             </Grid>
@@ -114,13 +106,56 @@
             </Grid>
         </Border>
 
+        <!-- Roblox Account Manager (RAM style) -->
+        <TextBlock Text="Account Switcher (Roblox Account Manager)" FontSize="20" FontWeight="Medium" Margin="0,20,0,0" Foreground="{StaticResource GoldPrimaryBrush}" />
+        <TextBlock Text="Manage your alt accounts and launch isolated sessions for each profile." Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,8" />
+
+        <Border Padding="14" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+            <StackPanel>
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Saved Account Profiles" FontSize="14" FontWeight="Medium" VerticalAlignment="Center" />
+                    <ui:Button Grid.Column="1" Icon="Add24" Content="Add Alt Profile" Command="{Binding AddAccountCommand}" Appearance="Secondary" />
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding Accounts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,4,0,4" Padding="12,8" CornerRadius="4" Background="{DynamicResource ControlFillColorSecondaryBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="👤" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" FontSize="13" />
+                                        <TextBlock Text="{Binding Username}" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Padding="6,2" CornerRadius="3" Background="#261E05" BorderBrush="{StaticResource GoldBorderBrush}" BorderThickness="1">
+                                            <TextBlock Text="Ready" FontSize="10" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+
         <!-- Parody Remake Notice -->
         <TextBlock Text="Bloxstrap Gold Clarification &amp; Parody Notice" FontSize="20" FontWeight="Medium" Margin="0,20,0,0" Foreground="{StaticResource GoldPrimaryBrush}" />
         <Border Margin="0,8,0,0" Padding="14" CornerRadius="6" BorderThickness="1.5"
                 BorderBrush="{StaticResource GoldBorderBrush}" Background="{StaticResource GoldDarkGradientBrush}">
             <StackPanel>
                 <TextBlock Text="👑 This program is a remake &amp; parody of Bloxstrap!" FontSize="14" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" Margin="0,0,0,6" />
-                <TextBlock Text="Bloxstrap Gold is a satirical joke remake created for fun. The 'paid subscription', '7-day trial', and evasive runaway 'Pay For It' button are entirely a joke — you will never be charged money, and Bloxstrap Gold is 100% free and open-source forever."
+                <TextBlock Text="Bloxstrap Gold is a satirical joke remake created for fun. The 'paid subscription', '7-day trial', and license keys are entirely community satire — you will never be charged money, and Bloxstrap Gold is 100% free and open-source forever."
                            TextWrapping="Wrap" Foreground="{StaticResource GoldLightBrush}" FontSize="13" LineHeight="18" />
             </StackPanel>
         </Border>

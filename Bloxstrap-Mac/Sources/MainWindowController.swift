@@ -108,6 +108,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
     // Multi-Instance Status
     private var multiInstanceStatusLabel: NSTextField!
     private var instancesStackView: NSStackView!
+    private var accountsStackView: NSStackView!
     private var instanceTimer: Timer?
     
     // Verbatim Bloxstrap Navigation Items from Screenshots
@@ -821,9 +822,39 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         instancesStackView.alignment = .leading
         instancesStackView.spacing = 4
         pScroll.documentView = instancesStackView
-        multiCard.addSubview(pScroll)
-        
         stack.addArrangedSubview(multiCard)
+        
+        // Account Switcher Card (Roblox Account Manager style)
+        let accHeader = createSectionHeader("Account Switcher (Roblox Account Manager)")
+        stack.addArrangedSubview(accHeader)
+        
+        let accCard = createOptionCard(height: 140)
+        let accTitle = NSTextField(labelWithString: "Saved Account Profiles")
+        accTitle.font = .boldSystemFont(ofSize: 12.5)
+        accTitle.textColor = .white
+        accTitle.frame = NSRect(x: 16, y: 108, width: 300, height: 18)
+        accCard.addSubview(accTitle)
+        
+        let addAccBtn = NSButton(frame: NSRect(x: 530, y: 104, width: 140, height: 26))
+        addAccBtn.title = "＋ Add Alt Profile"
+        addAccBtn.bezelStyle = .rounded
+        addAccBtn.font = .systemFont(ofSize: 10.5, weight: .medium)
+        addAccBtn.target = self
+        addAccBtn.action = #selector(onAddAltProfile)
+        accCard.addSubview(addAccBtn)
+        
+        let accScroll = NSScrollView(frame: NSRect(x: 16, y: 12, width: 688, height: 86))
+        accScroll.hasVerticalScroller = true
+        accScroll.drawsBackground = false
+        accountsStackView = NSStackView(frame: accScroll.bounds)
+        accountsStackView.orientation = .vertical
+        accountsStackView.alignment = .leading
+        accountsStackView.spacing = 4
+        accScroll.documentView = accountsStackView
+        accCard.addSubview(accScroll)
+        
+        stack.addArrangedSubview(accCard)
+        renderAccountsList()
         return scrollView
     }
     
@@ -1132,4 +1163,56 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
             self?.updateInstanceList()
         }
     }
+    
+    private func renderAccountsList() {
+        guard accountsStackView != nil else { return }
+        accountsStackView.subviews.forEach { $0.removeFromSuperview() }
+        
+        for acc in AppState.shared.data.accounts {
+            let row = NSView(frame: NSRect(x: 0, y: 0, width: 670, height: 26))
+            row.wantsLayer = true
+            row.layer?.backgroundColor = NSColor(calibratedRed: 0.16, green: 0.16, blue: 0.18, alpha: 1.0).cgColor
+            row.layer?.cornerRadius = 4
+            
+            let icon = NSTextField(labelWithString: "👤")
+            icon.font = .systemFont(ofSize: 11)
+            icon.frame = NSRect(x: 8, y: 5, width: 20, height: 16)
+            row.addSubview(icon)
+            
+            let nameLbl = NSTextField(labelWithString: "\(acc.displayName) (@\(acc.username))")
+            nameLbl.font = .boldSystemFont(ofSize: 11)
+            nameLbl.textColor = .white
+            nameLbl.frame = NSRect(x: 30, y: 5, width: 330, height: 16)
+            row.addSubview(nameLbl)
+            
+            let dateLbl = NSTextField(labelWithString: "Added \(acc.addedDate)")
+            dateLbl.font = .systemFont(ofSize: 10)
+            dateLbl.textColor = NSColor(calibratedRed: 0.60, green: 0.60, blue: 0.68, alpha: 1.0)
+            dateLbl.frame = NSRect(x: 380, y: 5, width: 150, height: 16)
+            row.addSubview(dateLbl)
+            
+            let launchBtn = NSButton(frame: NSRect(x: 550, y: 2, width: 110, height: 22))
+            launchBtn.title = "▶ Launch Alt"
+            launchBtn.bezelStyle = .rounded
+            launchBtn.font = .systemFont(ofSize: 9.5, weight: .bold)
+            launchBtn.target = self
+            launchBtn.action = #selector(onLaunchInstance)
+            row.addSubview(launchBtn)
+            
+            accountsStackView.addArrangedSubview(row)
+        }
+    }
+    
+    @objc private func onAddAltProfile() {
+        let count = AppState.shared.data.accounts.count + 1
+        let newAcc = AppState.AccountProfile(
+            username: "AltAccount_\(count)",
+            displayName: "Alt Profile #\(count)",
+            addedDate: "2026-10-22"
+        )
+        AppState.shared.data.accounts.append(newAcc)
+        AppState.shared.save()
+        renderAccountsList()
+    }
 }
+

@@ -38,6 +38,20 @@ namespace Bloxstrap
             }
         }
 
+        public static bool EnsureAuthenticated()
+        {
+            string? key = App.State.Prop.GoldLicenseKey;
+            if (!string.IsNullOrEmpty(key) && key.StartsWith("GOLD-7DAY-", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (App.LaunchSettings.QuietFlag.Active)
+                return false;
+
+            var dialog = new ActivationDialog();
+            dialog.ShowDialog();
+            return dialog.IsAuthenticated;
+        }
+
         public static void ProcessLaunchArgs()
         {
             const string LOG_IDENT = "LaunchHandler::ProcessLaunchArgs";
@@ -48,11 +62,6 @@ namespace Bloxstrap
             {
                 App.Logger.WriteLine(LOG_IDENT, "Opening uninstaller");
                 LaunchUninstaller();
-            }
-            else if (App.LaunchSettings.MenuFlag.Active)
-            {
-                App.Logger.WriteLine(LOG_IDENT, "Opening settings");
-                LaunchSettings();
             }
             else if (App.LaunchSettings.WatcherFlag.Active)
             {
@@ -69,20 +78,36 @@ namespace Bloxstrap
                 App.Logger.WriteLine(LOG_IDENT, "Opening background updater");
                 LaunchBackgroundUpdater();
             }
-            else if (App.LaunchSettings.RobloxLaunchMode != LaunchMode.None)
-            {
-                App.Logger.WriteLine(LOG_IDENT, $"Opening bootstrapper ({App.LaunchSettings.RobloxLaunchMode})");
-                LaunchRoblox(App.LaunchSettings.RobloxLaunchMode);
-            }
-            else if (!App.LaunchSettings.QuietFlag.Active)
-            {
-                App.Logger.WriteLine(LOG_IDENT, "Opening menu");
-                LaunchMenu();
-            }
             else
             {
-                App.Logger.WriteLine(LOG_IDENT, "Closing - quiet flag active");
-                App.Terminate();
+                // Key gate check: require a valid license key starting with GOLD-7DAY-
+                if (!EnsureAuthenticated())
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Authentication failed or cancelled by user, terminating.");
+                    App.Terminate();
+                    return;
+                }
+
+                if (App.LaunchSettings.MenuFlag.Active)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Opening settings");
+                    LaunchSettings();
+                }
+                else if (App.LaunchSettings.RobloxLaunchMode != LaunchMode.None)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, $"Opening bootstrapper ({App.LaunchSettings.RobloxLaunchMode})");
+                    LaunchRoblox(App.LaunchSettings.RobloxLaunchMode);
+                }
+                else if (!App.LaunchSettings.QuietFlag.Active)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Opening menu");
+                    LaunchMenu();
+                }
+                else
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Closing - quiet flag active");
+                    App.Terminate();
+                }
             }
         }
 

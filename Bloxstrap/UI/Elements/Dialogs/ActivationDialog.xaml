@@ -1,0 +1,78 @@
+<base:WpfUiWindow x:Class="Bloxstrap.UI.Elements.Dialogs.ActivationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:base="clr-namespace:Bloxstrap.UI.Elements.Base"
+        mc:Ignorable="d"
+        Title="Bloxstrap Gold — Authentication"
+        MinWidth="520"
+        Width="520"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+        ExtendsContentIntoTitleBar="True"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Padding="8" Title="Bloxstrap Gold — Authentication" ShowMinimize="False" ShowMaximize="False" CanMaximize="False" KeyboardNavigation.TabNavigation="None" Icon="pack://application:,,,/Bloxstrap.ico" />
+
+        <StackPanel Grid.Row="1" Margin="24,12,24,16">
+            <!-- Header section with icon -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                <TextBlock Text="👑" FontSize="36" VerticalAlignment="Center" Margin="0,0,16,0" />
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="AUTHENTICATION REQUIRED" FontSize="18" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
+                    <TextBlock Text="Enter your Bloxstrap Gold license key to unlock the application." FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0" />
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Key requirement notice -->
+            <Border Padding="12,10" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" Margin="0,0,0,14">
+                <TextBlock Text="All valid keys must start with the prefix GOLD-7DAY- (e.g. GOLD-7DAY-ULTRA-...)." FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
+            </Border>
+
+            <!-- Input label & box -->
+            <TextBlock Text="License Key" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,6" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+            <ui:TextBox x:Name="KeyTextBox" PlaceholderText="GOLD-7DAY-ULTRA-XXXX-XXXX-XXXX" TextChanged="KeyTextBox_TextChanged" FontFamily="Consolas, Courier New, monospace" FontSize="13" Padding="10,8" />
+
+            <!-- Live Tier Detection Card -->
+            <Border x:Name="TierBadgeBorder" Margin="0,12,0,0" Padding="12,10" CornerRadius="6" Background="#261E05" BorderBrush="{StaticResource GoldBorderBrush}" BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="TierIconText" Grid.Column="0" Text="🔒" FontSize="18" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Name="TierTitleText" Text="Awaiting Key Entry" FontSize="13" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
+                        <TextBlock x:Name="TierDetailText" Text="Please enter a key starting with GOLD-7DAY- to detect your tier." FontSize="11" Foreground="{StaticResource GoldLightBrush}" Margin="0,1,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Quick-Fill helper -->
+            <ui:Button x:Name="QuickFillButton" Margin="0,14,0,0" Content="⚡ Quick-Fill Demo Key (Gold ULTRA)" Appearance="Secondary" HorizontalAlignment="Left" Click="QuickFillButton_Click" />
+        </StackPanel>
+
+        <!-- Bottom Actions -->
+        <Border Grid.Row="2" Padding="20,14" Background="{ui:ThemeResource SolidBackgroundFillColorSecondaryBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ui:Button Grid.Column="1" x:Name="QuitButton" Content="Quit" Width="90" Click="QuitButton_Click" IsCancel="True" />
+                <ui:Button Grid.Column="2" x:Name="ActivateButton" Content="Activate &amp; Open" Appearance="Primary" Width="140" Margin="10,0,0,0" Click="ActivateButton_Click" IsDefault="True" IsEnabled="False" />
+            </Grid>
+        </Border>
+    </Grid>
+</base:WpfUiWindow>
