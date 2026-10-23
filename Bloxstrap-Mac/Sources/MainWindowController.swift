@@ -104,6 +104,11 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             }
             if let hideGuis = body["hideGuisEnabled"] as? Bool {
                 AppState.shared.data.hideGuisEnabled = hideGuis
+                if hideGuis {
+                    FastFlagManager.shared.setFlag(key: "DFIntCanHideGuiGroupId", value: 34970455)
+                } else {
+                    FastFlagManager.shared.removeFlag(key: "DFIntCanHideGuiGroupId")
+                }
             }
             if let renderingMode = body["renderingMode"] as? String {
                 AppState.shared.data.renderingMode = renderingMode
@@ -212,7 +217,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             }
             
         case "openGroupLink":
-            if let u = URL(string: "https://www.roblox.com/groups/15745484/Bloxstrap") {
+            if let u = URL(string: "https://www.roblox.com/communities/34970455/catfries-production-company#!/about") {
                 NSWorkspace.shared.open(u)
             }
             

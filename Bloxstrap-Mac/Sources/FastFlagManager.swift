@@ -108,7 +108,7 @@ public class FastFlagManager {
             key: "DFIntCanHideGuiGroupId",
             name: "Hide GUI Developer Group ID",
             description: "Permits hiding user interface elements for cinematic screenshots.",
-            defaultValue: 32380007,
+            defaultValue: 34970455,
             isAllowed: true,
             category: "UI"
         ),

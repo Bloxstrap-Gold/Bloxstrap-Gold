@@ -148,7 +148,10 @@
                     <div class="setting-title">Multi-Instance Execution</div>
                     <div class="setting-desc">Allow launching more than one Roblox game client at once.</div>
                   </div>
-                  <input type="checkbox" checked style="accent-color: var(--gold);">
+                  <label class="gold-switch">
+                    <input type="checkbox" checked>
+                    <span class="gold-slider"></span>
+                  </label>
                 </div>
 
                 <div class="app-setting-item">
@@ -156,7 +159,10 @@
                     <div class="setting-title">Check for updates on launch</div>
                     <div class="setting-desc">Automatically check for new bootstrapper releases.</div>
                   </div>
-                  <input type="checkbox" checked style="accent-color: var(--gold);">
+                  <label class="gold-switch">
+                    <input type="checkbox" checked>
+                    <span class="gold-slider"></span>
+                  </label>
                 </div>
 
                 <div class="app-setting-item">
@@ -175,7 +181,10 @@
                     <div class="setting-title">Discord Rich Presence</div>
                     <div class="setting-desc">Display active game details and Gold status badge on Discord.</div>
                   </div>
-                  <input type="checkbox" checked style="accent-color: var(--gold);">
+                  <label class="gold-switch">
+                    <input type="checkbox" checked>
+                    <span class="gold-slider"></span>
+                  </label>
                 </div>
 
                 <div class="app-setting-item">
@@ -183,7 +192,10 @@
                     <div class="setting-title">Show Server Location</div>
                     <div class="setting-desc">Query ipinfo.io to display server country and city.</div>
                   </div>
-                  <input type="checkbox" checked style="accent-color: var(--gold);">
+                  <label class="gold-switch">
+                    <input type="checkbox" checked>
+                    <span class="gold-slider"></span>
+                  </label>
                 </div>
               </div>
 
@@ -878,44 +890,123 @@
         </div>
       </div>
 
-      <!-- Success / Download View -->
+      <!-- Success / VIP Provisioning View -->
       <div class="success-view" id="checkoutSuccessView">
-        <div class="success-crown-wrapper">
-          <div class="success-ripple ring-1"></div>
-          <div class="success-ripple ring-2"></div>
-          <div class="success-crown-icon">👑</div>
-        </div>
-        <h3 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;" id="checkoutSuccessTitle">
-          Your 7-day free trial has started.
-        </h3>
-        <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 480px; margin: 0 auto 1.5rem auto;" id="checkoutSuccessSubtitle">
-          Download Bloxstrap Gold below and enjoy built-in multi-instance support and the gold theme.
-        </p>
+        <div class="success-glow-halo"></div>
 
-        <div style="margin-bottom: 1.5rem;">
-          <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--gold-light); font-weight: 700; margin-bottom: 0.35rem;">Enterprise License Key</div>
-          <div class="license-key-box" id="generatedLicenseKey" title="Click to copy">GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN</div>
-          <div id="copyKeyFeedback" style="font-size: 0.75rem; color: #4ade80; height: 16px; margin-top: 0.25rem;"></div>
+        <div class="success-header-wrap">
+          <div class="success-crown-wrapper">
+            <div class="success-ripple ring-1"></div>
+            <div class="success-ripple ring-2"></div>
+            <div class="success-crown-icon">👑</div>
+          </div>
+          <h3 class="success-main-title" id="checkoutSuccessTitle">
+            Sovereign License Provisioned.
+          </h3>
+          <p class="success-main-subtitle" id="checkoutSuccessSubtitle">
+            Your enterprise authorization is complete. Multi-instance kernel isolation and gold privileges are now active.
+          </p>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 360px; margin: 0 auto;">
-          <a id="deepLinkActivateBtn" href="bloxstrap-gold://activate?key=GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN" class="btn-primary" style="justify-content: center; text-decoration: none; background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); color: #000; font-weight: 800; box-shadow: 0 4px 15px rgba(255,215,0,0.35);">
-            ⚡ Open in Bloxstrap Gold (1-Click Activate)
+        <!-- 3D Holographic VIP Member Pass -->
+        <div class="vip-pass-card" id="vipPassCard">
+          <div class="vip-pass-sheen" id="vipPassSheen"></div>
+          <div class="vip-pass-inner">
+            <div class="vip-pass-top">
+              <div class="vip-pass-brand">
+                <span class="vip-pass-crown">👑</span>
+                <span class="vip-pass-title">BLOXSTRAP GOLD</span>
+                <span class="vip-pass-pill">SOVEREIGN</span>
+              </div>
+              <div class="vip-pass-badge" id="vipPassStatusBadge">
+                <span class="pulse-status-dot"></span> ACTIVE &bull; MINTED
+              </div>
+            </div>
+
+            <div class="vip-pass-body">
+              <div class="vip-pass-tier-name" id="vipPassTierName">GOLD ULTRA SOVEREIGN</div>
+              <div class="vip-pass-tier-sub" id="vipPassTierSub">Kernel Mutex Isolation &bull; Lifetime Sovereign Privilege</div>
+
+              <!-- Embedded Cryptographic License Key Plate -->
+              <div class="vip-key-plate">
+                <div class="vip-key-plate-header">
+                  <span class="vip-key-label">256-BIT CRYPTOGRAPHIC LICENSE KEY</span>
+                  <span class="vip-key-sublabel">TAP TO COPY</span>
+                </div>
+                <div class="vip-key-row">
+                  <code class="license-key-box tabular" id="generatedLicenseKey" title="Click to copy">GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN</code>
+                  <button type="button" class="vip-copy-btn" id="vipCopyBtn" title="Copy License Key">
+                    <span class="vip-copy-icon" id="vipCopyIcon">📋</span>
+                    <span class="vip-copy-text" id="vipCopyText">COPY KEY</span>
+                  </button>
+                </div>
+                <div id="copyKeyFeedback" class="vip-copy-feedback"></div>
+              </div>
+            </div>
+
+            <div class="vip-pass-bottom">
+              <div class="vip-holder-col">
+                <span class="vip-small-label">ISSUED TO</span>
+                <span class="vip-holder-val" id="vipHolderVal">SOVEREIGN MEMBER</span>
+              </div>
+              <div class="vip-auth-seal">
+                <span class="seal-star">★</span>
+                <span class="seal-text">VERIFIED AUTHENTIC</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Telemetry Provisioning Console -->
+        <div class="provisioning-console" id="provisioningConsole">
+          <div class="console-header">
+            <div class="console-dot-group">
+              <span class="c-dot dot-red"></span>
+              <span class="c-dot dot-yellow"></span>
+              <span class="c-dot dot-green"></span>
+            </div>
+            <span class="console-title">PROVISIONING ENGINE &bull; KERNEL DRIVER INTERFACE</span>
+            <span class="console-timer tabular" id="consoleLiveClock">0.89s</span>
+          </div>
+          <div class="console-log-list" id="consoleLogList">
+            <div class="console-log-item" id="cLog1">
+              <span class="log-indicator">⏳</span>
+              <span class="log-text">Minting 256-Bit Sovereign Cryptographic Token...</span>
+            </div>
+            <div class="console-log-item" id="cLog2">
+              <span class="log-indicator">⏳</span>
+              <span class="log-text">Arming Multi-Instance Mutex Process Isolation engine...</span>
+            </div>
+            <div class="console-log-item" id="cLog3">
+              <span class="log-indicator">⏳</span>
+              <span class="log-text">Unlocking FastFlags God Vault repository payload...</span>
+            </div>
+            <div class="console-log-item" id="cLog4">
+              <span class="log-indicator">⏳</span>
+              <span class="log-text">Sovereign VIP Priority Discord Presence &amp; Respect: Active.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions Suite -->
+        <div class="success-actions-suite">
+          <a id="deepLinkActivateBtn" href="bloxstrap-gold://activate?key=GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN" class="btn-primary success-btn-cta">
+            <span>⚡</span> Open in Bloxstrap Gold (1-Click Activate)
           </a>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-            <a href="https://github.com/bloxstraplabs/bloxstrap/releases/latest" target="_blank" class="btn-secondary" style="justify-content: center; text-decoration: none; font-size: 0.85rem; padding: 0.6rem 0.5rem;">
-              🪟 Windows (.exe)
+          <div class="success-dl-grid">
+            <a href="https://github.com/bloxstraplabs/bloxstrap/releases/latest" target="_blank" class="btn-secondary success-dl-btn">
+              <span>🪟</span> Windows (.exe)
             </a>
-            <a href="https://github.com/bloxstraplabs/bloxstrap/releases/latest" target="_blank" class="btn-secondary" style="justify-content: center; text-decoration: none; font-size: 0.85rem; padding: 0.6rem 0.5rem;">
-              🍏 macOS (.dmg)
+            <a href="https://github.com/bloxstraplabs/bloxstrap/releases/latest" target="_blank" class="btn-secondary success-dl-btn">
+              <span>🍏</span> macOS (.dmg)
             </a>
           </div>
 
-          <button class="btn-secondary" id="successUnlockVaultBtn" style="justify-content: center; border-color: var(--gold-border); color: var(--gold-light);">
-            ✨ Unlock FastFlags Vault with Key
+          <button class="btn-secondary success-vault-btn" id="successUnlockVaultBtn">
+            <span>✨</span> Unlock FastFlags Vault with Key
           </button>
-          <button class="btn-secondary" onclick="closeCheckout()" style="justify-content: center; opacity: 0.7;">
+          <button class="btn-secondary success-close-btn" onclick="closeCheckout()">
             Close
           </button>
         </div>
