@@ -102,11 +102,11 @@ public class AppState {
         if key.contains("-ULTRA-") {
             return "$199.99/mo"
         } else if key.contains("-DELUXE-") {
-            return "$19.99/mo"
+            return "$109.99/mo"
         } else if key.contains("-PLUS-") {
-            return "$12.99/mo"
+            return "$54.99/mo"
         } else if key.contains("-BASIC-") {
-            return "$6.99/mo"
+            return "$24.99/mo"
         } else {
             return "FREE FOREVER"
         }
@@ -116,9 +116,9 @@ public class AppState {
         let upper = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         guard upper.hasPrefix("GOLD-7DAY-") else { return "Invalid" }
         if upper.contains("-ULTRA-") { return "Gold ULTRA ($199.99/mo)" }
-        if upper.contains("-DELUXE-") { return "Gold Deluxe ($19.99/mo)" }
-        if upper.contains("-PLUS-") { return "Gold Plus ($12.99/mo)" }
-        if upper.contains("-BASIC-") { return "Gold Basic ($6.99/mo)" }
+        if upper.contains("-DELUXE-") { return "Gold Deluxe ($109.99/mo)" }
+        if upper.contains("-PLUS-") { return "Gold Plus ($54.99/mo)" }
+        if upper.contains("-BASIC-") { return "Gold Basic ($24.99/mo)" }
         return "VIP Free Trial (7 Days)"
     }
     

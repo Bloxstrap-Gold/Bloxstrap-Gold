@@ -48,7 +48,7 @@ The website now automatically embeds the purchased/selected tier into the genera
 ## 2. 🌌 Redesigned Tiers & ULTRA Features (Normal, Authentic Tone + Hilarious Support & Respect)
 The user instructed us to make the tier features sound more normal and realistic, while **keeping the funny "Support & Respect" perks** intact:
 
-### Tier 1: Gold Basic ($6.99/mo) — *Standard Edition*
+### Tier 1: Gold Basic ($24.99/mo • $199.99/yr) — *Standard Edition*
 - **Tagline:** "Entry-level dual-instance bootstrapper with basic FPS uncapping and gold styling."
 - Up to 2 simultaneous Roblox client instances
 - 240 FPS target framerate cap
@@ -57,7 +57,7 @@ The user instructed us to make the tier features sound more normal and realistic
 - Bronze Gold Discord Rich Presence badge
 - **Email support (replies in 3 to 5 business days if we feel like it)**
 
-### Tier 2: Gold Plus ($12.99/mo) — *Plus Edition* (Most Popular)
+### Tier 2: Gold Plus ($54.99/mo • $449.99/yr) — *Plus Edition* (Most Popular)
 - **Tagline:** "Expanded 5-instance capacity, monitor-refresh framerates, and live telemetry."
 - Up to 5 simultaneous Roblox client instances
 - Framerate uncapped to monitor refresh rate (144Hz / 240Hz)
@@ -66,7 +66,7 @@ The user instructed us to make the tier features sound more normal and realistic
 - Live server location and ping display (ipinfo.io)
 - **Priority ticket queue (strictly behind all Ultra members)**
 
-### Tier 3: Gold Deluxe ($19.99/mo) — *Deluxe Edition*
+### Tier 3: Gold Deluxe ($109.99/mo • $899.99/yr) — *Deluxe Edition*
 - **Tagline:** "Unlimited instances, fully uncapped framerates, and raw FastFlag memory access."
 - Unlimited simultaneous Roblox client instances
 - Fully uncapped framerate (up to 9999 FPS target)

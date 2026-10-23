@@ -42,11 +42,11 @@
         "Email support (replies in 3 to 5 business days if we feel like it)"
       ],
       "pricing_usd": {
-        "weekly": 2.99,
-        "monthly": 6.99,
-        "quarterly": 16.99,
-        "yearly": 49.99,
-        "lifetime": 99.99
+        "weekly": 7.99,
+        "monthly": 24.99,
+        "quarterly": 59.99,
+        "yearly": 199.99,
+        "lifetime": 499.99
       }
     },
     "2": {
@@ -66,11 +66,11 @@
         "Priority ticket queue (strictly behind all Ultra members)"
       ],
       "pricing_usd": {
-        "weekly": 4.99,
-        "monthly": 12.99,
-        "quarterly": 29.99,
-        "yearly": 89.99,
-        "lifetime": 189.99
+        "weekly": 17.99,
+        "monthly": 54.99,
+        "quarterly": 139.99,
+        "yearly": 449.99,
+        "lifetime": 1199.99
       }
     },
     "3": {
@@ -89,11 +89,11 @@
         "Dedicated priority email support queue"
       ],
       "pricing_usd": {
-        "weekly": 7.99,
-        "monthly": 19.99,
-        "quarterly": 46.99,
-        "yearly": 139.99,
-        "lifetime": 349.99
+        "weekly": 34.99,
+        "monthly": 109.99,
+        "quarterly": 279.99,
+        "yearly": 899.99,
+        "lifetime": 2499.99
       }
     },
     "4": {

@@ -101,9 +101,9 @@ const PRICING_MATRIX = {
     label: 'Weekly',
     periodText: '/ week',
     tiers: {
-      1: { price: 2.99, monthlyEquiv: 11.96, savings: 'Billed weekly • Cancel anytime' },
-      2: { price: 4.99, monthlyEquiv: 19.96, savings: 'Billed weekly • Cancel anytime' },
-      3: { price: 7.99, monthlyEquiv: 31.96, savings: 'Billed weekly • Cancel anytime' },
+      1: { price: 7.99, monthlyEquiv: 31.96, savings: 'Billed weekly • Cancel anytime' },
+      2: { price: 17.99, monthlyEquiv: 71.96, savings: 'Billed weekly • Cancel anytime' },
+      3: { price: 34.99, monthlyEquiv: 139.96, savings: 'Billed weekly • Cancel anytime' },
       4: { price: 59.99, monthlyEquiv: 239.96, savings: 'Billed weekly • Maximum flexibility' }
     }
   },
@@ -112,9 +112,9 @@ const PRICING_MATRIX = {
     label: 'Monthly',
     periodText: '/ month',
     tiers: {
-      1: { price: 6.99, monthlyEquiv: 6.99, savings: 'Standard monthly rate' },
-      2: { price: 12.99, monthlyEquiv: 12.99, savings: 'Save 35% vs weekly' },
-      3: { price: 19.99, monthlyEquiv: 19.99, savings: 'Save 38% vs weekly' },
+      1: { price: 24.99, monthlyEquiv: 24.99, savings: 'Standard monthly rate' },
+      2: { price: 54.99, monthlyEquiv: 54.99, savings: 'Save 24% vs weekly' },
+      3: { price: 109.99, monthlyEquiv: 109.99, savings: 'Save 21% vs weekly' },
       4: { price: 199.99, monthlyEquiv: 199.99, savings: 'The $200/mo apex standard' }
     }
   },
@@ -123,9 +123,9 @@ const PRICING_MATRIX = {
     label: 'Quarterly',
     periodText: '/ quarter',
     tiers: {
-      1: { price: 16.99, monthlyEquiv: 5.66, savings: 'Save 19% (~$5.66/mo)' },
-      2: { price: 29.99, monthlyEquiv: 9.99, savings: 'Save 23% (~$9.99/mo)' },
-      3: { price: 46.99, monthlyEquiv: 15.66, savings: 'Save 22% (~$15.66/mo)' },
+      1: { price: 59.99, monthlyEquiv: 19.99, savings: 'Save 20% (~$19.99/mo)' },
+      2: { price: 139.99, monthlyEquiv: 46.66, savings: 'Save 15% (~$46.66/mo)' },
+      3: { price: 279.99, monthlyEquiv: 93.33, savings: 'Save 15% (~$93.33/mo)' },
       4: { price: 499.99, monthlyEquiv: 166.66, savings: 'Save 17% (~$166.66/mo)' }
     }
   },
@@ -134,9 +134,9 @@ const PRICING_MATRIX = {
     label: 'Yearly',
     periodText: '/ year',
     tiers: {
-      1: { price: 49.99, monthlyEquiv: 4.16, savings: 'Save 40% (~$4.16/mo)' },
-      2: { price: 89.99, monthlyEquiv: 7.49, savings: 'Save 42% (~$7.49/mo)' },
-      3: { price: 139.99, monthlyEquiv: 11.66, savings: 'Save 41% (~$11.66/mo)' },
+      1: { price: 199.99, monthlyEquiv: 16.66, savings: 'Save 33% (~$16.66/mo)' },
+      2: { price: 449.99, monthlyEquiv: 37.49, savings: 'Save 32% (~$37.49/mo)' },
+      3: { price: 899.99, monthlyEquiv: 74.99, savings: 'Save 32% (~$74.99/mo)' },
       4: { price: 1599.99, monthlyEquiv: 133.33, savings: 'Save 33% (~$133.33/mo)' }
     }
   },
@@ -145,9 +145,9 @@ const PRICING_MATRIX = {
     label: 'Lifetime',
     periodText: 'one-time',
     tiers: {
-      1: { price: 99.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
-      2: { price: 189.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
-      3: { price: 349.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
+      1: { price: 499.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
+      2: { price: 1199.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
+      3: { price: 2499.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
       4: { price: 4799.99, monthlyEquiv: null, savings: '3-year equivalent permanent sovereign license' }
     }
   }
