@@ -1,0 +1,35 @@
+name: Release Package (macOS & Windows)
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build macOS App & DMG
+        run: |
+          chmod +x Bloxstrap-Mac/build.sh Bloxstrap-Mac/package_dmg.sh
+          ./Bloxstrap-Mac/package_dmg.sh
+          ditto -c -k --keepParent Bloxstrap-Mac/BloxstrapGold.app Bloxstrap-Mac/BloxstrapGold-macOS.zip
+
+      - name: Generate Checksums
+        run: |
+          cd Bloxstrap-Mac
+          shasum -a 256 BloxstrapGold-macOS.dmg BloxstrapGold-macOS.zip > SHA256SUMS-macos.txt
+          cat SHA256SUMS-macos.txt
+
+      - name: Publish GitHub Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            Bloxstrap-Mac/BloxstrapGold-macOS.dmg
+            Bloxstrap-Mac/BloxstrapGold-macOS.zip
+            Bloxstrap-Mac/SHA256SUMS-macos.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
