@@ -242,24 +242,37 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             }
             
         // MARK: - Account Manager (RAM) Bridge Actions
+        case "lookupRobloxUser":
+            let rawUser = body["username"] as? String ?? ""
+            let trimmed = rawUser.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { return }
+            self.lookupRobloxUser(username: trimmed)
+            
         case "addAccount":
             let username = body["username"] as? String ?? "AltAccount"
             let displayName = body["displayName"] as? String ?? username
             let userId = body["userId"] as? String ?? "1"
+            let avatarUrl = body["avatarUrl"] as? String ?? ""
             let tag = body["tag"] as? String ?? "Alt"
             let note = body["note"] as? String ?? ""
-            AppState.shared.addAccount(username: username, displayName: displayName, userId: userId, tag: tag, note: note)
+            AppState.shared.addAccount(username: username, displayName: displayName, userId: userId, avatarUrl: avatarUrl, tag: tag, note: note)
             pushStateToWeb()
-            webView.evaluateJavaScript("window.showToast && window.showToast('✓ Account profile added!');", completionHandler: nil)
+            webView.evaluateJavaScript("window.showToast && window.showToast('✓ Account @\(username) added!');", completionHandler: nil)
+            
+            // Asynchronously resolve avatar URL if missing
+            if avatarUrl.isEmpty && userId != "1" {
+                self.resolveAvatarForAccount(userId: userId, username: username)
+            }
             
         case "editAccount":
             if let id = body["id"] as? String {
                 let username = body["username"] as? String ?? "AltAccount"
                 let displayName = body["displayName"] as? String ?? username
                 let userId = body["userId"] as? String ?? "1"
+                let avatarUrl = body["avatarUrl"] as? String ?? ""
                 let tag = body["tag"] as? String ?? "Alt"
                 let note = body["note"] as? String ?? ""
-                AppState.shared.editAccount(id: id, username: username, displayName: displayName, userId: userId, tag: tag, note: note)
+                AppState.shared.editAccount(id: id, username: username, displayName: displayName, userId: userId, avatarUrl: avatarUrl, tag: tag, note: note)
                 pushStateToWeb()
                 webView.evaluateJavaScript("window.showToast && window.showToast('✓ Account updated!');", completionHandler: nil)
             }
@@ -268,8 +281,13 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             if let id = body["id"] as? String {
                 AppState.shared.deleteAccount(id: id)
                 pushStateToWeb()
-                webView.evaluateJavaScript("window.showToast && window.showToast('🗑 Account deleted');", completionHandler: nil)
+                webView.evaluateJavaScript("window.showToast && window.showToast('🗑 Account profile removed');", completionHandler: nil)
             }
+            
+        case "resetSampleAccounts":
+            AppState.shared.resetSampleAccounts()
+            pushStateToWeb()
+            webView.evaluateJavaScript("window.showToast && window.showToast('✓ Sample RAM accounts loaded!');", completionHandler: nil)
             
         case "launchAccount":
             _ = MultiInstanceManager.shared.launchNewInstance()
@@ -277,7 +295,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 self?.pushStateToWeb()
             }
             let user = body["username"] as? String ?? "Account"
-            webView.evaluateJavaScript("window.showToast && window.showToast('🚀 Launching session for @\(user)...');", completionHandler: nil)
+            webView.evaluateJavaScript("window.showToast && window.showToast('🚀 Launching isolated session for @\(user)...');", completionHandler: nil)
             
         case "joinGame":
             let placeId = body["placeId"] as? String ?? ""
@@ -335,8 +353,9 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 let success = AppState.shared.verifyAndApplyKey(key)
                 if success {
                     pushStateToWeb()
+                    webView.evaluateJavaScript("window.showToast && window.showToast('👑 Bloxstrap Gold VIP Unlocked!');", completionHandler: nil)
                 } else {
-                    webView.evaluateJavaScript("document.getElementById('modalDetectedTier').textContent = '❌ Invalid key! Must begin with GOLD-7DAY-';", completionHandler: nil)
+                    webView.evaluateJavaScript("window.onKeyVerifyFailed && window.onKeyVerifyFailed();", completionHandler: nil)
                 }
             }
             
@@ -392,6 +411,86 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         }
     }
     
+    // MARK: - Asynchronous Roblox User & Avatar API Lookup
+    private func lookupRobloxUser(username: String) {
+        guard let url = URL(string: "https://users.roblox.com/v1/usernames/users") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let postBody: [String: Any] = [
+            "usernames": [username],
+            "excludeBannedUsers": false
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: postBody, options: [])
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let list = json["data"] as? [[String: Any]],
+                  let first = list.first,
+                  let userIdInt = first["id"] as? Int,
+                  let resolvedUsername = first["name"] as? String,
+                  let resolvedDisplayName = first["displayName"] as? String else {
+                DispatchQueue.main.async {
+                    self?.webView.evaluateJavaScript("window.onRobloxUserLookupResult && window.onRobloxUserLookupResult({ success: false, message: 'User not found' });", completionHandler: nil)
+                }
+                return
+            }
+            
+            let userIdStr = String(userIdInt)
+            
+            // Now fetch real Avatar Headshot from thumbnails.roblox.com
+            let thumbUrlStr = "https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=\(userIdStr)&size=150x150&format=Png&isCircular=false"
+            if let thumbUrl = URL(string: thumbUrlStr) {
+                URLSession.shared.dataTask(with: thumbUrl) { tData, _, _ in
+                    var avatarUrl = ""
+                    if let tData = tData,
+                       let tJson = try? JSONSerialization.jsonObject(with: tData) as? [String: Any],
+                       let tList = tJson["data"] as? [[String: Any]],
+                       let tFirst = tList.first,
+                       let imgUrl = tFirst["imageUrl"] as? String {
+                        avatarUrl = imgUrl
+                    }
+                    
+                    let result: [String: Any] = [
+                        "success": true,
+                        "userId": userIdStr,
+                        "username": resolvedUsername,
+                        "displayName": resolvedDisplayName,
+                        "avatarUrl": avatarUrl
+                    ]
+                    
+                    if let resData = try? JSONSerialization.data(withJSONObject: result),
+                       let resStr = String(data: resData, encoding: .utf8) {
+                        DispatchQueue.main.async {
+                            self?.webView.evaluateJavaScript("window.onRobloxUserLookupResult && window.onRobloxUserLookupResult(\(resStr));", completionHandler: nil)
+                        }
+                    }
+                }.resume()
+            }
+        }.resume()
+    }
+    
+    private func resolveAvatarForAccount(userId: String, username: String) {
+        let thumbUrlStr = "https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=\(userId)&size=150x150&format=Png&isCircular=false"
+        guard let thumbUrl = URL(string: thumbUrlStr) else { return }
+        URLSession.shared.dataTask(with: thumbUrl) { [weak self] data, _, _ in
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let list = json["data"] as? [[String: Any]],
+                  let first = list.first,
+                  let imgUrl = first["imageUrl"] as? String, !imgUrl.isEmpty else { return }
+            
+            DispatchQueue.main.async {
+                if let idx = AppState.shared.data.accounts.firstIndex(where: { $0.username.lowercased() == username.lowercased() }) {
+                    AppState.shared.data.accounts[idx].avatarUrl = imgUrl
+                    AppState.shared.save()
+                    self?.pushStateToWeb()
+                }
+            }
+        }.resume()
+    }
+    
     private func pushStateToWeb() {
         let pids = MultiInstanceManager.shared.getRunningInstances()
         var instancesPayload: [[String: Any]] = []
@@ -407,6 +506,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 "username": acc.username,
                 "displayName": acc.displayName,
                 "userId": acc.userId,
+                "avatarUrl": acc.avatarUrl,
                 "tag": acc.tag,
                 "note": acc.note,
                 "addedDate": acc.addedDate

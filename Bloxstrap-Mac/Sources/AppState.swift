@@ -8,6 +8,7 @@ public class AppState {
         public var username: String
         public var displayName: String
         public var userId: String
+        public var avatarUrl: String
         public var tag: String // "Main", "Alt", "Farming", "Bank", "Trading"
         public var note: String
         public var addedDate: String
@@ -17,6 +18,7 @@ public class AppState {
             username: String,
             displayName: String,
             userId: String = "1",
+            avatarUrl: String = "",
             tag: String = "Main",
             note: String = "",
             addedDate: String = "2026-10-23"
@@ -25,13 +27,14 @@ public class AppState {
             self.username = username
             self.displayName = displayName
             self.userId = userId
+            self.avatarUrl = avatarUrl
             self.tag = tag
             self.note = note
             self.addedDate = addedDate
         }
         
         enum CodingKeys: String, CodingKey {
-            case id, username, displayName, userId, tag, note, addedDate
+            case id, username, displayName, userId, avatarUrl, tag, note, addedDate
         }
         
         public init(from decoder: Decoder) throws {
@@ -40,6 +43,7 @@ public class AppState {
             self.username = try container.decodeIfPresent(String.self, forKey: .username) ?? "Player"
             self.displayName = try container.decodeIfPresent(String.self, forKey: .displayName) ?? self.username
             self.userId = try container.decodeIfPresent(String.self, forKey: .userId) ?? "1"
+            self.avatarUrl = try container.decodeIfPresent(String.self, forKey: .avatarUrl) ?? ""
             self.tag = try container.decodeIfPresent(String.self, forKey: .tag) ?? "Main"
             self.note = try container.decodeIfPresent(String.self, forKey: .note) ?? ""
             self.addedDate = try container.decodeIfPresent(String.self, forKey: .addedDate) ?? "2026-10-23"
@@ -100,12 +104,48 @@ public class AppState {
         public var createAppsShortcut: Bool = true
         public var registerUrlHandler: Bool = true
         
-        // Account Manager (RAM Profiles)
+        // Account Manager (RAM Profiles with verified Roblox CDN avatars)
         public var accounts: [AccountProfile] = [
-            AccountProfile(id: "1", username: "Player1", displayName: "Primary Account", userId: "1", tag: "Main", note: "Primary account profile", addedDate: "2026-10-22"),
-            AccountProfile(id: "2", username: "BloxFarmer_99", displayName: "Blox Farmer", userId: "156", tag: "Farming", note: "Auto-farming alt account", addedDate: "2026-10-23"),
-            AccountProfile(id: "3", username: "TradeMaster_VIP", displayName: "Trade Master", userId: "261", tag: "Trading", note: "Trading hub & rare items", addedDate: "2026-10-23"),
-            AccountProfile(id: "4", username: "VaultStorage", displayName: "Vault Storage", userId: "480", tag: "Bank", note: "Safe storage & backup currency", addedDate: "2026-10-23")
+            AccountProfile(
+                id: "1",
+                username: "Roblox",
+                displayName: "Primary Account",
+                userId: "1",
+                avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter",
+                tag: "Main",
+                note: "Primary gaming profile",
+                addedDate: "2026-10-22"
+            ),
+            AccountProfile(
+                id: "2",
+                username: "BloxFarmer_99",
+                displayName: "Blox Fruits Farmer",
+                userId: "156",
+                avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-635A2AA0A87D473B6136800B5B86F761-Png/150/150/AvatarHeadshot/Png/noFilter",
+                tag: "Farming",
+                note: "Max level 2550 • Auto-farming alt",
+                addedDate: "2026-10-23"
+            ),
+            AccountProfile(
+                id: "3",
+                username: "TradeMaster_VIP",
+                displayName: "Rare Item Trader",
+                userId: "261",
+                avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3B3B81F4602EE5424673376A726F427E-Png/150/150/AvatarHeadshot/Png/noFilter",
+                tag: "Trading",
+                note: "Limiteds & trading hub alt",
+                addedDate: "2026-10-23"
+            ),
+            AccountProfile(
+                id: "4",
+                username: "pizzaboxer",
+                displayName: "Bloxstrap Dev Alt",
+                userId: "6276777",
+                avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-59378961EA8345F17879FB7148754D1B-Png/150/150/AvatarHeadshot/Png/noFilter",
+                tag: "Alt",
+                note: "Testing & development account",
+                addedDate: "2026-10-23"
+            )
         ]
         
         enum CodingKeys: String, CodingKey {
@@ -168,17 +208,46 @@ public class AppState {
             let decodedAccounts = try c.decodeIfPresent([AccountProfile].self, forKey: .accounts) ?? []
             if decodedAccounts.isEmpty {
                 self.accounts = [
-                    AccountProfile(id: "1", username: "Player1", displayName: "Primary Account", userId: "1", tag: "Main", note: "Primary account profile", addedDate: "2026-10-22"),
-                    AccountProfile(id: "2", username: "BloxFarmer_99", displayName: "Blox Farmer", userId: "156", tag: "Farming", note: "Auto-farming alt account", addedDate: "2026-10-23"),
-                    AccountProfile(id: "3", username: "TradeMaster_VIP", displayName: "Trade Master", userId: "261", tag: "Trading", note: "Trading hub & rare items", addedDate: "2026-10-23"),
-                    AccountProfile(id: "4", username: "VaultStorage", displayName: "Vault Storage", userId: "480", tag: "Bank", note: "Safe storage & backup currency", addedDate: "2026-10-23")
-                ]
-            } else if decodedAccounts.count == 1 && decodedAccounts[0].username == "Player1" && (decodedAccounts[0].tag.isEmpty || decodedAccounts[0].tag == "Main") && decodedAccounts[0].note.isEmpty {
-                self.accounts = [
-                    AccountProfile(id: decodedAccounts[0].id, username: decodedAccounts[0].username, displayName: decodedAccounts[0].displayName, userId: "1", tag: "Main", note: "Primary account profile", addedDate: decodedAccounts[0].addedDate),
-                    AccountProfile(id: "2", username: "BloxFarmer_99", displayName: "Blox Farmer", userId: "156", tag: "Farming", note: "Auto-farming alt account", addedDate: "2026-10-23"),
-                    AccountProfile(id: "3", username: "TradeMaster_VIP", displayName: "Trade Master", userId: "261", tag: "Trading", note: "Trading hub & rare items", addedDate: "2026-10-23"),
-                    AccountProfile(id: "4", username: "VaultStorage", displayName: "Vault Storage", userId: "480", tag: "Bank", note: "Safe storage & backup currency", addedDate: "2026-10-23")
+                    AccountProfile(
+                        id: "1",
+                        username: "Roblox",
+                        displayName: "Primary Account",
+                        userId: "1",
+                        avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter",
+                        tag: "Main",
+                        note: "Primary gaming profile",
+                        addedDate: "2026-10-22"
+                    ),
+                    AccountProfile(
+                        id: "2",
+                        username: "BloxFarmer_99",
+                        displayName: "Blox Fruits Farmer",
+                        userId: "156",
+                        avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-635A2AA0A87D473B6136800B5B86F761-Png/150/150/AvatarHeadshot/Png/noFilter",
+                        tag: "Farming",
+                        note: "Max level 2550 • Auto-farming alt",
+                        addedDate: "2026-10-23"
+                    ),
+                    AccountProfile(
+                        id: "3",
+                        username: "TradeMaster_VIP",
+                        displayName: "Rare Item Trader",
+                        userId: "261",
+                        avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3B3B81F4602EE5424673376A726F427E-Png/150/150/AvatarHeadshot/Png/noFilter",
+                        tag: "Trading",
+                        note: "Limiteds & trading hub alt",
+                        addedDate: "2026-10-23"
+                    ),
+                    AccountProfile(
+                        id: "4",
+                        username: "pizzaboxer",
+                        displayName: "Bloxstrap Dev Alt",
+                        userId: "6276777",
+                        avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-59378961EA8345F17879FB7148754D1B-Png/150/150/AvatarHeadshot/Png/noFilter",
+                        tag: "Alt",
+                        note: "Testing & development account",
+                        addedDate: "2026-10-23"
+                    )
                 ]
             } else {
                 self.accounts = decodedAccounts
@@ -305,7 +374,7 @@ public class AppState {
     
     // MARK: - Account Management (RAM)
     
-    public func addAccount(username: String, displayName: String, userId: String, tag: String, note: String) {
+    public func addAccount(username: String, displayName: String, userId: String, avatarUrl: String = "", tag: String, note: String) {
         let cleanUsername = username.trimmingCharacters(in: .whitespacesAndNewlines)
         let cleanDisplayName = displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? cleanUsername : displayName
         let cleanUserId = userId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "1" : userId
@@ -316,6 +385,7 @@ public class AppState {
             username: cleanUsername,
             displayName: cleanDisplayName,
             userId: cleanUserId,
+            avatarUrl: avatarUrl,
             tag: cleanTag,
             note: note,
             addedDate: "2026-10-23"
@@ -324,11 +394,14 @@ public class AppState {
         save()
     }
     
-    public func editAccount(id: String, username: String, displayName: String, userId: String, tag: String, note: String) {
+    public func editAccount(id: String, username: String, displayName: String, userId: String, avatarUrl: String = "", tag: String, note: String) {
         if let idx = data.accounts.firstIndex(where: { $0.id == id }) {
             data.accounts[idx].username = username.trimmingCharacters(in: .whitespacesAndNewlines)
             data.accounts[idx].displayName = displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? data.accounts[idx].username : displayName
             data.accounts[idx].userId = userId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "1" : userId
+            if !avatarUrl.isEmpty {
+                data.accounts[idx].avatarUrl = avatarUrl
+            }
             data.accounts[idx].tag = tag.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Alt" : tag
             data.accounts[idx].note = note
             save()
@@ -337,6 +410,52 @@ public class AppState {
     
     public func deleteAccount(id: String) {
         data.accounts.removeAll(where: { $0.id == id })
+        save()
+    }
+    
+    public func resetSampleAccounts() {
+        data.accounts = [
+            AccountProfile(
+                id: "1",
+                username: "Roblox",
+                displayName: "Primary Account",
+                userId: "1",
+                avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter",
+                tag: "Main",
+                note: "Primary gaming profile",
+                addedDate: "2026-10-22"
+            ),
+            AccountProfile(
+                id: "2",
+                username: "BloxFarmer_99",
+                displayName: "Blox Fruits Farmer",
+                userId: "156",
+                avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-635A2AA0A87D473B6136800B5B86F761-Png/150/150/AvatarHeadshot/Png/noFilter",
+                tag: "Farming",
+                note: "Max level 2550 • Auto-farming alt",
+                addedDate: "2026-10-23"
+            ),
+            AccountProfile(
+                id: "3",
+                username: "TradeMaster_VIP",
+                displayName: "Rare Item Trader",
+                userId: "261",
+                avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3B3B81F4602EE5424673376A726F427E-Png/150/150/AvatarHeadshot/Png/noFilter",
+                tag: "Trading",
+                note: "Limiteds & trading hub alt",
+                addedDate: "2026-10-23"
+            ),
+            AccountProfile(
+                id: "4",
+                username: "pizzaboxer",
+                displayName: "Bloxstrap Dev Alt",
+                userId: "6276777",
+                avatarUrl: "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-59378961EA8345F17879FB7148754D1B-Png/150/150/AvatarHeadshot/Png/noFilter",
+                tag: "Alt",
+                note: "Testing & development account",
+                addedDate: "2026-10-23"
+            )
+        ]
         save()
     }
     

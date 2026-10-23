@@ -138,7 +138,7 @@
 
     /* Sidebar */
     .sidebar {
-      width: 224px;
+      width: 228px;
       background-color: var(--sidebar-bg);
       border-right: 1px solid rgba(255, 255, 255, 0.04);
       display: flex;
@@ -512,13 +512,17 @@
       align-items: center;
       gap: 7px;
       text-decoration: none;
-      transition: background 0.12s ease, border-color 0.12s ease;
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
       outline: none;
     }
 
     .pill-btn:hover {
       background: #34333f;
       border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .pill-btn:active {
+      transform: scale(0.98);
     }
 
     .pill-btn.primary {
@@ -537,10 +541,12 @@
       border: none;
       color: #000;
       font-weight: 700;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);
     }
 
     .pill-btn.gold:hover {
-      opacity: 0.92;
+      opacity: 0.94;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
     }
 
     .pill-btn.danger {
@@ -650,13 +656,14 @@
     }
 
     .account-avatar {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       background: #18171e;
-      border: 2px solid rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.12);
       object-fit: cover;
       flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     }
 
     .account-meta {
@@ -728,11 +735,12 @@
        BLOXSTRAP GOLD TAB STYLES
        -------------------------------------------------------------------------- */
     .gold-vip-card {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(180, 83, 9, 0.08));
-      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(180, 83, 9, 0.09));
+      border: 1px solid rgba(245, 158, 11, 0.4);
       border-radius: 8px;
       padding: 18px;
       margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
     }
 
     .gold-card-header {
@@ -791,6 +799,230 @@
       gap: 8px;
       font-family: var(--font-mono);
       font-weight: 600;
+    }
+
+    /* --------------------------------------------------------------------------
+       KEY ENTERING MODAL (PREMIUM GOLD VIP ACTIVATION DIALOG)
+       -------------------------------------------------------------------------- */
+    .key-gate-card {
+      width: 560px;
+      background: linear-gradient(180deg, #282421 0%, #1e1d24 100%);
+      border: 1.5px solid rgba(245, 158, 11, 0.45);
+      border-radius: 12px;
+      padding: 32px 36px;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 50px rgba(245, 158, 11, 0.15);
+      position: relative;
+    }
+
+    .key-gate-crown-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(252, 211, 77, 0.2) 0%, rgba(245, 158, 11, 0.05) 70%);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      font-size: 34px;
+      margin-bottom: 12px;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+    }
+
+    .key-gate-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+    }
+
+    .key-gate-gold-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, #fcd34d, #f59e0b);
+      color: #000;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      vertical-align: middle;
+    }
+
+    .key-gate-desc {
+      font-size: 12.5px;
+      color: #a8a7b5;
+      line-height: 1.5;
+      margin: 8px 0 20px 0;
+    }
+
+    .key-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .key-input-box {
+      width: 100%;
+      height: 44px;
+      background: #17161d;
+      border: 1.5px solid rgba(245, 158, 11, 0.4);
+      border-radius: 6px;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-align: center;
+      padding: 0 75px 0 35px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .key-input-box:focus {
+      border-color: #fcd34d;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
+    }
+
+    .key-input-icon {
+      position: absolute;
+      left: 12px;
+      font-size: 15px;
+      color: #f59e0b;
+      pointer-events: none;
+    }
+
+    .key-input-paste-btn {
+      position: absolute;
+      right: 6px;
+      height: 32px;
+      padding: 0 10px;
+      background: #2a2933;
+      border: 1px solid #484756;
+      border-radius: 4px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .key-input-paste-btn:hover {
+      background: #363542;
+    }
+
+    /* Detected Tier Preview Card */
+    .detected-tier-card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .detected-tier-icon {
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .detected-tier-info {
+      flex: 1;
+    }
+
+    .detected-tier-heading {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fcd34d;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .detected-tier-sub {
+      font-size: 11px;
+      color: #9897a5;
+      margin-top: 2px;
+    }
+
+    .quick-keys-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .quick-key-pill {
+      background: #24222b;
+      border: 1px solid #3c3a47;
+      color: #c5c5c5;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+
+    .quick-key-pill:hover {
+      background: #34323e;
+      border-color: var(--accent-gold);
+      color: #fcd34d;
+    }
+
+    .btn-key-activate {
+      width: 100%;
+      height: 42px;
+      background: linear-gradient(135deg, #fcd34d, #f59e0b);
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+      transition: opacity 0.12s ease, transform 0.08s ease;
+    }
+
+    .btn-key-activate:hover {
+      opacity: 0.94;
+    }
+
+    .btn-key-activate:active {
+      transform: scale(0.99);
+    }
+
+    .key-gate-footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      font-size: 11.5px;
+    }
+
+    .key-gate-footer-links a, .key-gate-footer-links button {
+      background: transparent;
+      border: none;
+      color: #9897a3;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .key-gate-footer-links a:hover, .key-gate-footer-links button:hover {
+      color: #ffffff;
     }
 
     /* --------------------------------------------------------------------------
@@ -1024,16 +1256,16 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.82);
-      backdrop-filter: blur(8px);
+      background: rgba(10, 9, 14, 0.84);
+      backdrop-filter: blur(12px);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      z-index: 1200;
     }
 
     .modal-card {
-      width: 520px;
+      width: 530px;
       background: #25242d;
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
@@ -1794,7 +2026,7 @@
         <div class="ram-toolbar">
           <div class="ram-search-box">
             <span class="ram-search-icon">🔍</span>
-            <input type="text" id="inputAccountSearch" placeholder="Search by username, display name, or tag...">
+            <input type="text" id="inputAccountSearch" placeholder="Search accounts by username, display name, or notes...">
           </div>
           <div class="tag-filter-pills">
             <div class="tag-pill active" data-tag="all">All</div>
@@ -1807,6 +2039,7 @@
           <div style="display: flex; gap: 8px;">
             <button class="pill-btn primary" id="btnOpenAddAccountModal">＋ Add Account</button>
             <button class="pill-btn gold" id="btnOpenDirectJoinModal">🌐 Direct Join</button>
+            <button class="pill-btn" id="btnRestoreSampleAlts" title="Load sample accounts with verified Roblox avatars">✨ Reset Sample Alts</button>
             <button class="pill-btn" id="btnLaunchAllAccounts" title="Launch all accounts simultaneously">🚀 Launch All</button>
           </div>
         </div>
@@ -1833,7 +2066,7 @@
               <span>👑</span>
               <span id="goldTierTitle">BLOXSTRAP GOLD MEMBERSHIP</span>
             </div>
-            <button class="pill-btn gold" id="btnChangeKey">🔑 Change Key</button>
+            <button class="pill-btn gold" id="btnChangeKey">🔑 Enter / Change Key</button>
           </div>
           <div class="gold-card-meta">
             <div>Tier Level: <strong id="goldTierPrice">$199.99/mo</strong> • Lifetime Mutex Isolation Active</div>
@@ -2001,41 +2234,63 @@
   <!-- ========================================================================
        MODAL: ADD / EDIT ACCOUNT (RAM STYLE)
        ======================================================================== -->
-  <div class="modal-overlay" id="accountModal" style="display: none;">
+  <div class="modal-overlay" id="accountModal" style="display: none; z-index: 1300;">
     <div class="modal-card">
-      <div class="modal-title" id="accountModalTitle">Add Account Profile</div>
-      <div class="modal-desc">Configure your Roblox account profile for isolated multi-instance launching.</div>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+        <div>
+          <div class="modal-title" id="accountModalTitle">Add Account Profile</div>
+          <div class="modal-desc" style="margin-bottom: 0;">Configure your Roblox profile for isolated multi-instance launching.</div>
+        </div>
+        <!-- Live Avatar Preview Container -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+          <img id="modalAvatarPreview" class="account-avatar" src="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter" alt="Avatar" style="width: 58px; height: 58px; border-color: var(--accent-purple);">
+          <span id="modalAvatarStatus" style="font-size: 10px; color: #10b981; font-weight: 600;">Verified</span>
+        </div>
+      </div>
       
       <input type="hidden" id="modalAccountId">
+      <input type="hidden" id="modalAvatarUrl" value="">
+      
+      <div class="form-group" style="margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between;">
+          <span class="form-label">Roblox Username *</span>
+          <span id="lookupStatusText" style="font-size: 11px; color: var(--accent-purple); font-weight: 500;">Type username to auto-fetch</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" class="fluent-input" id="modalUsername" placeholder="e.g. pizzaboxer, Roblox, or your Alt" style="flex: 1;">
+          <button class="pill-btn primary" id="btnLookupUser" style="padding: 0 12px;">🔍 Lookup</button>
+        </div>
+      </div>
+
       <div class="modal-grid">
         <div class="form-group">
-          <div class="form-label">Roblox Username *</div>
-          <input type="text" class="fluent-input" id="modalUsername" placeholder="e.g. Player1" style="width: 100%;">
-        </div>
-        <div class="form-group">
           <div class="form-label">Display Name</div>
-          <input type="text" class="fluent-input" id="modalDisplayName" placeholder="e.g. Main Character" style="width: 100%;">
+          <input type="text" class="fluent-input" id="modalDisplayName" placeholder="e.g. Primary Account" style="width: 100%;">
         </div>
         <div class="form-group">
-          <div class="form-label">Roblox User ID (for avatar)</div>
-          <input type="text" class="fluent-input" id="modalUserId" placeholder="e.g. 1" value="1" style="width: 100%;">
+          <div class="form-label">Roblox User ID</div>
+          <input type="text" class="fluent-input mono" id="modalUserId" placeholder="1" value="1" style="width: 100%; text-align: left;">
         </div>
+      </div>
+
+      <div class="modal-grid">
         <div class="form-group">
           <div class="form-label">Profile Tag</div>
           <select class="fluent-select" id="modalTag" style="width: 100%; min-width: auto;">
-            <option value="Main">Main</option>
-            <option value="Alt" selected>Alt</option>
-            <option value="Farming">Farming</option>
-            <option value="Bank">Bank</option>
-            <option value="Trading">Trading</option>
+            <option value="Main">Main (Primary)</option>
+            <option value="Alt" selected>Alt (Secondary)</option>
+            <option value="Farming">Farming (Auto-farm)</option>
+            <option value="Bank">Bank (Storage/Currency)</option>
+            <option value="Trading">Trading (Rare items)</option>
           </select>
         </div>
+        <div class="form-group">
+          <div class="form-label">Notes / Description</div>
+          <input type="text" class="fluent-input" id="modalNote" placeholder="e.g. Blox Fruits max level" style="width: 100%;">
+        </div>
       </div>
+
       <div class="form-group" style="margin-bottom: 12px;">
-        <div class="form-label">Notes / Description</div>
-        <input type="text" class="fluent-input" id="modalNote" placeholder="e.g. Auto-farming Blox Fruits / Pet Sim 99" style="width: 100%;">
-      </div>
-      <div class="form-group">
         <div class="form-label">Session Cookie (.ROBLOSECURITY - Optional)</div>
         <input type="password" class="fluent-input" id="modalCookie" placeholder="_|WARNING:-DO-NOT-SHARE-THIS..." style="width: 100%;">
         <div style="font-size: 10.5px; color: #8e8d98; margin-top: 2px;">Stored encrypted locally in macOS Application Support for 1-click RAM authentication.</div>
@@ -2051,7 +2306,7 @@
   <!-- ========================================================================
        MODAL: DIRECT GAME JOINER (RAM STYLE)
        ======================================================================== -->
-  <div class="modal-overlay" id="joinGameModal" style="display: none;">
+  <div class="modal-overlay" id="joinGameModal" style="display: none; z-index: 1300;">
     <div class="modal-card">
       <div class="modal-title">Direct Game Joiner</div>
       <div class="modal-desc">Launch into a specific Place ID, private VIP server, or exact Job ID server instance.</div>
@@ -2066,11 +2321,13 @@
       <div class="form-group" style="margin-bottom: 12px;">
         <div class="form-label">Place ID *</div>
         <input type="text" class="fluent-input mono" id="modalPlaceId" placeholder="e.g. 2753915549" value="2753915549" style="width: 100%; text-align: left;">
-        <div style="display: flex; gap: 6px; margin-top: 5px;">
+        <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
           <button class="tag-pill" data-place="2753915549">Blox Fruits</button>
+          <button class="tag-pill" data-place="8737899170">Pet Sim 99</button>
           <button class="tag-pill" data-place="286090429">Arsenal</button>
           <button class="tag-pill" data-place="606849624">Jailbreak</button>
           <button class="tag-pill" data-place="6516141723">Doors</button>
+          <button class="tag-pill" data-place="4924922222">Brookhaven</button>
         </div>
       </div>
 
@@ -2092,20 +2349,52 @@
   </div>
 
   <!-- ========================================================================
-       KEY GATE ACTIVATION MODAL (GOLD-7DAY- REQUIREMENT)
+       MODAL: KEY ENTERING PLACE (PREMIUM BLOXSTRAP GOLD ACTIVATION)
        ======================================================================== -->
-  <div class="modal-overlay" id="keyGateModal" style="display: none;">
-    <div class="modal-card" style="text-align: center;">
-      <div style="font-size: 42px; margin-bottom: 8px;">👑</div>
-      <div class="modal-title">Bloxstrap Gold Activation</div>
-      <div class="modal-desc">
-        Please enter your license key to authenticate and access Bloxstrap Gold.<br>
-        Keys must start with <strong>GOLD-7DAY-</strong> (e.g. GOLD-7DAY-ULTRA-XXXX-XXXX).
+  <div class="modal-overlay" id="keyGateModal" style="display: none; z-index: 1400;">
+    <div class="key-gate-card">
+      <div class="key-gate-crown-wrap">👑</div>
+      <div>
+        <span class="key-gate-title">BLOXSTRAP GOLD ACTIVATION</span>
+        <span class="key-gate-gold-tag">VIP TIER</span>
       </div>
-      <input type="text" class="fluent-input mono" id="modalKeyInput" placeholder="GOLD-7DAY-ULTRA-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="width: 100%; height: 38px; text-align: center; margin-bottom: 8px;">
-      <div style="font-size: 12px; font-weight: 600; color: #fcd34d; min-height: 20px; margin-bottom: 16px;" id="modalDetectedTier">🔑 Enter a valid key to detect your tier</div>
-      <button class="pill-btn gold" id="btnUnlockKey" style="width: 100%; height: 38px; justify-content: center; font-size: 13px; margin-bottom: 12px;">Unlock Bloxstrap Gold</button>
-      <button class="pill-btn" id="btnStoreLink" style="background: transparent; border: none; color: #9897a3; font-size: 11.5px; text-decoration: underline;">🛒 Get a key at bloxstrapgold.github.io</button>
+      <div class="key-gate-desc">
+        Enter your license key to authenticate your VIP edition and unlock multi-instance mutex management.
+      </div>
+
+      <!-- Segmented Input with Paste Button -->
+      <div class="key-input-container">
+        <span class="key-input-icon">🔑</span>
+        <input type="text" class="key-input-box" id="modalKeyInput" placeholder="GOLD-7DAY-ULTRA-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+        <button class="key-input-paste-btn" id="btnPasteKey">📋 Paste</button>
+      </div>
+
+      <!-- Detected Tier Preview Box -->
+      <div class="detected-tier-card" id="detectedTierCard">
+        <div class="detected-tier-icon" id="detectedTierIcon">👑</div>
+        <div class="detected-tier-info">
+          <div class="detected-tier-heading" id="detectedTierHeading">Enter a license key to detect tier</div>
+          <div class="detected-tier-sub" id="detectedTierSub">Valid keys begin with GOLD-7DAY- (e.g. GOLD-7DAY-ULTRA-XXXX)</div>
+        </div>
+      </div>
+
+      <!-- Sample Test Keys for 1-Click Testing -->
+      <div style="font-size: 11px; color: #8e8d98; margin-bottom: 6px;">Try a sample VIP license key:</div>
+      <div class="quick-keys-row">
+        <button class="quick-key-pill" data-key="GOLD-7DAY-ULTRA-2026-VIP9">👑 Ultra ($199.99/mo)</button>
+        <button class="quick-key-pill" data-key="GOLD-7DAY-DELUXE-4488-X992">🥇 Deluxe ($109.99/mo)</button>
+        <button class="quick-key-pill" data-key="GOLD-7DAY-PLUS-H0SL-8XZY-PIN8">🥈 Plus ($54.99/mo)</button>
+        <button class="quick-key-pill" data-key="GOLD-7DAY-BASIC-1102-M773">🥉 Basic ($24.99/mo)</button>
+      </div>
+
+      <button class="btn-key-activate" id="btnUnlockKey">
+        <span>✨ Activate &amp; Unlock Bloxstrap Gold</span>
+      </button>
+
+      <div class="key-gate-footer-links">
+        <button id="btnStoreLink">🛒 Get a license key at bloxstrapgold.github.io</button>
+        <button id="btnCloseKeyGate">✕ Close / Continue as Guest</button>
+      </div>
     </div>
   </div>
 
@@ -2172,6 +2461,7 @@
 
     let activeTagFilter = "all";
     let activeSearchQuery = "";
+    let lookupDebounceTimer = null;
 
     // Post message to Swift host
     function sendToHost(action, payload = {}) {
@@ -2298,7 +2588,6 @@
     }
 
     function renderAccountsList() {
-      // 1. Render Full RAM Tab Accounts
       const fullContainer = document.getElementById("fullAccountsList");
       const quickContainer = document.getElementById("quickAccountsList");
       const joinSelect = document.getElementById("modalJoinAccountSelect");
@@ -2310,7 +2599,20 @@
       const accounts = appState.accounts || [];
 
       if (accounts.length === 0) {
-        fullContainer.innerHTML = '<div class="option-card" style="color: #8e8d98; font-size: 13px; text-align: center; padding: 24px;">No accounts saved yet. Click "+ Add Account" to configure your Roblox profiles.</div>';
+        fullContainer.innerHTML = `
+          <div class="option-card" style="display: block; text-align: center; padding: 32px 20px;">
+            <div style="font-size: 32px; margin-bottom: 8px;">👥</div>
+            <div style="font-size: 15px; font-weight: 700; color: #ffffff; margin-bottom: 4px;">No Roblox Accounts Configured</div>
+            <div style="font-size: 12px; color: #8e8d98; margin-bottom: 16px;">Add your main and alt accounts for 1-click isolated multi-client launching.</div>
+            <div style="display: flex; gap: 8px; justify-content: center;">
+              <button class="pill-btn primary" id="btnEmptyAdd">＋ Add Account</button>
+              <button class="pill-btn gold" id="btnEmptySample">✨ Load Sample Alts</button>
+            </div>
+          </div>
+        `;
+        document.getElementById("btnEmptyAdd")?.addEventListener("click", openAddAccountModal);
+        document.getElementById("btnEmptySample")?.addEventListener("click", () => sendToHost("resetSampleAccounts"));
+
         quickContainer.innerHTML = '<div style="color: #686774; font-size: 11px; padding: 6px;">No saved accounts. Click "+ Add Alt Profile".</div>';
         return;
       }
@@ -2358,11 +2660,11 @@
         const card = document.createElement("div");
         card.className = "account-card";
         const tagClass = `tag-${(acc.tag || 'alt').toLowerCase()}`;
-        const avatarUrl = `https://www.roblox.com/headshot-thumbnail/image?userId=${encodeURIComponent(acc.userId || '1')}&width=150&height=150&format=png`;
+        const avatarSrc = acc.avatarUrl && acc.avatarUrl.length > 10 ? acc.avatarUrl : `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter`;
 
         card.innerHTML = `
           <div class="account-card-left">
-            <img class="account-avatar" src="${avatarUrl}" alt="${escapeHtml(acc.username)}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 24 24\\' fill=\\'%238e8d98\\'%3e%3cpath d=\\'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\\'/%3e%3c/svg%3e'">
+            <img class="account-avatar" src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(acc.username)}" onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter'">
             <div class="account-meta">
               <div class="account-title-row">
                 <span class="account-display-name">${escapeHtml(acc.displayName)}</span>
@@ -2399,6 +2701,9 @@
 
         card.querySelector(".btn-card-delete").addEventListener("click", () => {
           if (confirm(`Are you sure you want to delete profile @${acc.username}?`)) {
+            // Immediate local update
+            appState.accounts = (appState.accounts || []).filter(a => a.id !== acc.id);
+            renderAccountsList();
             sendToHost("deleteAccount", { id: acc.id });
           }
         });
@@ -2451,6 +2756,10 @@
       }
     });
 
+    document.getElementById("btnRestoreSampleAlts").addEventListener("click", () => {
+      sendToHost("resetSampleAccounts");
+    });
+
     document.getElementById("btnLaunchAllAccounts").addEventListener("click", () => {
       const accounts = appState.accounts || [];
       if (accounts.length === 0) {
@@ -2467,6 +2776,10 @@
     const accountModal = document.getElementById("accountModal");
     const accountModalTitle = document.getElementById("accountModalTitle");
     const modalAccountId = document.getElementById("modalAccountId");
+    const modalAvatarUrl = document.getElementById("modalAvatarUrl");
+    const modalAvatarPreview = document.getElementById("modalAvatarPreview");
+    const modalAvatarStatus = document.getElementById("modalAvatarStatus");
+    const lookupStatusText = document.getElementById("lookupStatusText");
     const modalUsername = document.getElementById("modalUsername");
     const modalDisplayName = document.getElementById("modalDisplayName");
     const modalUserId = document.getElementById("modalUserId");
@@ -2477,6 +2790,11 @@
     function openAddAccountModal() {
       accountModalTitle.textContent = "Add Account Profile";
       modalAccountId.value = "";
+      modalAvatarUrl.value = "";
+      modalAvatarPreview.src = "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter";
+      modalAvatarStatus.textContent = "Default";
+      modalAvatarStatus.style.color = "#8e8d98";
+      lookupStatusText.textContent = "Type username to auto-fetch";
       modalUsername.value = "";
       modalDisplayName.value = "";
       modalUserId.value = "1";
@@ -2490,6 +2808,11 @@
     function openEditAccountModal(acc) {
       accountModalTitle.textContent = "Edit Account Profile";
       modalAccountId.value = acc.id;
+      modalAvatarUrl.value = acc.avatarUrl || "";
+      modalAvatarPreview.src = acc.avatarUrl && acc.avatarUrl.length > 10 ? acc.avatarUrl : "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-310966282D3529E36976BF6B07B1DC90-Png/150/150/AvatarHeadshot/Png/noFilter";
+      modalAvatarStatus.textContent = "Verified";
+      modalAvatarStatus.style.color = "#10b981";
+      lookupStatusText.textContent = `Editing @${acc.username}`;
       modalUsername.value = acc.username;
       modalDisplayName.value = acc.displayName;
       modalUserId.value = acc.userId || "1";
@@ -2499,6 +2822,51 @@
       accountModal.style.display = "flex";
       modalDisplayName.focus();
     }
+
+    // Auto-lookup Roblox user as user types
+    modalUsername.addEventListener("input", (e) => {
+      const query = e.target.value.trim();
+      if (!query || query.length < 3) {
+        lookupStatusText.textContent = "Type username to auto-fetch";
+        lookupStatusText.style.color = "#8e8d98";
+        return;
+      }
+      lookupStatusText.textContent = "Searching Roblox...";
+      lookupStatusText.style.color = "var(--accent-purple)";
+      clearTimeout(lookupDebounceTimer);
+      lookupDebounceTimer = setTimeout(() => {
+        sendToHost("lookupRobloxUser", { username: query });
+      }, 350);
+    });
+
+    document.getElementById("btnLookupUser").addEventListener("click", () => {
+      const query = modalUsername.value.trim();
+      if (query) {
+        lookupStatusText.textContent = "Searching Roblox...";
+        sendToHost("lookupRobloxUser", { username: query });
+      }
+    });
+
+    // Callback from Swift when Roblox API returns user info
+    window.onRobloxUserLookupResult = function(res) {
+      if (res.success) {
+        lookupStatusText.textContent = `✓ Found Roblox User: ${res.displayName}`;
+        lookupStatusText.style.color = "#10b981";
+        modalUserId.value = res.userId;
+        if (!modalDisplayName.value || modalDisplayName.value === modalUsername.value) {
+          modalDisplayName.value = res.displayName;
+        }
+        if (res.avatarUrl && res.avatarUrl.length > 10) {
+          modalAvatarUrl.value = res.avatarUrl;
+          modalAvatarPreview.src = res.avatarUrl;
+          modalAvatarStatus.textContent = "Verified";
+          modalAvatarStatus.style.color = "#10b981";
+        }
+      } else {
+        lookupStatusText.textContent = `⚠️ ${res.message || 'User not found'}`;
+        lookupStatusText.style.color = "#f59e0b";
+      }
+    };
 
     document.getElementById("btnOpenAddAccountModal").addEventListener("click", openAddAccountModal);
     document.getElementById("btnQuickAddAlt").addEventListener("click", openAddAccountModal);
@@ -2515,15 +2883,26 @@
       }
       const displayName = modalDisplayName.value.trim() || username;
       const userId = modalUserId.value.trim() || "1";
+      const avatarUrl = modalAvatarUrl.value.trim() || modalAvatarPreview.src;
       const tag = modalTag.value;
       const note = modalNote.value.trim();
       const id = modalAccountId.value;
 
+      // Immediate local UI update for instantaneous response
       if (id) {
-        sendToHost("editAccount", { id, username, displayName, userId, tag, note });
+        const idx = (appState.accounts || []).findIndex(a => a.id === id);
+        if (idx >= 0) {
+          appState.accounts[idx] = { id, username, displayName, userId, avatarUrl, tag, note, addedDate: "2026-10-23" };
+        }
+        sendToHost("editAccount", { id, username, displayName, userId, avatarUrl, tag, note });
       } else {
-        sendToHost("addAccount", { username, displayName, userId, tag, note });
+        const newId = "acc_" + Date.now();
+        if (!appState.accounts) appState.accounts = [];
+        appState.accounts.push({ id: newId, username, displayName, userId, avatarUrl, tag, note, addedDate: "2026-10-23" });
+        sendToHost("addAccount", { username, displayName, userId, avatarUrl, tag, note });
       }
+
+      renderAccountsList();
       accountModal.style.display = "none";
     });
 
@@ -2564,6 +2943,112 @@
       const accountId = modalJoinAccountSelect.value;
       sendToHost("joinGame", { placeId, jobId, vipUrl, accountId });
       joinGameModal.style.display = "none";
+    });
+
+    // --- KEY GATE MODAL (PREMIUM GOLD ACTIVATION SCREEN) ---
+    const keyGateModal = document.getElementById("keyGateModal");
+    const keyInput = document.getElementById("modalKeyInput");
+    const detectedIcon = document.getElementById("detectedTierIcon");
+    const detectedHeading = document.getElementById("detectedTierHeading");
+    const detectedSub = document.getElementById("detectedTierSub");
+    const detectedCard = document.getElementById("detectedTierCard");
+
+    function updateKeyPreview(val) {
+      const trimmed = val.trim().toUpperCase();
+      if (trimmed.startsWith("GOLD-7DAY-")) {
+        if (trimmed.includes("-ULTRA-")) {
+          detectedIcon.textContent = "👑";
+          detectedHeading.innerHTML = "Bloxstrap Gold ULTRA VIP <span style='color: #fcd34d;'>($199.99/mo)</span>";
+          detectedSub.textContent = "✓ Lifetime Mutex Isolation • ✓ Unlimited RAM Alts • ✓ FastFlag Presets & Audio";
+          detectedCard.style.borderColor = "#fcd34d";
+          detectedCard.style.background = "rgba(245, 158, 11, 0.12)";
+        } else if (trimmed.includes("-DELUXE-")) {
+          detectedIcon.textContent = "🥇";
+          detectedHeading.innerHTML = "Bloxstrap Gold Deluxe <span style='color: #fcd34d;'>($109.99/mo)</span>";
+          detectedSub.textContent = "✓ Priority Mutex Handler • ✓ RAM Account Manager • ✓ All Graphic Mods";
+          detectedCard.style.borderColor = "#f59e0b";
+          detectedCard.style.background = "rgba(245, 158, 11, 0.1)";
+        } else if (trimmed.includes("-PLUS-")) {
+          detectedIcon.textContent = "🥈";
+          detectedHeading.innerHTML = "Bloxstrap Gold Plus <span style='color: #fcd34d;'>($54.99/mo)</span>";
+          detectedSub.textContent = "✓ Multi-Instance Client Support • ✓ RAM Profiles • ✓ Custom Audio";
+          detectedCard.style.borderColor = "#60a5fa";
+          detectedCard.style.background = "rgba(96, 165, 250, 0.1)";
+        } else if (trimmed.includes("-BASIC-")) {
+          detectedIcon.textContent = "🥉";
+          detectedHeading.innerHTML = "Bloxstrap Gold Basic <span style='color: #fcd34d;'>($24.99/mo)</span>";
+          detectedSub.textContent = "✓ Standard Multi-Instance • ✓ RAM Basic Switcher";
+          detectedCard.style.borderColor = "#cd7f32";
+          detectedCard.style.background = "rgba(205, 127, 50, 0.1)";
+        } else {
+          detectedIcon.textContent = "✨";
+          detectedHeading.innerHTML = "Bloxstrap Gold 7-Day VIP Trial";
+          detectedSub.textContent = "✓ Full Multi-Instance & RAM features unlocked";
+          detectedCard.style.borderColor = "var(--accent-purple)";
+          detectedCard.style.background = "rgba(176, 132, 249, 0.1)";
+        }
+      } else if (trimmed.length > 0) {
+        detectedIcon.textContent = "⚠️";
+        detectedHeading.innerHTML = "<span style='color: #fca5a5;'>Invalid Key Format</span>";
+        detectedSub.textContent = "License keys must begin with GOLD-7DAY- (e.g. GOLD-7DAY-ULTRA-XXXX)";
+        detectedCard.style.borderColor = "#7f1d1d";
+        detectedCard.style.background = "rgba(127, 29, 29, 0.15)";
+      } else {
+        detectedIcon.textContent = "🔑";
+        detectedHeading.textContent = "Enter a license key to detect tier";
+        detectedSub.textContent = "Valid keys begin with GOLD-7DAY- (e.g. GOLD-7DAY-ULTRA-XXXX)";
+        detectedCard.style.borderColor = "rgba(245, 158, 11, 0.25)";
+        detectedCard.style.background = "rgba(0, 0, 0, 0.35)";
+      }
+    }
+
+    keyInput.addEventListener("input", (e) => {
+      updateKeyPreview(e.target.value);
+    });
+
+    document.querySelectorAll(".quick-key-pill").forEach(pill => {
+      pill.addEventListener("click", () => {
+        keyInput.value = pill.dataset.key;
+        updateKeyPreview(pill.dataset.key);
+      });
+    });
+
+    document.getElementById("btnPasteKey").addEventListener("click", async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          keyInput.value = text.trim();
+          updateKeyPreview(text);
+        }
+      } catch (err) {
+        keyInput.focus();
+      }
+    });
+
+    document.getElementById("btnUnlockKey").addEventListener("click", () => {
+      const key = keyInput.value.trim();
+      sendToHost("verifyKey", { key });
+    });
+
+    window.onKeyVerifyFailed = function() {
+      detectedIcon.textContent = "❌";
+      detectedHeading.innerHTML = "<span style='color: #ef4444;'>Activation Failed</span>";
+      detectedSub.textContent = "Invalid key! Keys must begin with GOLD-7DAY- and be at least 14 characters.";
+    };
+
+    document.getElementById("btnChangeKey").addEventListener("click", () => {
+      keyGateModal.style.display = "flex";
+      keyInput.value = appState.vipKey || "";
+      updateKeyPreview(keyInput.value);
+      keyInput.focus();
+    });
+
+    document.getElementById("btnCloseKeyGate").addEventListener("click", () => {
+      keyGateModal.style.display = "none";
+    });
+
+    document.getElementById("btnStoreLink").addEventListener("click", () => {
+      sendToHost("openStore");
     });
 
     // --- WINDOW CAPTION BUTTONS ---
@@ -2641,38 +3126,6 @@
     // Multi-Instance actions
     document.getElementById("btnLaunchInstance").addEventListener("click", () => sendToHost("launchInstance"));
     document.getElementById("btnKillAll").addEventListener("click", () => sendToHost("killAllInstances"));
-
-    // Key Gate modal logic
-    const keyInput = document.getElementById("modalKeyInput");
-    const detectedLabel = document.getElementById("modalDetectedTier");
-    keyInput.addEventListener("input", (e) => {
-      const val = e.target.value.trim().toUpperCase();
-      if (val.startsWith("GOLD-7DAY-")) {
-        if (val.includes("-ULTRA-")) {
-          detectedLabel.textContent = "👑 Detected: Gold ULTRA ($199.99/mo)";
-        } else if (val.includes("-DELUXE-")) {
-          detectedLabel.textContent = "🥇 Detected: Gold Deluxe ($109.99/mo)";
-        } else if (val.includes("-PLUS-")) {
-          detectedLabel.textContent = "🥈 Detected: Gold Plus ($54.99/mo)";
-        } else if (val.includes("-BASIC-")) {
-          detectedLabel.textContent = "🥉 Detected: Gold Basic ($24.99/mo)";
-        } else {
-          detectedLabel.textContent = "✨ Detected: 7-Day Gold VIP Pass";
-        }
-      } else if (val.length > 0) {
-        detectedLabel.textContent = "⚠️ Key must begin with GOLD-7DAY-";
-      } else {
-        detectedLabel.textContent = "🔑 Enter a valid key to detect your tier";
-      }
-    });
-
-    document.getElementById("btnUnlockKey").addEventListener("click", () => {
-      const key = keyInput.value.trim();
-      sendToHost("verifyKey", { key });
-    });
-
-    document.getElementById("btnStoreLink").addEventListener("click", () => sendToHost("openStore"));
-    document.getElementById("btnChangeKey").addEventListener("click", () => sendToHost("deauthenticate"));
 
     // FastFlag links & Help
     document.getElementById("cardFastFlagEditor").addEventListener("click", () => sendToHost("openFastFlagEditor"));
