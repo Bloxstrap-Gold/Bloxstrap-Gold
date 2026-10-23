@@ -280,6 +280,9 @@ let runningInstances = [
 // INITIALIZATION
 // =============================================================================
 document.addEventListener('DOMContentLoaded', () => {
+  setupHeroParticles();
+  setupHeroCockpit();
+  setupHeroTelemetryTicker();
   setupRenewalPills();
   setupCurrencyAndTax();
   setupFastFlagsVault();
@@ -290,18 +293,274 @@ document.addEventListener('DOMContentLoaded', () => {
   setupFaq();
   setupWingetCopy();
 
-  // Initial render of the 3 tier cards side-by-side
+  // Initial render of the tier cards side-by-side
   renderTierCards();
 });
 
 // =============================================================================
-// 1. RENEWAL PILL CYCLING & 3-CARD SIDE-BY-SIDE RENDERING
+// HERO INTRO: PARTICLES, COCKPIT DECK & LIVE TELEMETRY
+// =============================================================================
+function setupHeroParticles() {
+  const canvas = document.getElementById('heroParticlesCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const particles = [];
+  const colors = ['rgba(226, 192, 118, ', 'rgba(245, 215, 150, ', 'rgba(255, 240, 211, '];
+
+  for (let i = 0; i < 48; i++) {
+    particles.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 2.2 + 0.8,
+      speedY: Math.random() * 0.45 + 0.15,
+      speedX: (Math.random() - 0.5) * 0.25,
+      opacity: Math.random() * 0.65 + 0.2,
+      baseColor: colors[Math.floor(Math.random() * colors.length)],
+      pulse: Math.random() * Math.PI * 2,
+      pulseSpeed: Math.random() * 0.03 + 0.01
+    });
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.y -= p.speedY;
+      p.x += p.speedX;
+      p.pulse += p.pulseSpeed;
+
+      const currentOpacity = Math.max(0.08, p.opacity + Math.sin(p.pulse) * 0.18);
+
+      if (p.y < -10) {
+        p.y = height + 10;
+        p.x = Math.random() * width;
+      }
+      if (p.x < -10) p.x = width + 10;
+      if (p.x > width + 10) p.x = -10;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `${p.baseColor}${currentOpacity})`;
+      ctx.shadowBlur = p.size * 4;
+      ctx.shadowColor = 'rgba(226, 192, 118, 0.4)';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
+
+function setupHeroCockpit() {
+  const cockpitWrap = document.getElementById('heroCockpitWrap');
+  const cockpitCard = document.getElementById('heroCockpitCard');
+  if (!cockpitWrap || !cockpitCard) return;
+
+  // 1. Cockpit Tabs Switching
+  const tabBtns = document.querySelectorAll('.cockpit-tab-btn');
+  const panels = {
+    instances: document.getElementById('cockpitTabInstances'),
+    fps: document.getElementById('cockpitTabFps'),
+    security: document.getElementById('cockpitTabSecurity')
+  };
+
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.cockpitTab;
+      tabBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      Object.keys(panels).forEach((key) => {
+        if (panels[key]) {
+          if (key === target) {
+            panels[key].style.display = 'block';
+            panels[key].classList.add('active');
+          } else {
+            panels[key].style.display = 'none';
+            panels[key].classList.remove('active');
+          }
+        }
+      });
+    });
+  });
+
+  // 2. Interactive 3D Perspective Tilt on Hover
+  let isHovered = false;
+  cockpitWrap.addEventListener('mouseenter', () => { isHovered = true; });
+  cockpitWrap.addEventListener('mouseleave', () => {
+    isHovered = false;
+    cockpitCard.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+  });
+
+  cockpitWrap.addEventListener('mousemove', (e) => {
+    if (!isHovered) return;
+    const rect = cockpitCard.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const rotateY = (x / (rect.width / 2)) * 4.5;
+    const rotateX = -(y / (rect.height / 2)) * 4;
+    cockpitCard.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+  });
+
+  // 3. Quick Spawn Client 3 inside Cockpit
+  const quickSpawnBtn = document.getElementById('cockpitQuickSpawnBtn');
+  let client3Spawned = false;
+  if (quickSpawnBtn) {
+    quickSpawnBtn.addEventListener('click', () => {
+      if (client3Spawned) return;
+      client3Spawned = true;
+
+      quickSpawnBtn.classList.remove('spawn-tile');
+      quickSpawnBtn.classList.add('active');
+      quickSpawnBtn.innerHTML = `
+        <div class="c-tile-header">
+          <span class="c-client-tag">CLIENT_03</span>
+          <span class="c-fps-tag tabular">158.8 FPS</span>
+        </div>
+        <div class="c-tile-body">
+          <div class="c-user-name">RobloxAccount_3</div>
+          <div class="c-game-title">Deepwoken: Verse 2</div>
+        </div>
+        <div class="c-tile-footer">
+          <span class="tabular">RAM: 410 MB</span>
+          <span class="c-status-live">● Active</span>
+        </div>
+      `;
+
+      // Animate Hero Instance Counter
+      const instStat = document.getElementById('heroStatInstances');
+      if (instStat) {
+        let current = parseInt(instStat.textContent.replace(/,/g, ''), 10) || 3420891;
+        instStat.textContent = (current + 1).toLocaleString();
+        instStat.style.color = 'var(--gold-lighter)';
+        setTimeout(() => { instStat.style.color = '#fff'; }, 300);
+      }
+    });
+  }
+
+  // 4. FastFlag FPS Pacer Oscillator Waveform
+  setupFpsOscillator();
+}
+
+function setupFpsOscillator() {
+  const slider = document.getElementById('cockpitFpsSlider');
+  const display = document.getElementById('cockpitFpsSliderDisplay');
+  const dialVal = document.getElementById('cockpitFpsValue');
+  const presetBtns = document.querySelectorAll('.fps-preset-btn');
+  const canvas = document.getElementById('cockpitFpsWaveCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let targetFps = 240;
+
+  function updateFps(val) {
+    targetFps = parseInt(val, 10);
+    const label = targetFps >= 9999 ? '9999 (Uncapped)' : `${targetFps} FPS`;
+    if (dialVal) dialVal.textContent = targetFps >= 9999 ? '9999' : targetFps;
+    if (display) display.textContent = label;
+    if (slider) slider.value = Math.min(targetFps, 9999);
+
+    presetBtns.forEach((btn) => {
+      btn.classList.toggle('active', parseInt(btn.dataset.fps, 10) === targetFps);
+    });
+  }
+
+  if (slider) {
+    slider.addEventListener('input', (e) => updateFps(e.target.value));
+  }
+
+  presetBtns.forEach((btn) => {
+    btn.addEventListener('click', () => updateFps(btn.dataset.fps));
+  });
+
+  // Real-time canvas wave drawing
+  let phase = 0;
+  function drawWave() {
+    if (!ctx) return;
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    // Subtle grid guide
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, h / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.stroke();
+
+    // Wave parameters modulated by targetFps
+    const clampedFps = Math.min(targetFps, 9999);
+    const speed = 0.03 + (clampedFps / 9999) * 0.07;
+    const frequency = 0.018 + (clampedFps / 9999) * 0.024;
+    const amplitude = 20 + Math.sin(phase * 0.5) * 4;
+    phase += speed;
+
+    const grad = ctx.createLinearGradient(0, 0, w, 0);
+    grad.addColorStop(0, 'rgba(226, 192, 118, 0.2)');
+    grad.addColorStop(0.5, 'rgba(245, 215, 150, 0.95)');
+    grad.addColorStop(1, 'rgba(226, 192, 118, 0.3)');
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 2.5;
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = 'rgba(226, 192, 118, 0.5)';
+
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const y = h / 2 + Math.sin(x * frequency + phase) * amplitude * Math.cos(x * 0.0035 + phase * 0.25);
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(drawWave);
+  }
+
+  requestAnimationFrame(drawWave);
+}
+
+function setupHeroTelemetryTicker() {
+  const statEl = document.getElementById('heroStatInstances');
+  if (!statEl) return;
+
+  setInterval(() => {
+    let current = parseInt(statEl.textContent.replace(/,/g, ''), 10) || 3420891;
+    current += Math.floor(Math.random() * 3) + 1;
+    statEl.textContent = current.toLocaleString();
+  }, 4500);
+}
+
+// =============================================================================
+// 1. RENEWAL PILL CYCLING & 4-CARD SIDE-BY-SIDE RENDERING
 // =============================================================================
 function updatePillGlider(activeBtn) {
   const track = document.getElementById('pillSliderTrack');
-  if (!track || !activeBtn) return;
-  track.style.width = `${activeBtn.offsetWidth}px`;
-  track.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+  const container = document.getElementById('renewalSegmentedPill') || (activeBtn ? activeBtn.parentElement : null);
+  if (!track || !activeBtn || !container) return;
+
+  const width = activeBtn.offsetWidth;
+  const left = activeBtn.offsetLeft;
+
+  if (width > 0) {
+    track.style.width = `${width}px`;
+    track.style.transform = `translateX(${left}px)`;
+    track.style.opacity = '1';
+    container.classList.add('glider-ready');
+  }
 }
 
 function setupRenewalPills() {
@@ -310,7 +569,10 @@ function setupRenewalPills() {
 
   const initialActive = document.querySelector('.renewal-pill-btn.active');
   if (initialActive) {
-    setTimeout(() => updatePillGlider(initialActive), 50);
+    updatePillGlider(initialActive);
+    requestAnimationFrame(() => updatePillGlider(initialActive));
+    setTimeout(() => updatePillGlider(initialActive), 60);
+    setTimeout(() => updatePillGlider(initialActive), 300);
   }
 
   pillBtns.forEach((btn) => {
@@ -329,6 +591,11 @@ function setupRenewalPills() {
   });
 
   window.addEventListener('resize', () => {
+    const currentActive = document.querySelector('.renewal-pill-btn.active');
+    if (currentActive) updatePillGlider(currentActive);
+  });
+
+  window.addEventListener('load', () => {
     const currentActive = document.querySelector('.renewal-pill-btn.active');
     if (currentActive) updatePillGlider(currentActive);
   });

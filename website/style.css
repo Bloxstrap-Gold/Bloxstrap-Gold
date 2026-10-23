@@ -43,10 +43,22 @@ body {
   overflow-x: hidden;
 }
 
+.hero-particles-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .container {
   max-width: 1180px;
   margin: 0 auto;
   padding: 1.5rem;
+  position: relative;
+  z-index: 2;
 }
 
 /* Numeric tabular layout everywhere */
@@ -363,6 +375,571 @@ body {
 }
 
 /* ========================================================
+   HERO LIVE TELEMETRY STRIP & INTERACTIVE APEX COCKPIT
+   ======================================================== */
+.hero-telemetry-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  margin: 2.5rem auto 3rem auto;
+  padding: 0.85rem 2rem;
+  max-width: 820px;
+  background: rgba(18, 20, 27, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--gold-border);
+  border-radius: 9999px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(226, 192, 118, 0.08);
+  flex-wrap: wrap;
+}
+
+.telemetry-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.telemetry-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.telemetry-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.telemetry-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border-color);
+}
+
+.pulse-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 10px #4ade80;
+  margin-right: 0.35rem;
+  animation: pulseDotGreen 2s infinite ease-in-out;
+}
+
+/* Hero Cockpit Deck Wrapper & 3D Perspective Card */
+.hero-cockpit-wrapper {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  perspective: 1200px;
+}
+
+.hero-cockpit-card {
+  background: rgba(16, 18, 24, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--gold-border);
+  border-radius: 1.25rem;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.75), 0 0 35px rgba(226, 192, 118, 0.12);
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  transform-style: preserve-3d;
+}
+
+.hero-cockpit-card:hover {
+  border-color: var(--gold-border-bright);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), var(--gold-glow);
+}
+
+.hero-floating-badge {
+  position: absolute;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(20, 23, 31, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--gold-border-bright);
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55), 0 0 20px rgba(226, 192, 118, 0.2);
+  pointer-events: none;
+}
+
+.badge-top-right {
+  top: -14px;
+  right: -16px;
+  animation: floatBadgeTop 4.2s ease-in-out infinite alternate;
+}
+
+.badge-bottom-left {
+  bottom: -14px;
+  left: -16px;
+  animation: floatBadgeBottom 4.8s ease-in-out infinite alternate;
+}
+
+@keyframes floatBadgeTop {
+  0% { transform: translateY(0) rotate(-1deg); }
+  100% { transform: translateY(-8px) rotate(1.5deg); }
+}
+
+@keyframes floatBadgeBottom {
+  0% { transform: translateY(0) rotate(1deg); }
+  100% { transform: translateY(8px) rotate(-1.5deg); }
+}
+
+/* Cockpit Titlebar */
+.cockpit-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(10, 11, 15, 0.95);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.82rem;
+}
+
+.cockpit-window-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.cockpit-window-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-close { background: #ef4444; }
+.dot-min { background: #eab308; }
+.dot-max { background: #22c55e; }
+
+.cockpit-title-text {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.cockpit-crown-icon {
+  font-size: 0.95rem;
+}
+
+.cockpit-engine-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #4ade80;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
+}
+
+.live-dot-green {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+  animation: pulseDotGreen 2s infinite ease-in-out;
+}
+
+@keyframes pulseDotGreen {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Cockpit Navigation Tabs */
+.cockpit-tabs-bar {
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cockpit-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.95rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cockpit-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cockpit-tab-btn.active {
+  color: #121316;
+  background: linear-gradient(135deg, #f5d796 0%, #e2c076 100%);
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(226, 192, 118, 0.35);
+}
+
+/* Cockpit Panels */
+.cockpit-tab-panel {
+  padding: 1.5rem;
+  text-align: left;
+}
+
+/* Tab 1: Multi-Instance Row */
+.cockpit-instances-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .cockpit-instances-row {
+    grid-template-columns: 1fr;
+  }
+  .hero-floating-badge {
+    display: none;
+  }
+}
+
+.cockpit-instance-tile {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+  padding: 1.05rem;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 115px;
+}
+
+.cockpit-instance-tile.active {
+  border-color: var(--gold-border);
+  background: linear-gradient(145deg, rgba(226, 192, 118, 0.06) 0%, rgba(18, 20, 27, 0.85) 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.c-tile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  margin-bottom: 0.4rem;
+}
+
+.c-client-tag {
+  color: var(--gold-light);
+  font-weight: 800;
+  font-family: ui-monospace, monospace;
+}
+
+.c-fps-tag {
+  color: #4ade80;
+  font-weight: 700;
+  background: rgba(34, 197, 94, 0.15);
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+}
+
+.c-user-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+.c-game-title {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 0.1rem;
+}
+
+.c-tile-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 0.65rem;
+}
+
+.c-status-live {
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.spawn-tile {
+  border: 1px dashed var(--gold-border-bright);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(226, 192, 118, 0.03);
+}
+
+.spawn-tile:hover {
+  background: rgba(226, 192, 118, 0.08);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(226, 192, 118, 0.15);
+}
+
+.c-spawn-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.c-spawn-icon {
+  font-size: 1.6rem;
+  color: var(--gold-light);
+  line-height: 1;
+}
+
+.c-spawn-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.c-spawn-sub {
+  font-size: 0.72rem;
+  color: var(--gold);
+}
+
+.cockpit-sub-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.55rem 0.95rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cockpit-ping-indicator strong {
+  color: var(--gold-light);
+}
+
+/* Tab 2: FPS Oscillator */
+.cockpit-fps-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.fps-oscillator-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.fps-dial-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(226, 192, 118, 0.16) 0%, rgba(0, 0, 0, 0.5) 75%);
+  border: 2px solid var(--gold-border-bright);
+  border-radius: 50%;
+  width: 110px;
+  height: 110px;
+  box-shadow: var(--gold-glow);
+  flex-shrink: 0;
+}
+
+.fps-dial-number {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--gold-lighter);
+  line-height: 1;
+}
+
+.fps-dial-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+}
+
+.fps-slider-control {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 250px;
+}
+
+.fps-slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.cockpit-range {
+  width: 100%;
+  accent-color: var(--gold);
+  cursor: pointer;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+.fps-presets-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.fps-preset-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.7rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fps-preset-btn:hover {
+  color: #fff;
+  border-color: var(--gold-border);
+}
+
+.fps-preset-btn.active {
+  background: var(--gold-soft);
+  border-color: var(--gold);
+  color: var(--gold-light);
+  font-weight: 700;
+}
+
+.fps-canvas-container {
+  position: relative;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+#cockpitFpsWaveCanvas {
+  width: 100%;
+  height: 85px;
+  display: block;
+}
+
+.fps-wave-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+}
+
+/* Tab 3: Security */
+.sec-status-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.15rem;
+  background: rgba(226, 192, 118, 0.06);
+  border: 1px solid var(--gold-border);
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.sec-icon-circle {
+  font-size: 1.85rem;
+  line-height: 1;
+}
+
+.sec-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.sec-desc {
+  font-size: 0.84rem;
+  color: #94a3b8;
+  line-height: 1.55;
+}
+
+.sec-grid-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.95rem;
+}
+
+@media (max-width: 600px) {
+  .sec-grid-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sec-metric-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-color);
+  border-radius: 0.6rem;
+  padding: 0.85rem;
+  text-align: center;
+}
+
+.sec-metric-val {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--gold-light);
+}
+
+.sec-metric-tag {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* ========================================================
    ENHANCED CHOOSING WINDOW & RENEWAL MODE PILL TOGGLE
    ======================================================== */
 .pricing-section {
@@ -425,10 +1002,15 @@ body {
   width: 0;
   background: linear-gradient(135deg, #f5d796 0%, #e2c076 100%);
   border-radius: 9999px;
-  box-shadow: 0 2px 12px rgba(226, 192, 118, 0.35);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 14px rgba(226, 192, 118, 0.45);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), width 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
   pointer-events: none;
   z-index: 1;
+  opacity: 0;
+}
+
+.renewal-segmented-pill.glider-ready .pill-slider-track {
+  opacity: 1;
 }
 
 .renewal-pill-btn {
@@ -442,7 +1024,7 @@ body {
   padding: 0.55rem 1.15rem;
   border-radius: 9999px;
   cursor: pointer;
-  transition: color 0.25s ease;
+  transition: color 0.2s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -453,22 +1035,31 @@ body {
 }
 
 .renewal-pill-btn.active {
-  color: #121316 !important;
+  color: #111215 !important;
   font-weight: 700;
 }
 
+/* Failsafe: if glider is initializing, render solid gold pill background directly on active button */
+.renewal-segmented-pill:not(.glider-ready) .renewal-pill-btn.active {
+  background: linear-gradient(135deg, #f5d796 0%, #e2c076 100%);
+  box-shadow: 0 2px 12px rgba(226, 192, 118, 0.35);
+}
+
 .pill-savings-tag {
-  background: rgba(0, 0, 0, 0.2);
-  color: #121316;
+  background: rgba(0, 0, 0, 0.22);
+  color: #111215;
   font-size: 0.72rem;
-  padding: 0.15rem 0.45rem;
+  padding: 0.15rem 0.48rem;
   border-radius: 9999px;
   font-weight: 800;
+  letter-spacing: -0.01em;
+  transition: all 0.2s ease;
 }
 
 .renewal-pill-btn:not(.active) .pill-savings-tag {
-  background: var(--gold-soft);
+  background: rgba(226, 192, 118, 0.16);
   color: var(--gold-light);
+  font-weight: 700;
 }
 
 /* Secondary Jurisdiction and Currency Toolbar */

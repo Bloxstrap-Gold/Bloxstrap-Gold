@@ -12,6 +12,11 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Ambient Luxury Gold Aurora Background -->
+  <div class="bg-mesh-aurora"></div>
+
+  <!-- Ambient Interactive Golden Stardust Particles Canvas -->
+  <canvas id="heroParticlesCanvas" class="hero-particles-canvas"></canvas>
 
   <div class="container">
     <!-- Sleek Product Announcement Pill (Deadpan & Ultra-Clean) -->
@@ -45,7 +50,7 @@
     <main>
       <section class="hero">
         <div class="hero-tag">
-          <span>👑</span> Bloxstrap Gold Edition
+          <span>👑</span> Bloxstrap Gold Edition &bull; Sovereign Desktop Suite
         </div>
 
         <h1 class="hero-title">
@@ -53,7 +58,7 @@
         </h1>
 
         <p class="hero-subtitle">
-          Bloxstrap Gold adds native multi-instance execution, expanded FastFlag performance controls, and a refined gold theme to your Roblox desktop setup.
+          Bloxstrap Gold adds native multi-instance execution, expanded FastFlag performance controls, and an ultra-refined gold interface to your Roblox desktop setup.
         </p>
 
         <div class="hero-actions">
@@ -74,6 +79,176 @@
           <div class="winget-snippet">
             <span>&gt; winget install bloxstrap</span>
             <button class="winget-copy-btn" id="wingetCopyBtn">Copy</button>
+          </div>
+        </div>
+
+        <!-- Live Telemetry Strip -->
+        <div class="hero-telemetry-strip">
+          <div class="telemetry-item">
+            <span class="telemetry-value tabular" id="heroStatInstances">3,420,891</span>
+            <span class="telemetry-label">Instances Spawned</span>
+          </div>
+          <div class="telemetry-divider"></div>
+          <div class="telemetry-item">
+            <span class="telemetry-value tabular">0.00 ms</span>
+            <span class="telemetry-label">Kernel Mutex Delay</span>
+          </div>
+          <div class="telemetry-divider"></div>
+          <div class="telemetry-item">
+            <span class="telemetry-value tabular">99.98%</span>
+            <span class="telemetry-label">Error 273 Shield</span>
+          </div>
+          <div class="telemetry-divider"></div>
+          <div class="telemetry-item">
+            <span class="telemetry-value" style="color: #4ade80;"><span class="pulse-status-dot"></span> Sep 2025</span>
+            <span class="telemetry-label">Allowlist Synced</span>
+          </div>
+        </div>
+
+        <!-- Interactive Hero Showcase Cockpit Deck -->
+        <div class="hero-cockpit-wrapper" id="heroCockpitWrap">
+          <!-- Floating holographic badges -->
+          <div class="hero-floating-badge badge-top-right">
+            <span>✦</span> 24K Gold UI Shell
+          </div>
+          <div class="hero-floating-badge badge-bottom-left">
+            <span>🛡️</span> Zero Mutex Collisions
+          </div>
+
+          <div class="hero-cockpit-card" id="heroCockpitCard">
+            <!-- Window Titlebar -->
+            <div class="cockpit-titlebar">
+              <div class="cockpit-window-dots">
+                <span class="dot-close"></span>
+                <span class="dot-min"></span>
+                <span class="dot-max"></span>
+              </div>
+              <div class="cockpit-title-text">
+                <span class="cockpit-crown-icon">👑</span>
+                <span>Bloxstrap Gold Apex Cockpit — v2.8.4</span>
+              </div>
+              <div class="cockpit-engine-pill">
+                <span class="live-dot-green"></span>
+                <span>KERNEL MUTEX UNLOCKED</span>
+              </div>
+            </div>
+
+            <!-- Cockpit Navigation Tabs -->
+            <div class="cockpit-tabs-bar">
+              <button class="cockpit-tab-btn active" data-cockpit-tab="instances" id="tabBtnInstances">
+                <span>⚡</span> Multi-Instance Monitor
+              </button>
+              <button class="cockpit-tab-btn" data-cockpit-tab="fps" id="tabBtnFps">
+                <span>📈</span> FastFlag FPS Pacer
+              </button>
+              <button class="cockpit-tab-btn" data-cockpit-tab="security" id="tabBtnSecurity">
+                <span>🛡️</span> Error 273 Shield
+              </button>
+            </div>
+
+            <!-- Cockpit Tab 1: Multi-Instance Live Monitor -->
+            <div class="cockpit-tab-panel active" id="cockpitTabInstances">
+              <div class="cockpit-instances-row" id="cockpitInstancesRow">
+                <div class="cockpit-instance-tile active">
+                  <div class="c-tile-header">
+                    <span class="c-client-tag">CLIENT_01</span>
+                    <span class="c-fps-tag tabular">165.2 FPS</span>
+                  </div>
+                  <div class="c-tile-body">
+                    <div class="c-user-name">RobloxAccount_1</div>
+                    <div class="c-game-title">Pet Simulator 99</div>
+                  </div>
+                  <div class="c-tile-footer">
+                    <span class="tabular">RAM: 420 MB</span>
+                    <span class="c-status-live">● Active</span>
+                  </div>
+                </div>
+
+                <div class="cockpit-instance-tile active">
+                  <div class="c-tile-header">
+                    <span class="c-client-tag">CLIENT_02</span>
+                    <span class="c-fps-tag tabular">144.0 FPS</span>
+                  </div>
+                  <div class="c-tile-body">
+                    <div class="c-user-name">RobloxAccount_2</div>
+                    <div class="c-game-title">Blox Fruits (Sea 3)</div>
+                  </div>
+                  <div class="c-tile-footer">
+                    <span class="tabular">RAM: 380 MB</span>
+                    <span class="c-status-live">● Active</span>
+                  </div>
+                </div>
+
+                <div class="cockpit-instance-tile spawn-tile" id="cockpitQuickSpawnBtn">
+                  <div class="c-spawn-inner">
+                    <span class="c-spawn-icon">+</span>
+                    <span class="c-spawn-text">Launch Client 3</span>
+                    <span class="c-spawn-sub">Instant Mutex Isolation</span>
+                  </div>
+                </div>
+              </div>
+              <div class="cockpit-sub-status">
+                <span>Direct Mutex Override: <strong style="color: var(--gold-light);">ROBLOX_singletonMutex Bypass OK</strong></span>
+                <span class="cockpit-ping-indicator">Driver Hook: <strong>0.00ms latency</strong></span>
+              </div>
+            </div>
+
+            <!-- Cockpit Tab 2: FastFlag FPS Pacer & Waveform Oscillator -->
+            <div class="cockpit-tab-panel" id="cockpitTabFps" style="display: none;">
+              <div class="cockpit-fps-content">
+                <div class="fps-oscillator-meta">
+                  <div class="fps-dial-wrap">
+                    <span class="fps-dial-number tabular" id="cockpitFpsValue">240</span>
+                    <span class="fps-dial-label">FPS TARGET</span>
+                  </div>
+                  <div class="fps-slider-control">
+                    <div class="fps-slider-label-row">
+                      <span>TaskScheduler Cap (DFIntTaskSchedulerTargetFps)</span>
+                      <span id="cockpitFpsSliderDisplay" class="tabular" style="color: var(--gold-light); font-weight: 700;">240 FPS</span>
+                    </div>
+                    <input type="range" min="60" max="9999" step="60" value="240" id="cockpitFpsSlider" class="cockpit-range">
+                    <div class="fps-presets-row">
+                      <button class="fps-preset-btn" data-fps="60">60 FPS</button>
+                      <button class="fps-preset-btn" data-fps="144">144 FPS</button>
+                      <button class="fps-preset-btn active" data-fps="240">240 FPS</button>
+                      <button class="fps-preset-btn" data-fps="9999">Uncapped (9999)</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="fps-canvas-container">
+                  <canvas id="cockpitFpsWaveCanvas" width="700" height="85"></canvas>
+                  <div class="fps-wave-badge">Smooth Frame Pacing Engine &bull; Zero Display Tear</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cockpit Tab 3: Error 273 Shield -->
+            <div class="cockpit-tab-panel" id="cockpitTabSecurity" style="display: none;">
+              <div class="cockpit-security-content">
+                <div class="sec-status-card">
+                  <div class="sec-icon-circle">🛡️</div>
+                  <div class="sec-status-info">
+                    <div class="sec-title">Dual-Session Auto-Rebinder Active</div>
+                    <div class="sec-desc">When Roblox triggers Disconnect Error 273 ("Same account launched from another device"), Bloxstrap Gold intercepts the socket teardown and negotiates instant reconnect handshakes without terminating your client session.</div>
+                  </div>
+                </div>
+                <div class="sec-grid-metrics">
+                  <div class="sec-metric-box">
+                    <span class="sec-metric-val">0 ms</span>
+                    <span class="sec-metric-tag">Socket Drop Overhead</span>
+                  </div>
+                  <div class="sec-metric-box">
+                    <span class="sec-metric-val">100%</span>
+                    <span class="sec-metric-tag">Process Isolation</span>
+                  </div>
+                  <div class="sec-metric-box">
+                    <span class="sec-metric-val">Zero</span>
+                    <span class="sec-metric-tag">DLL / Memory Injections</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -431,7 +606,8 @@
 
           <!-- Centered Segmented Renewal Mode Pill Toggle -->
           <div class="renewal-pill-container">
-            <div class="renewal-segmented-pill">
+            <div class="renewal-segmented-pill" id="renewalSegmentedPill">
+              <div class="pill-slider-track" id="pillSliderTrack"></div>
               <button class="renewal-pill-btn" data-cycle="weekly">Weekly</button>
               <button class="renewal-pill-btn" data-cycle="monthly">Monthly</button>
               <button class="renewal-pill-btn" data-cycle="quarterly">Quarterly</button>
