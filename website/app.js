@@ -270,24 +270,16 @@ let currentRegion = 'us';
 let selectedCheckoutTier = 2;
 let selectedCheckoutCycle = 'yearly';
 
-// Multi-instance state
-let runningInstances = [
-  { id: 1, account: 'RobloxAccount_1', game: 'Pet Simulator 99', ram: 420, fps: 165 },
-  { id: 2, account: 'RobloxAccount_2', game: 'Blox Fruits', ram: 380, fps: 144 }
-];
-
 // =============================================================================
 // INITIALIZATION
 // =============================================================================
 document.addEventListener('DOMContentLoaded', () => {
   setupHeroParticles();
-  setupHeroCockpit();
   setupHeroTelemetryTicker();
   setupRenewalPills();
   setupCurrencyAndTax();
   setupFastFlagsVault();
   setupPayingWindow();
-  setupMultiInstanceSimulator();
   setupAppThemePreview();
   setupModals();
   setupFaq();
@@ -363,175 +355,6 @@ function setupHeroParticles() {
   requestAnimationFrame(render);
 }
 
-function setupHeroCockpit() {
-  const cockpitWrap = document.getElementById('heroCockpitWrap');
-  const cockpitCard = document.getElementById('heroCockpitCard');
-  if (!cockpitWrap || !cockpitCard) return;
-
-  // 1. Cockpit Tabs Switching
-  const tabBtns = document.querySelectorAll('.cockpit-tab-btn');
-  const panels = {
-    instances: document.getElementById('cockpitTabInstances'),
-    fps: document.getElementById('cockpitTabFps'),
-    security: document.getElementById('cockpitTabSecurity')
-  };
-
-  tabBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.cockpitTab;
-      tabBtns.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      Object.keys(panels).forEach((key) => {
-        if (panels[key]) {
-          if (key === target) {
-            panels[key].style.display = 'block';
-            panels[key].classList.add('active');
-          } else {
-            panels[key].style.display = 'none';
-            panels[key].classList.remove('active');
-          }
-        }
-      });
-    });
-  });
-
-  // 2. Interactive 3D Perspective Tilt on Hover
-  let isHovered = false;
-  cockpitWrap.addEventListener('mouseenter', () => { isHovered = true; });
-  cockpitWrap.addEventListener('mouseleave', () => {
-    isHovered = false;
-    cockpitCard.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
-  });
-
-  cockpitWrap.addEventListener('mousemove', (e) => {
-    if (!isHovered) return;
-    const rect = cockpitCard.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const rotateY = (x / (rect.width / 2)) * 4.5;
-    const rotateX = -(y / (rect.height / 2)) * 4;
-    cockpitCard.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
-  });
-
-  // 3. Quick Spawn Client 3 inside Cockpit
-  const quickSpawnBtn = document.getElementById('cockpitQuickSpawnBtn');
-  let client3Spawned = false;
-  if (quickSpawnBtn) {
-    quickSpawnBtn.addEventListener('click', () => {
-      if (client3Spawned) return;
-      client3Spawned = true;
-
-      quickSpawnBtn.classList.remove('spawn-tile');
-      quickSpawnBtn.classList.add('active');
-      quickSpawnBtn.innerHTML = `
-        <div class="c-tile-header">
-          <span class="c-client-tag">CLIENT_03</span>
-          <span class="c-fps-tag tabular">158.8 FPS</span>
-        </div>
-        <div class="c-tile-body">
-          <div class="c-user-name">RobloxAccount_3</div>
-          <div class="c-game-title">Deepwoken: Verse 2</div>
-        </div>
-        <div class="c-tile-footer">
-          <span class="tabular">RAM: 410 MB</span>
-          <span class="c-status-live">● Active</span>
-        </div>
-      `;
-
-      // Animate Hero Instance Counter
-      const instStat = document.getElementById('heroStatInstances');
-      if (instStat) {
-        let current = parseInt(instStat.textContent.replace(/,/g, ''), 10) || 3420891;
-        instStat.textContent = (current + 1).toLocaleString();
-        instStat.style.color = 'var(--gold-lighter)';
-        setTimeout(() => { instStat.style.color = '#fff'; }, 300);
-      }
-    });
-  }
-
-  // 4. FastFlag FPS Pacer Oscillator Waveform
-  setupFpsOscillator();
-}
-
-function setupFpsOscillator() {
-  const slider = document.getElementById('cockpitFpsSlider');
-  const display = document.getElementById('cockpitFpsSliderDisplay');
-  const dialVal = document.getElementById('cockpitFpsValue');
-  const presetBtns = document.querySelectorAll('.fps-preset-btn');
-  const canvas = document.getElementById('cockpitFpsWaveCanvas');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  let targetFps = 240;
-
-  function updateFps(val) {
-    targetFps = parseInt(val, 10);
-    const label = targetFps >= 9999 ? '9999 (Uncapped)' : `${targetFps} FPS`;
-    if (dialVal) dialVal.textContent = targetFps >= 9999 ? '9999' : targetFps;
-    if (display) display.textContent = label;
-    if (slider) slider.value = Math.min(targetFps, 9999);
-
-    presetBtns.forEach((btn) => {
-      btn.classList.toggle('active', parseInt(btn.dataset.fps, 10) === targetFps);
-    });
-  }
-
-  if (slider) {
-    slider.addEventListener('input', (e) => updateFps(e.target.value));
-  }
-
-  presetBtns.forEach((btn) => {
-    btn.addEventListener('click', () => updateFps(btn.dataset.fps));
-  });
-
-  // Real-time canvas wave drawing
-  let phase = 0;
-  function drawWave() {
-    if (!ctx) return;
-    const w = canvas.width;
-    const h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-
-    // Subtle grid guide
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(0, h / 2);
-    ctx.lineTo(w, h / 2);
-    ctx.stroke();
-
-    // Wave parameters modulated by targetFps
-    const clampedFps = Math.min(targetFps, 9999);
-    const speed = 0.03 + (clampedFps / 9999) * 0.07;
-    const frequency = 0.018 + (clampedFps / 9999) * 0.024;
-    const amplitude = 20 + Math.sin(phase * 0.5) * 4;
-    phase += speed;
-
-    const grad = ctx.createLinearGradient(0, 0, w, 0);
-    grad.addColorStop(0, 'rgba(226, 192, 118, 0.2)');
-    grad.addColorStop(0.5, 'rgba(245, 215, 150, 0.95)');
-    grad.addColorStop(1, 'rgba(226, 192, 118, 0.3)');
-
-    ctx.strokeStyle = grad;
-    ctx.lineWidth = 2.5;
-    ctx.shadowBlur = 12;
-    ctx.shadowColor = 'rgba(226, 192, 118, 0.5)';
-
-    ctx.beginPath();
-    for (let x = 0; x < w; x++) {
-      const y = h / 2 + Math.sin(x * frequency + phase) * amplitude * Math.cos(x * 0.0035 + phase * 0.25);
-      if (x === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-
-    requestAnimationFrame(drawWave);
-  }
-
-  requestAnimationFrame(drawWave);
-}
 
 function setupHeroTelemetryTicker() {
   const statEl = document.getElementById('heroStatInstances');
@@ -1363,97 +1186,7 @@ function updateVaultJsonPreview() {
 }
 
 // =============================================================================
-// 4. MULTI-INSTANCE SIMULATOR
-// =============================================================================
-function setupMultiInstanceSimulator() {
-  const addBtn = document.getElementById('addInstanceBtn');
-  const launchAllBtn = document.getElementById('launchAllBtn');
 
-  if (addBtn) {
-    addBtn.addEventListener('click', () => {
-      addSimulatedInstance();
-    });
-  }
-
-  if (launchAllBtn) {
-    launchAllBtn.addEventListener('click', () => {
-      launchMaxInstances();
-    });
-  }
-
-  renderInstanceList();
-}
-
-function renderInstanceList() {
-  const listEl = document.getElementById('simulatedInstancesList');
-  const countEl = document.getElementById('simulatedInstanceCount');
-  const ramEl = document.getElementById('simulatedTotalRam');
-
-  if (!listEl) return;
-
-  listEl.innerHTML = '';
-
-  let totalRam = 0;
-  runningInstances.forEach((inst) => {
-    totalRam += inst.ram;
-    const item = document.createElement('div');
-    item.className = 'sim-instance-item';
-    item.innerHTML = `
-      <div class="sim-instance-badge">
-        <span class="sim-instance-dot"></span>
-        <span style="font-weight: 700; color: #fff;">${inst.account}</span>
-      </div>
-      <div class="sim-game-name">${inst.game}</div>
-      <div class="sim-ram-usage tabular">${inst.ram} MB RAM &bull; ${inst.fps} FPS</div>
-      <button class="sim-btn-kill" onclick="killSimulatedInstance(${inst.id})">&times;</button>
-    `;
-    listEl.appendChild(item);
-  });
-
-  if (countEl) countEl.textContent = `${runningInstances.length} Active`;
-  if (ramEl) ramEl.textContent = `${(totalRam / 1024).toFixed(2)} GB RAM`;
-}
-
-function addSimulatedInstance() {
-  const maxLimit = TIERS_META[selectedCheckoutTier]?.instanceLimit || 5;
-  const errorEl = document.getElementById('instanceLimitError');
-
-  if (runningInstances.length >= maxLimit) {
-    if (errorEl) {
-      errorEl.textContent = `Instance limit reached for ${TIERS_META[selectedCheckoutTier].name} (Max ${maxLimit}). Upgrade tier for more.`;
-      setTimeout(() => { if (errorEl) errorEl.textContent = ''; }, 3500);
-    }
-    return;
-  }
-
-  const nextId = runningInstances.length > 0 ? Math.max(...runningInstances.map(i => i.id)) + 1 : 1;
-  const games = ['Blox Fruits', 'Pet Simulator 99', 'Arsenal', 'Jailbreak', 'Rivals', 'BedWars'];
-  const randomGame = games[Math.floor(Math.random() * games.length)];
-  const randomRam = Math.floor(Math.random() * 80) + 360;
-  const randomFps = Math.floor(Math.random() * 40) + 140;
-
-  runningInstances.push({
-    id: nextId,
-    account: `RobloxAccount_${nextId}`,
-    game: randomGame,
-    ram: randomRam,
-    fps: randomFps
-  });
-
-  renderInstanceList();
-}
-
-function launchMaxInstances() {
-  const maxLimit = TIERS_META[selectedCheckoutTier]?.instanceLimit || 5;
-  while (runningInstances.length < Math.min(maxLimit, 8)) {
-    addSimulatedInstance();
-  }
-}
-
-window.killSimulatedInstance = function(id) {
-  runningInstances = runningInstances.filter(i => i.id !== id);
-  renderInstanceList();
-};
 
 // =============================================================================
 // 5. INTERACTIVE BLOXSTRAP APP THEME PREVIEW

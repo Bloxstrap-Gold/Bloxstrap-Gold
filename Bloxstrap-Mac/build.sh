@@ -30,8 +30,8 @@ if [ -f "${SCRIPT_DIR}/oof.wav" ]; then
     cp "${SCRIPT_DIR}/oof.wav" "${RESOURCES_DIR}/oof.wav"
 fi
 
-if [ -f "${SCRIPT_DIR}/oof.ogg" ]; then
-    cp "${SCRIPT_DIR}/oof.ogg" "${RESOURCES_DIR}/oof.ogg"
+if [ -f "${SCRIPT_DIR}/../Images/Bloxstrap.png" ]; then
+    cp "${SCRIPT_DIR}/../Images/Bloxstrap.png" "${RESOURCES_DIR}/Bloxstrap.png"
 fi
 
 if [ -d "${SCRIPT_DIR}/../website" ]; then

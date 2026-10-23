@@ -2,6 +2,161 @@ import AppKit
 import AVFoundation
 @preconcurrency import WebKit
 
+// MARK: - Official Bloxstrap Logo Provider
+func getBloxstrapLogoImage() -> NSImage? {
+    if let bundlePath = Bundle.main.path(forResource: "Bloxstrap", ofType: "png"),
+       let img = NSImage(contentsOfFile: bundlePath) {
+        return img
+    }
+    let localPath = "/Users/t4cs/Documents/antigravity/lively-bell/Images/Bloxstrap.png"
+    if FileManager.default.fileExists(atPath: localPath),
+       let img = NSImage(contentsOfFile: localPath) {
+        return img
+    }
+    return nil
+}
+
+// MARK: - Fallback Vector Logo (Perspective 4-Square Gradient)
+class BloxstrapLogoView: NSView {
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+        if let img = getBloxstrapLogoImage() {
+            img.draw(in: bounds, from: .zero, operation: .sourceOver, fraction: 1.0)
+            return
+        }
+        guard let ctx = NSGraphicsContext.current?.cgContext else { return }
+        let w = bounds.width
+        let h = bounds.height
+        
+        ctx.saveGState()
+        // Center rotation for isometric Bloxstrap diamond look
+        ctx.translateBy(x: w / 2, y: h / 2)
+        ctx.rotate(by: -18 * .pi / 180)
+        
+        let tileSize = w * 0.38
+        let gap = w * 0.08
+        let corner = tileSize * 0.22
+        
+        let colors = [
+            NSColor(calibratedRed: 0.85, green: 0.35, blue: 0.95, alpha: 1.0).cgColor,
+            NSColor(calibratedRed: 0.40, green: 0.30, blue: 0.95, alpha: 1.0).cgColor
+        ] as CFArray
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: [0.0, 1.0]) else {
+            ctx.restoreGState()
+            return
+        }
+        
+        let tiles: [CGRect] = [
+            CGRect(x: -tileSize - gap/2, y: gap/2, width: tileSize, height: tileSize),
+            CGRect(x: gap/2, y: gap/2, width: tileSize, height: tileSize),
+            CGRect(x: -tileSize - gap/2, y: -tileSize - gap/2, width: tileSize, height: tileSize),
+            CGRect(x: gap/2, y: -tileSize - gap/2, width: tileSize, height: tileSize)
+        ]
+        
+        for r in tiles {
+            let p = CGPath(roundedRect: r, cornerWidth: corner, cornerHeight: corner, transform: nil)
+            ctx.saveGState()
+            ctx.addPath(p)
+            ctx.clip()
+            ctx.drawLinearGradient(gradient, start: CGPoint(x: r.minX, y: r.maxY), end: CGPoint(x: r.maxX, y: r.minY), options: [])
+            ctx.restoreGState()
+        }
+        ctx.restoreGState()
+    }
+}
+
+// MARK: - Windows 11 Fluent Caption Control Button
+class WindowsCaptionButton: NSButton {
+    enum ButtonType {
+        case help
+        case minimize
+        case maximize
+        case close
+    }
+    
+    let btnType: ButtonType
+    private var trackingArea: NSTrackingArea?
+    private var isHovered = false
+    
+    init(type: ButtonType, frame: NSRect) {
+        self.btnType = type
+        super.init(frame: frame)
+        self.isBordered = false
+        self.wantsLayer = true
+        self.focusRingType = .none
+        
+        switch type {
+        case .help:
+            self.title = "？"
+            self.font = .systemFont(ofSize: 12, weight: .bold)
+        case .minimize:
+            self.title = "─"
+            self.font = .systemFont(ofSize: 11, weight: .regular)
+        case .maximize:
+            self.title = "□"
+            self.font = .systemFont(ofSize: 12, weight: .bold)
+        case .close:
+            self.title = "✕"
+            self.font = .systemFont(ofSize: 11, weight: .regular)
+        }
+        self.contentTintColor = NSColor(calibratedWhite: 0.82, alpha: 1.0)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        if let existing = trackingArea {
+            removeTrackingArea(existing)
+        }
+        let area = NSTrackingArea(
+            rect: bounds,
+            options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect],
+            owner: self,
+            userInfo: nil
+        )
+        addTrackingArea(area)
+        self.trackingArea = area
+    }
+    
+    override func mouseEntered(with event: NSEvent) {
+        isHovered = true
+        needsDisplay = true
+    }
+    
+    override func mouseExited(with event: NSEvent) {
+        isHovered = false
+        needsDisplay = true
+    }
+    
+    override func draw(_ dirtyRect: NSRect) {
+        if isHovered {
+            if btnType == .close {
+                NSColor(calibratedRed: 0.91, green: 0.07, blue: 0.14, alpha: 1.0).setFill() // Windows Close Red #E81123
+            } else {
+                NSColor(calibratedWhite: 1.0, alpha: 0.09).setFill()
+            }
+            dirtyRect.fill()
+        }
+        super.draw(dirtyRect)
+    }
+}
+
+// MARK: - Draggable Custom Windows TitleBar
+class CustomTitleBarView: NSView {
+    override func mouseDown(with event: NSEvent) {
+        let loc = convert(event.locationInWindow, from: nil)
+        if hitTest(loc) is NSButton {
+            super.mouseDown(with: event)
+        } else {
+            window?.performDrag(with: event)
+        }
+    }
+}
+
 // MARK: - Windows 11 Fluent Toggle Switch (Pixel-Identical to WPF UI)
 class FluentToggleSwitch: NSControl {
     var isOn: Bool = false {
@@ -11,10 +166,12 @@ class FluentToggleSwitch: NSControl {
         }
     }
     
-    // Bloxstrap Purple Accent (from screenshots: #7B5EA7 / #A277FF) or Gold Accent (#E5A93C)
-    var onColor = NSColor(calibratedRed: 0.635, green: 0.467, blue: 1.0, alpha: 1.0)
-    var offBorderColor = NSColor(calibratedWhite: 0.55, alpha: 0.9)
-    var offThumbColor = NSColor(calibratedWhite: 0.85, alpha: 1.0)
+    // Bloxstrap Purple Accent (#B084F9)
+    var onTrackColor = NSColor(calibratedRed: 0.69, green: 0.52, blue: 0.98, alpha: 1.0)
+    var onThumbColor = NSColor(calibratedRed: 0.09, green: 0.08, blue: 0.14, alpha: 1.0)
+    var offBorderColor = NSColor(calibratedWhite: 0.55, alpha: 0.85)
+    var offThumbColor = NSColor(calibratedWhite: 0.88, alpha: 1.0)
+    var offTrackColor = NSColor(calibratedRed: 0.12, green: 0.11, blue: 0.15, alpha: 1.0)
     
     override init(frame frameRect: NSRect) {
         super.init(frame: NSRect(x: frameRect.origin.x, y: frameRect.origin.y, width: 44, height: 22))
@@ -26,35 +183,46 @@ class FluentToggleSwitch: NSControl {
         wantsLayer = true
     }
     
+    override func resetCursorRects() {
+        addCursorRect(bounds, cursor: .pointingHand)
+    }
+    
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         guard let ctx = NSGraphicsContext.current?.cgContext else { return }
         
-        let trackRect = NSRect(x: 1, y: 1, width: 42, height: 20)
+        let trackRect = NSRect(x: 2, y: 2, width: 40, height: 18)
         let corner = trackRect.height / 2
         let path = CGPath(roundedRect: trackRect, cornerWidth: corner, cornerHeight: corner, transform: nil)
         
         if isOn {
-            ctx.setFillColor(onColor.cgColor)
+            // Filled track with accent color
+            ctx.setFillColor(onTrackColor.cgColor)
             ctx.addPath(path)
             ctx.fillPath()
             
-            // Thumb (right)
-            ctx.setFillColor(NSColor.black.cgColor)
-            let thumbRect = NSRect(x: trackRect.maxX - 16, y: trackRect.minY + 3, width: 14, height: 14)
-            let thumbPath = CGPath(roundedRect: thumbRect, cornerWidth: 7, cornerHeight: 7, transform: nil)
+            // Dark thumb on right side (exact screenshot style)
+            ctx.setFillColor(onThumbColor.cgColor)
+            let thumbRect = NSRect(x: trackRect.maxX - 15.5, y: trackRect.minY + 2.5, width: 13, height: 13)
+            let thumbPath = CGPath(roundedRect: thumbRect, cornerWidth: 6.5, cornerHeight: 6.5, transform: nil)
             ctx.addPath(thumbPath)
             ctx.fillPath()
         } else {
+            // Dark track inside
+            ctx.setFillColor(offTrackColor.cgColor)
+            ctx.addPath(path)
+            ctx.fillPath()
+            
+            // Border outline
             ctx.setStrokeColor(offBorderColor.cgColor)
             ctx.setLineWidth(1.5)
             ctx.addPath(path)
             ctx.strokePath()
             
-            // Thumb (left)
+            // Light thumb on left side
             ctx.setFillColor(offThumbColor.cgColor)
-            let thumbRect = NSRect(x: trackRect.minX + 3, y: trackRect.minY + 3, width: 14, height: 14)
-            let thumbPath = CGPath(roundedRect: thumbRect, cornerWidth: 7, cornerHeight: 7, transform: nil)
+            let thumbRect = NSRect(x: trackRect.minX + 2.5, y: trackRect.minY + 2.5, width: 13, height: 13)
+            let thumbPath = CGPath(roundedRect: thumbRect, cornerWidth: 6.5, cornerHeight: 6.5, transform: nil)
             ctx.addPath(thumbPath)
             ctx.fillPath()
         }
@@ -62,6 +230,71 @@ class FluentToggleSwitch: NSControl {
     
     override func mouseDown(with event: NSEvent) {
         isOn.toggle()
+    }
+}
+
+// MARK: - Sidebar Item Button with Hover Tracking
+class SidebarItemButton: NSButton {
+    private var trackingArea: NSTrackingArea?
+    var isCurrentSelected: Bool = false {
+        didSet {
+            updateAppearance()
+        }
+    }
+    private var isHovered: Bool = false {
+        didSet {
+            updateAppearance()
+        }
+    }
+    
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        self.isBordered = false
+        self.wantsLayer = true
+        self.layer?.cornerRadius = 5
+        self.alignment = .left
+        self.font = .systemFont(ofSize: 13, weight: .medium)
+        updateAppearance()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        if let existing = trackingArea {
+            removeTrackingArea(existing)
+        }
+        let area = NSTrackingArea(
+            rect: bounds,
+            options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect],
+            owner: self,
+            userInfo: nil
+        )
+        addTrackingArea(area)
+        self.trackingArea = area
+    }
+    
+    override func mouseEntered(with event: NSEvent) {
+        isHovered = true
+    }
+    
+    override func mouseExited(with event: NSEvent) {
+        isHovered = false
+    }
+    
+    private func updateAppearance() {
+        if isCurrentSelected {
+            layer?.backgroundColor = NSColor(calibratedRed: 0.173, green: 0.169, blue: 0.212, alpha: 1.0).cgColor // Selected #2C2B36
+            contentTintColor = .white
+        } else if isHovered {
+            layer?.backgroundColor = NSColor(calibratedWhite: 1.0, alpha: 0.04).cgColor
+            contentTintColor = NSColor(calibratedRed: 0.90, green: 0.90, blue: 0.94, alpha: 1.0)
+        } else {
+            layer?.backgroundColor = NSColor.clear.cgColor
+            contentTintColor = NSColor(calibratedRed: 0.72, green: 0.71, blue: 0.77, alpha: 1.0)
+        }
     }
 }
 
@@ -74,9 +307,9 @@ class FlippedContainerView: NSView {
 public class MainWindowController: NSWindowController, WKNavigationDelegate, NSTextFieldDelegate {
     
     // Windows TitleBar & Navigation
-    private var customTitleBar: NSView!
+    private var customTitleBar: CustomTitleBarView!
     private var sidebarView: NSView!
-    private var sidebarButtons: [NSButton] = []
+    private var sidebarButtons: [SidebarItemButton] = []
     private var activeIndicators: [NSView] = []
     private var contentContainer: NSView!
     private var tabViews: [NSView] = []
@@ -111,7 +344,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
     private var accountsStackView: NSStackView!
     private var instanceTimer: Timer?
     
-    // Verbatim Bloxstrap Navigation Items from Screenshots
+    // Authentic Bloxstrap Navigation Items
     private let pageNames: [String] = [
         "Integrations",
         "Mods",
@@ -119,6 +352,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         "Appearance",
         "Behaviour",
         "Installation",
+        "Bloxstrap Gold",
         "About"
     ]
     
@@ -129,6 +363,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         "🖥",
         "⚙",
         "🖫",
+        "👑",
         "❓"
     ]
     
@@ -142,8 +377,13 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         window.title = "Bloxstrap Menu"
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
-        window.backgroundColor = NSColor(calibratedRed: 0.125, green: 0.125, blue: 0.137, alpha: 1.0) // Windows Mica Dark #202023
+        window.backgroundColor = NSColor(calibratedRed: 0.122, green: 0.118, blue: 0.149, alpha: 1.0) // Mica Dark #1F1E26
         window.minSize = NSSize(width: 960, height: 560)
+        
+        // Hide standard macOS traffic lights to present Windows 11 Fluent frame
+        window.standardWindowButton(.closeButton)?.isHidden = true
+        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        window.standardWindowButton(.zoomButton)?.isHidden = true
         
         super.init(window: window)
         setupUI()
@@ -165,41 +405,42 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
     private func setupUI() {
         guard let contentView = window?.contentView else { return }
         contentView.wantsLayer = true
-        contentView.layer?.backgroundColor = NSColor(calibratedRed: 0.125, green: 0.125, blue: 0.137, alpha: 1.0).cgColor
+        contentView.layer?.backgroundColor = NSColor(calibratedRed: 0.122, green: 0.118, blue: 0.149, alpha: 1.0).cgColor
         
         let bounds = contentView.bounds
         
-        // 1. Custom TitleBar (Flush with top, height: 38px)
+        // 1. Windows TitleBar (Flush with top, height: 38px)
         setupCustomTitleBar(bounds: bounds)
         
         // 2. Bottom Status Bar (Flush with bottom, height: 52px)
         setupBottomStatusBar(bounds: bounds)
         
-        // 3. Left Sidebar (Width: 200px)
+        // 3. Left Sidebar (Width: 216px)
         let bodyY: CGFloat = 52
         let bodyH: CGFloat = bounds.height - 52 - 38
-        sidebarView = NSView(frame: NSRect(x: 0, y: bodyY, width: 210, height: bodyH))
+        sidebarView = NSView(frame: NSRect(x: 0, y: bodyY, width: 216, height: bodyH))
         sidebarView.wantsLayer = true
-        sidebarView.layer?.backgroundColor = NSColor(calibratedRed: 0.105, green: 0.105, blue: 0.115, alpha: 0.98).cgColor // Darker sidebar #1B1B1D
+        sidebarView.layer?.backgroundColor = NSColor(calibratedRed: 0.098, green: 0.094, blue: 0.125, alpha: 1.0).cgColor // Sidebar #191820
         sidebarView.autoresizingMask = [.height, .maxXMargin]
         contentView.addSubview(sidebarView)
         setupSidebar()
         
-        // 4. Right Content Container (Width: bounds.width - 210)
-        contentContainer = NSView(frame: NSRect(x: 210, y: bodyY, width: bounds.width - 210, height: bodyH))
+        // 4. Right Content Container (Width: bounds.width - 216)
+        contentContainer = NSView(frame: NSRect(x: 216, y: bodyY, width: bounds.width - 216, height: bodyH))
         contentContainer.wantsLayer = true
-        contentContainer.layer?.backgroundColor = NSColor(calibratedRed: 0.125, green: 0.125, blue: 0.137, alpha: 1.0).cgColor
+        contentContainer.layer?.backgroundColor = NSColor(calibratedRed: 0.122, green: 0.118, blue: 0.149, alpha: 1.0).cgColor
         contentContainer.autoresizingMask = [.width, .height]
         contentView.addSubview(contentContainer)
         
-        // Build the 7 authentic Bloxstrap pages
+        // Build the authentic Bloxstrap pages
         tabViews = [
             buildIntegrationsPage(bounds: contentContainer.bounds),
             buildModsPage(bounds: contentContainer.bounds),
             buildFastFlagsPage(bounds: contentContainer.bounds),
             buildAppearancePage(bounds: contentContainer.bounds),
             buildBehaviourPage(bounds: contentContainer.bounds),
-            buildInstallationGoldPage(bounds: contentContainer.bounds),
+            buildInstallationPage(bounds: contentContainer.bounds),
+            buildGoldPage(bounds: contentContainer.bounds),
             buildAboutPage(bounds: contentContainer.bounds)
         ]
         
@@ -217,51 +458,79 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         updateAuthenticationState()
     }
     
-    // MARK: - Custom Windows TitleBar
+    // MARK: - Windows 11 TitleBar
     private func setupCustomTitleBar(bounds: NSRect) {
         guard let contentView = window?.contentView else { return }
         
-        customTitleBar = NSView(frame: NSRect(x: 0, y: bounds.height - 38, width: bounds.width, height: 38))
+        customTitleBar = CustomTitleBarView(frame: NSRect(x: 0, y: bounds.height - 38, width: bounds.width, height: 38))
         customTitleBar.wantsLayer = true
-        customTitleBar.layer?.backgroundColor = NSColor(calibratedRed: 0.105, green: 0.105, blue: 0.115, alpha: 1.0).cgColor
+        customTitleBar.layer?.backgroundColor = NSColor(calibratedRed: 0.098, green: 0.094, blue: 0.125, alpha: 1.0).cgColor
         customTitleBar.autoresizingMask = [.width, .minYMargin]
         contentView.addSubview(customTitleBar)
         
-        // Iconic 4-Square Bloxstrap Logo on Top Left
-        let logo = NSTextField(labelWithString: "⬚⬚")
-        logo.font = .systemFont(ofSize: 13, weight: .black)
-        logo.textColor = NSColor(calibratedRed: 0.635, green: 0.467, blue: 1.0, alpha: 1.0) // Bloxstrap purple
-        logo.frame = NSRect(x: 16, y: 10, width: 20, height: 18)
-        customTitleBar.addSubview(logo)
+        // Official Bloxstrap Logo (18x18) on Top Left
+        let logoContainer = NSView(frame: NSRect(x: 14, y: 10, width: 18, height: 18))
+        if let img = getBloxstrapLogoImage() {
+            let iv = NSImageView(frame: logoContainer.bounds)
+            iv.image = img
+            iv.imageScaling = .scaleProportionallyUpOrDown
+            logoContainer.addSubview(iv)
+        } else {
+            let fallback = BloxstrapLogoView(frame: logoContainer.bounds)
+            logoContainer.addSubview(fallback)
+        }
+        customTitleBar.addSubview(logoContainer)
         
         let titleLabel = NSTextField(labelWithString: "Bloxstrap Menu")
-        titleLabel.font = .systemFont(ofSize: 12, weight: .regular)
+        titleLabel.font = .systemFont(ofSize: 12.5, weight: .regular)
         titleLabel.textColor = .white
-        titleLabel.frame = NSRect(x: 40, y: 10, width: 140, height: 18)
+        titleLabel.frame = NSRect(x: 38, y: 10, width: 140, height: 18)
         customTitleBar.addSubview(titleLabel)
         
         // Tier Header Tag on right side of title bar
         tierBadgeLabel = NSTextField(labelWithString: AppState.shared.currentTierBadge)
-        tierBadgeLabel.font = .boldSystemFont(ofSize: 10)
+        tierBadgeLabel.font = .boldSystemFont(ofSize: 9.5)
         tierBadgeLabel.alignment = .center
         tierBadgeLabel.textColor = .black
         tierBadgeLabel.wantsLayer = true
         tierBadgeLabel.layer?.backgroundColor = NSColor(calibratedRed: 0.898, green: 0.725, blue: 0.282, alpha: 1.0).cgColor
         tierBadgeLabel.layer?.cornerRadius = 3
-        tierBadgeLabel.frame = NSRect(x: customTitleBar.bounds.width - 240, y: 9, width: 110, height: 20)
+        tierBadgeLabel.frame = NSRect(x: customTitleBar.bounds.width - 310, y: 9, width: 110, height: 20)
         tierBadgeLabel.autoresizingMask = [.minXMargin]
         customTitleBar.addSubview(tierBadgeLabel)
         
-        // Windows-style ? Help icon on top right
-        let helpBtn = NSButton(frame: NSRect(x: customTitleBar.bounds.width - 120, y: 8, width: 24, height: 22))
-        helpBtn.title = "？"
-        helpBtn.isBordered = false
-        helpBtn.font = .systemFont(ofSize: 13, weight: .bold)
-        helpBtn.contentTintColor = NSColor(calibratedWhite: 0.75, alpha: 1.0)
+        // Windows 11 Caption Controls: [ ? ] [ ─ ] [ □ ] [ ✕ ]
+        let helpBtn = WindowsCaptionButton(type: .help, frame: NSRect(x: customTitleBar.bounds.width - 184, y: 0, width: 46, height: 38))
         helpBtn.target = self
         helpBtn.action = #selector(onOpenStore)
         helpBtn.autoresizingMask = [.minXMargin]
         customTitleBar.addSubview(helpBtn)
+        
+        let minBtn = WindowsCaptionButton(type: .minimize, frame: NSRect(x: customTitleBar.bounds.width - 138, y: 0, width: 46, height: 38))
+        minBtn.target = self
+        minBtn.action = #selector(onMinimizeClicked)
+        minBtn.autoresizingMask = [.minXMargin]
+        customTitleBar.addSubview(minBtn)
+        
+        let maxBtn = WindowsCaptionButton(type: .maximize, frame: NSRect(x: customTitleBar.bounds.width - 92, y: 0, width: 46, height: 38))
+        maxBtn.target = self
+        maxBtn.action = #selector(onMaximizeClicked)
+        maxBtn.autoresizingMask = [.minXMargin]
+        customTitleBar.addSubview(maxBtn)
+        
+        let closeBtn = WindowsCaptionButton(type: .close, frame: NSRect(x: customTitleBar.bounds.width - 46, y: 0, width: 46, height: 38))
+        closeBtn.target = self
+        closeBtn.action = #selector(onCloseClicked)
+        closeBtn.autoresizingMask = [.minXMargin]
+        customTitleBar.addSubview(closeBtn)
+    }
+    
+    @objc private func onMinimizeClicked() {
+        window?.miniaturize(nil)
+    }
+    
+    @objc private func onMaximizeClicked() {
+        window?.zoom(nil)
     }
     
     // MARK: - Key Gate Modal (Requires GOLD-7DAY-)
@@ -270,14 +539,14 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         keyGateOverlay = NSView(frame: bounds)
         keyGateOverlay.wantsLayer = true
-        keyGateOverlay.layer?.backgroundColor = NSColor(calibratedWhite: 0.0, alpha: 0.75).cgColor // Dark Fluent Backdrop
+        keyGateOverlay.layer?.backgroundColor = NSColor(calibratedWhite: 0.0, alpha: 0.80).cgColor
         keyGateOverlay.autoresizingMask = [.width, .height]
         
-        let cardW: CGFloat = 500
-        let cardH: CGFloat = 340
+        let cardW: CGFloat = 520
+        let cardH: CGFloat = 360
         let card = NSView(frame: NSRect(x: (bounds.width - cardW) / 2, y: (bounds.height - cardH) / 2, width: cardW, height: cardH))
         card.wantsLayer = true
-        card.layer?.backgroundColor = NSColor(calibratedRed: 0.165, green: 0.165, blue: 0.185, alpha: 1.0).cgColor
+        card.layer?.backgroundColor = NSColor(calibratedRed: 0.145, green: 0.141, blue: 0.176, alpha: 1.0).cgColor
         card.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.08).cgColor
         card.layer?.borderWidth = 1.0
         card.layer?.cornerRadius = 8
@@ -285,30 +554,32 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         keyGateOverlay.addSubview(card)
         
         let crown = NSTextField(labelWithString: "👑")
-        crown.font = .systemFont(ofSize: 38)
-        crown.frame = NSRect(x: (cardW - 46) / 2, y: cardH - 62, width: 46, height: 46)
+        crown.font = .systemFont(ofSize: 42)
+        crown.frame = NSRect(x: (cardW - 50) / 2, y: cardH - 68, width: 50, height: 50)
         card.addSubview(crown)
         
         let title = NSTextField(labelWithString: "Bloxstrap Gold Activation")
         title.font = .boldSystemFont(ofSize: 18)
         title.textColor = .white
         title.alignment = .center
-        title.frame = NSRect(x: 20, y: cardH - 96, width: cardW - 40, height: 24)
+        title.frame = NSRect(x: 20, y: cardH - 102, width: cardW - 40, height: 24)
         card.addSubview(title)
         
-        let desc = NSTextField(labelWithString: "Please enter your license key to continue.\nKeys must start with GOLD-7DAY- (e.g. GOLD-7DAY-ULTRA-XXXX-XXXX).")
+        let desc = NSTextField(labelWithString: "Please enter your license key to authenticate and access Bloxstrap Gold.\nKeys must start with GOLD-7DAY- (e.g. GOLD-7DAY-ULTRA-XXXX-XXXX-XXXX).")
         desc.font = .systemFont(ofSize: 12)
         desc.textColor = NSColor(calibratedRed: 0.70, green: 0.70, blue: 0.78, alpha: 1.0)
         desc.alignment = .center
-        desc.frame = NSRect(x: 20, y: cardH - 142, width: cardW - 40, height: 34)
+        desc.frame = NSRect(x: 20, y: cardH - 150, width: cardW - 40, height: 34)
         card.addSubview(desc)
         
-        keyGateInputField = NSTextField(frame: NSRect(x: 40, y: cardH - 186, width: cardW - 80, height: 32))
+        keyGateInputField = NSTextField(frame: NSRect(x: 40, y: cardH - 196, width: cardW - 80, height: 34))
         keyGateInputField.placeholderString = "GOLD-7DAY-ULTRA-XXXX-XXXX-XXXX"
         keyGateInputField.font = .monospacedSystemFont(ofSize: 12, weight: .bold)
         keyGateInputField.textColor = .white
         keyGateInputField.wantsLayer = true
-        keyGateInputField.layer?.backgroundColor = NSColor(calibratedRed: 0.12, green: 0.12, blue: 0.14, alpha: 1.0).cgColor
+        keyGateInputField.layer?.backgroundColor = NSColor(calibratedRed: 0.098, green: 0.094, blue: 0.125, alpha: 1.0).cgColor
+        keyGateInputField.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.12).cgColor
+        keyGateInputField.layer?.borderWidth = 1.0
         keyGateInputField.layer?.cornerRadius = 4
         keyGateInputField.delegate = self
         card.addSubview(keyGateInputField)
@@ -317,28 +588,29 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         keyGateTierLabel.font = .boldSystemFont(ofSize: 11.5)
         keyGateTierLabel.textColor = NSColor(calibratedRed: 0.898, green: 0.725, blue: 0.282, alpha: 1.0)
         keyGateTierLabel.alignment = .center
-        keyGateTierLabel.frame = NSRect(x: 20, y: cardH - 215, width: cardW - 40, height: 18)
+        keyGateTierLabel.frame = NSRect(x: 20, y: cardH - 228, width: cardW - 40, height: 18)
         card.addSubview(keyGateTierLabel)
         
         keyGateErrorLabel = NSTextField(labelWithString: "")
         keyGateErrorLabel.font = .systemFont(ofSize: 11)
         keyGateErrorLabel.textColor = NSColor(calibratedRed: 0.95, green: 0.35, blue: 0.35, alpha: 1.0)
         keyGateErrorLabel.alignment = .center
-        keyGateErrorLabel.frame = NSRect(x: 20, y: cardH - 235, width: cardW - 40, height: 18)
+        keyGateErrorLabel.frame = NSRect(x: 20, y: cardH - 250, width: cardW - 40, height: 18)
         card.addSubview(keyGateErrorLabel)
         
-        let unlockBtn = NSButton(frame: NSRect(x: 40, y: 50, width: cardW - 80, height: 36))
+        let unlockBtn = NSButton(frame: NSRect(x: 40, y: 56, width: cardW - 80, height: 36))
         unlockBtn.title = "Unlock Bloxstrap Gold"
-        unlockBtn.bezelStyle = .rounded
+        unlockBtn.isBordered = false
         unlockBtn.font = .boldSystemFont(ofSize: 13)
         unlockBtn.wantsLayer = true
         unlockBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.898, green: 0.725, blue: 0.282, alpha: 1.0).cgColor
+        unlockBtn.layer?.cornerRadius = 4
         unlockBtn.contentTintColor = .black
         unlockBtn.target = self
         unlockBtn.action = #selector(onActivateKeyClicked)
         card.addSubview(unlockBtn)
         
-        let storeBtn = NSButton(frame: NSRect(x: 40, y: 16, width: cardW - 80, height: 26))
+        let storeBtn = NSButton(frame: NSRect(x: 40, y: 20, width: cardW - 80, height: 26))
         storeBtn.title = "🛒 Get a key at bloxstrapgold.github.io"
         storeBtn.isBordered = false
         storeBtn.font = .systemFont(ofSize: 11, weight: .semibold)
@@ -390,7 +662,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         }
     }
     
-    // MARK: - Sidebar Setup (Exact NavigationFluent from Screenshots)
+    // MARK: - Sidebar Setup (Verbatim NavigationFluent from Screenshots)
     private func setupSidebar() {
         sidebarButtons.removeAll()
         activeIndicators.removeAll()
@@ -402,26 +674,22 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
             let row = NSView(frame: NSRect(x: 6, y: y, width: sidebarView.bounds.width - 12, height: 34))
             row.autoresizingMask = [.width, .minYMargin]
             
-            // Left active purple/gold indicator bar
-            let indicator = NSView(frame: NSRect(x: 2, y: 8, width: 3, height: 18))
+            // Left active purple pill indicator (|)
+            let indicator = NSView(frame: NSRect(x: 2, y: 8, width: 3.5, height: 18))
             indicator.wantsLayer = true
-            indicator.layer?.backgroundColor = NSColor(calibratedRed: 0.635, green: 0.467, blue: 1.0, alpha: 1.0).cgColor // Bloxstrap purple
-            indicator.layer?.cornerRadius = 1.5
+            indicator.layer?.backgroundColor = NSColor(calibratedRed: 0.69, green: 0.52, blue: 0.98, alpha: 1.0).cgColor // #B084F9
+            indicator.layer?.cornerRadius = 1.75
             indicator.isHidden = (i != currentTabIndex)
             row.addSubview(indicator)
             activeIndicators.append(indicator)
             
-            let btn = NSButton(frame: NSRect(x: 8, y: 0, width: row.bounds.width - 8, height: 34))
+            let btn = SidebarItemButton(frame: NSRect(x: 8, y: 0, width: row.bounds.width - 8, height: 34))
             btn.title = "  \(pageIcons[i])   \(name)"
-            btn.alignment = .left
-            btn.isBordered = false
-            btn.font = .systemFont(ofSize: 13, weight: .medium)
-            btn.wantsLayer = true
-            btn.layer?.cornerRadius = 4
             btn.tag = i
             btn.target = self
             btn.action = #selector(onSidebarTabClicked(_:))
             btn.autoresizingMask = [.width]
+            btn.isCurrentSelected = (i == currentTabIndex)
             row.addSubview(btn)
             sidebarButtons.append(btn)
             
@@ -434,21 +702,20 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
     }
     
     @objc public func showAboutTab() {
-        selectTab(index: 6)
+        selectTab(index: 7)
     }
     
     private func selectTab(index: Int) {
         currentTabIndex = index
         for (i, btn) in sidebarButtons.enumerated() {
             let isSelected = (i == index)
-            btn.layer?.backgroundColor = isSelected ? NSColor(calibratedRed: 0.20, green: 0.20, blue: 0.23, alpha: 1.0).cgColor : NSColor.clear.cgColor
-            btn.contentTintColor = isSelected ? .white : NSColor(calibratedRed: 0.75, green: 0.75, blue: 0.82, alpha: 1.0)
+            btn.isCurrentSelected = isSelected
             activeIndicators[i].isHidden = !isSelected
         }
         for (i, v) in tabViews.enumerated() {
             v.isHidden = (i != index)
         }
-        if index == 5 {
+        if index == 6 {
             updateInstanceList()
         }
     }
@@ -459,7 +726,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         statusBarView = NSView(frame: NSRect(x: 0, y: 0, width: bounds.width, height: 52))
         statusBarView.wantsLayer = true
-        statusBarView.layer?.backgroundColor = NSColor(calibratedRed: 0.105, green: 0.105, blue: 0.115, alpha: 1.0).cgColor
+        statusBarView.layer?.backgroundColor = NSColor(calibratedRed: 0.098, green: 0.094, blue: 0.125, alpha: 1.0).cgColor
         statusBarView.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.06).cgColor
         statusBarView.layer?.borderWidth = 1.0
         statusBarView.autoresizingMask = [.width, .maxYMargin]
@@ -484,23 +751,31 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         toastLabel.isHidden = true
         statusBarView.addSubview(toastLabel)
         
-        // Exact Bloxstrap Save & Cancel buttons from screenshots
+        // Exact Bloxstrap Cancel button: dark flat rectangle
         let cancelBtn = NSButton(frame: NSRect(x: statusBarView.bounds.width - 92, y: 11, width: 78, height: 30))
         cancelBtn.title = "Cancel"
-        cancelBtn.bezelStyle = .rounded
-        cancelBtn.font = .systemFont(ofSize: 12)
+        cancelBtn.isBordered = false
+        cancelBtn.wantsLayer = true
+        cancelBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.173, green: 0.169, blue: 0.204, alpha: 1.0).cgColor // #2B2A34
+        cancelBtn.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.10).cgColor
+        cancelBtn.layer?.borderWidth = 1.0
+        cancelBtn.layer?.cornerRadius = 4
+        cancelBtn.font = .systemFont(ofSize: 12, weight: .medium)
+        cancelBtn.contentTintColor = .white
         cancelBtn.target = self
         cancelBtn.action = #selector(onCloseClicked)
         cancelBtn.autoresizingMask = [.minXMargin]
         statusBarView.addSubview(cancelBtn)
         
+        // Exact Bloxstrap Save button: #B084F9 purple pill
         let saveBtn = NSButton(frame: NSRect(x: statusBarView.bounds.width - 180, y: 11, width: 80, height: 30))
         saveBtn.title = "Save"
-        saveBtn.bezelStyle = .rounded
-        saveBtn.font = .boldSystemFont(ofSize: 12)
+        saveBtn.isBordered = false
         saveBtn.wantsLayer = true
-        saveBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.635, green: 0.467, blue: 1.0, alpha: 1.0).cgColor // Bloxstrap purple
-        saveBtn.contentTintColor = .black
+        saveBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.69, green: 0.52, blue: 0.98, alpha: 1.0).cgColor // #B084F9
+        saveBtn.layer?.cornerRadius = 4
+        saveBtn.font = .boldSystemFont(ofSize: 12.5)
+        saveBtn.contentTintColor = NSColor(calibratedRed: 0.09, green: 0.08, blue: 0.14, alpha: 1.0)
         saveBtn.target = self
         saveBtn.action = #selector(onSaveClicked)
         saveBtn.autoresizingMask = [.minXMargin]
@@ -563,31 +838,34 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         let presetSub = createSubtitleLabel("FastFlags for Direct3D exclusive fullscreen (Alt+Enter) and DPI scaling fixes are already enabled by default.")
         stack.addArrangedSubview(presetSub)
         
-        // Option 1: Framerate limit ⓘ
-        fpsInputField = NSTextField(frame: NSRect(x: 0, y: 0, width: 140, height: 28))
+        // Option 1: Framerate limit (?)
+        fpsInputField = NSTextField(frame: NSRect(x: 0, y: 0, width: 150, height: 28))
         fpsInputField.stringValue = "\(AppState.shared.data.targetFps)"
-        fpsInputField.font = .monospacedSystemFont(ofSize: 12, weight: .bold)
+        fpsInputField.font = .monospacedSystemFont(ofSize: 12.5, weight: .bold)
         fpsInputField.textColor = .white
+        fpsInputField.alignment = .right
         fpsInputField.wantsLayer = true
-        fpsInputField.layer?.backgroundColor = NSColor(calibratedRed: 0.12, green: 0.12, blue: 0.14, alpha: 1.0).cgColor
+        fpsInputField.layer?.backgroundColor = NSColor(calibratedRed: 0.173, green: 0.169, blue: 0.204, alpha: 1.0).cgColor
+        fpsInputField.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.10).cgColor
+        fpsInputField.layer?.borderWidth = 1.0
         fpsInputField.layer?.cornerRadius = 4
-        let optFps = createOptionControl(header: "Framerate limit ⓘ", desc: "Use a large number like 9999 for no limit. Set as 0 for defaults.", control: fpsInputField)
+        let optFps = createOptionControl(header: "Framerate limit", hasHelpBadge: true, desc: "Use a large number like 9999 for no limit. Set as 0 for defaults.", control: fpsInputField)
         stack.addArrangedSubview(optFps)
         
         // Option 2: Preferred lighting technology
         lightingPopup = createStyledPopup(items: ["Chosen by game", "Compatibility (Phase 1)", "ShadowMap (Phase 2)", "Future (Phase 3)"], selected: AppState.shared.data.preferredLighting)
-        let optLight = createOptionControl(header: "Preferred lighting technology", desc: "Choose which lighting technology should be forced enabled in all games.", control: lightingPopup)
+        let optLight = createOptionControl(header: "Preferred lighting technology", hasHelpBadge: false, desc: "Choose which lighting technology should be forced enabled in all games.", control: lightingPopup)
         stack.addArrangedSubview(optLight)
         
-        // Option 3: Preferred escape menu version ⓘ
+        // Option 3: Preferred escape menu version (?)
         escapeMenuPopup = createStyledPopup(items: ["Default", "Version 1 (2015)", "Version 2 (2020)", "Version 4 (2023)"], selected: AppState.shared.data.escapeMenuVersion)
-        let optEsc = createOptionControl(header: "Preferred escape menu version ⓘ", desc: "Choose which version of the escape menu to use.", control: escapeMenuPopup)
+        let optEsc = createOptionControl(header: "Preferred escape menu version", hasHelpBadge: true, desc: "Choose which version of the escape menu to use.", control: escapeMenuPopup)
         stack.addArrangedSubview(optEsc)
         
-        // Option 4: Enable ability to hide GUIs ⓘ
+        // Option 4: Enable ability to hide GUIs (?)
         hideGuisSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
         hideGuisSwitch.isOn = AppState.shared.data.hideGuisEnabled
-        let optHide = createOptionControl(header: "Enable ability to hide GUIs ⓘ", desc: "Toggled with keyboard shortcuts. Only works if you're in the Bloxstrap group.", control: hideGuisSwitch)
+        let optHide = createOptionControl(header: "Enable ability to hide GUIs", hasHelpBadge: true, desc: "Toggled with keyboard shortcuts. Only works if you're in the Bloxstrap group.", control: hideGuisSwitch)
         stack.addArrangedSubview(optHide)
         
         return scrollView
@@ -597,29 +875,29 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
     private func buildModsPage(bounds: NSRect) -> NSView {
         let (scrollView, stack) = createScrollablePage(bounds: bounds)
         
-        let title = createPageHeader(title: "Mods", subtitle: "Manage game rendering, custom assets, and mouse controls.")
+        let title = createPageHeader(title: "Mods", subtitle: "")
         stack.addArrangedSubview(title)
         
         // Option 1: Rendering mode
-        renderingModePopup = createStyledPopup(items: ["Direct3D 11", "Vulkan / MoltenVK", "Metal (macOS Default)", "OpenGL"], selected: AppState.shared.data.renderingMode)
-        let optRen = createOptionControl(header: "Rendering mode", desc: "Select which renderer Roblox should use. ReShade requires Direct3D 11.", control: renderingModePopup)
+        renderingModePopup = createStyledPopup(items: ["Direct3D 11", "Metal (macOS Default)", "Vulkan / MoltenVK", "OpenGL"], selected: AppState.shared.data.renderingMode)
+        let optRen = createOptionControl(header: "Rendering mode", hasHelpBadge: false, desc: "Select which renderer Roblox should use. ReShade requires Direct3D 11.", control: renderingModePopup)
         stack.addArrangedSubview(optRen)
         
         // Option 2: Use exclusive fullscreen
         exclusiveFullscreenSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
         exclusiveFullscreenSwitch.isOn = AppState.shared.data.exclusiveFullscreen
-        let optFull = createOptionControl(header: "Use exclusive fullscreen", desc: "Enables using Alt + Enter to enter exclusive fullscreen. Only works with Direct3D 11.", control: exclusiveFullscreenSwitch)
+        let optFull = createOptionControl(header: "Use exclusive fullscreen", hasHelpBadge: false, desc: "Enables using Alt + Enter to enter exclusive fullscreen. Only works with Direct3D 11.", control: exclusiveFullscreenSwitch)
         stack.addArrangedSubview(optFull)
         
         // Option 3: Use alternate graphics quality selector
         altQualitySwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
         altQualitySwitch.isOn = AppState.shared.data.alternateQualitySelector
-        let optAlt = createOptionControl(header: "Use alternate graphics quality selector", desc: "Toggle between using the consolidated 1-10 / fine-grained 1-21 graphics quality slider.", control: altQualitySwitch)
+        let optAlt = createOptionControl(header: "Use alternate graphics quality selector", hasHelpBadge: false, desc: "Toggle between using the consolidated 1-10 / fine-grained 1-21 graphics quality slider.", control: altQualitySwitch)
         stack.addArrangedSubview(optAlt)
         
         // Option 4: In-game menu version
-        inGameMenuPopup = createStyledPopup(items: ["Default", "Version 1 (2015)", "Version 2 (2020)", "Version 3 (2021)"], selected: AppState.shared.data.inGameMenuVersion)
-        let optMenu = createOptionControl(header: "In-game menu version", desc: "Choose which version of the in-game menu to use. Current default is v1.", control: inGameMenuPopup)
+        inGameMenuPopup = createStyledPopup(items: ["Default", "Version 1 (2015)", "Version 2 (2020)", "Version 3 (2021)", "Version 4 (2023)"], selected: AppState.shared.data.inGameMenuVersion)
+        let optMenu = createOptionControl(header: "In-game menu version", hasHelpBadge: false, desc: "Choose which version of the in-game menu to use. Current default is v1.", control: inGameMenuPopup)
         stack.addArrangedSubview(optMenu)
         
         // Section: Miscellaneous
@@ -629,18 +907,38 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         // Option 5: Disable full-screen optimizations
         disableFsoSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
         disableFsoSwitch.isOn = AppState.shared.data.disableFullscreenOptimizations
-        let optFso = createOptionControl(header: "Disable full-screen optimizations", desc: "A Windows feature that can potentially cause problems - click here for more info.", control: disableFsoSwitch)
+        let optFso = createOptionControl(header: "Disable full-screen optimizations", hasHelpBadge: false, desc: "A Windows feature that can potentially cause problems - click here for more info.", control: disableFsoSwitch)
         stack.addArrangedSubview(optFso)
         
-        // Option 6: Classic 2006 Death Sound
-        deathSoundSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
+        // Option 6: Classic 2006 Death Sound + Preview
+        let soundControls = NSView(frame: NSRect(x: 0, y: 0, width: 140, height: 26))
+        
+        let playBtn = NSButton(frame: NSRect(x: 0, y: 1, width: 85, height: 24))
+        playBtn.title = "▶ Preview"
+        playBtn.isBordered = false
+        playBtn.wantsLayer = true
+        playBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.22, green: 0.21, blue: 0.26, alpha: 1.0).cgColor
+        playBtn.layer?.cornerRadius = 4
+        playBtn.font = .systemFont(ofSize: 11, weight: .medium)
+        playBtn.contentTintColor = .white
+        playBtn.target = self
+        playBtn.action = #selector(onPlayOofPreview)
+        soundControls.addSubview(playBtn)
+        
+        deathSoundSwitch = FluentToggleSwitch(frame: NSRect(x: 94, y: 2, width: 44, height: 22))
         deathSoundSwitch.isOn = AppState.shared.data.customDeathSound
         deathSoundSwitch.target = self
         deathSoundSwitch.action = #selector(onDeathSoundToggled)
-        let optSound = createOptionControl(header: "Classic 2006 \"OOF\" death sound", desc: "Restores the nostalgic sound and backs up default Roblox audio.", control: deathSoundSwitch)
+        soundControls.addSubview(deathSoundSwitch)
+        
+        let optSound = createOptionControl(header: "Classic 2006 \"OOF\" death sound", hasHelpBadge: false, desc: "Restores the nostalgic sound and backs up default Roblox audio.", control: soundControls)
         stack.addArrangedSubview(optSound)
         
         return scrollView
+    }
+    
+    @objc private func onPlayOofPreview() {
+        SoundManager.shared.playPreview()
     }
     
     @objc private func onDeathSoundToggled() {
@@ -666,23 +964,29 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         heroCard.heightAnchor.constraint(equalToConstant: 110).isActive = true
         heroCard.widthAnchor.constraint(equalToConstant: 720).isActive = true
         
-        // Iconic 4-Square Bloxstrap Logo
-        let logo = NSTextField(labelWithString: "⬚⬚\n⬚⬚")
-        logo.font = .systemFont(ofSize: 26, weight: .black)
-        logo.textColor = NSColor(calibratedRed: 0.635, green: 0.467, blue: 1.0, alpha: 1.0) // Bloxstrap purple
-        logo.frame = NSRect(x: 0, y: 35, width: 45, height: 50)
-        heroCard.addSubview(logo)
+        // Official Bloxstrap Logo (48x48)
+        let logoContainer = NSView(frame: NSRect(x: 0, y: 40, width: 48, height: 48))
+        if let img = getBloxstrapLogoImage() {
+            let iv = NSImageView(frame: logoContainer.bounds)
+            iv.image = img
+            iv.imageScaling = .scaleProportionallyUpOrDown
+            logoContainer.addSubview(iv)
+        } else {
+            let fallback = BloxstrapLogoView(frame: logoContainer.bounds)
+            logoContainer.addSubview(fallback)
+        }
+        heroCard.addSubview(logoContainer)
         
-        let appName = NSTextField(labelWithString: "Bloxstrap  Version 2.11.4")
+        let appName = NSTextField(labelWithString: "Bloxstrap  Version 2.3.0")
         appName.font = .boldSystemFont(ofSize: 18)
         appName.textColor = .white
-        appName.frame = NSRect(x: 55, y: 64, width: 400, height: 24)
+        appName.frame = NSRect(x: 58, y: 64, width: 400, height: 24)
         heroCard.addSubview(appName)
         
-        let appDesc = NSTextField(labelWithString: "An open-source, feature-packed alternative bootstrapper for Roblox\nDeveloped by pizzaboxer - if you like this, please consider leaving a star on GitHub.")
+        let appDesc = NSTextField(labelWithString: "An open-source, feature-packed alternative bootstrapper for Roblox\nDeveloped by pizzaboxer - if you like this, please consider leaving a star on GitHub!")
         appDesc.font = .systemFont(ofSize: 12)
         appDesc.textColor = NSColor(calibratedRed: 0.70, green: 0.70, blue: 0.78, alpha: 1.0)
-        appDesc.frame = NSRect(x: 55, y: 22, width: 620, height: 36)
+        appDesc.frame = NSRect(x: 58, y: 22, width: 620, height: 36)
         heroCard.addSubview(appDesc)
         
         stack.addArrangedSubview(heroCard)
@@ -695,7 +999,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         let p1 = createActionPill(frame: NSRect(x: 0, y: 2, width: 165, height: 30), icon: "</>", title: "GitHub repository", url: "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold")
         let p2 = createActionPill(frame: NSRect(x: 175, y: 2, width: 145, height: 30), icon: "🗩", title: "Report an issue", url: "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/issues")
-        let p3 = createActionPill(frame: NSRect(x: 330, y: 2, width: 125, height: 30), icon: "🕮", title: "Help topics", url: "https://bloxstrapgold.github.io")
+        let p3 = createActionPill(frame: NSRect(x: 330, y: 2, width: 125, height: 30), icon: "🕮", title: "Help topics", url: "https://bloxstraplabs.com")
         pillsRow.addSubview(p1)
         pillsRow.addSubview(p2)
         pillsRow.addSubview(p3)
@@ -714,7 +1018,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
             ("1011025m", "Providing a method for disabling the Roblox desktop app"),
             ("sitiom", "Setting up GitHub CI workflows and Winget releases"),
             ("taskmanager", "Helping with designing the new menu look and layout"),
-            ("Extravi", "Allowing their presets to be bundled with Bloxstrap, and helping...")
+            ("Extravi", "Allowing their presets to be bundled with Bloxstrap, and helping with...")
         ]
         
         for c in contributors {
@@ -725,7 +1029,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
             
             let n = NSTextField(labelWithString: c.name)
             n.font = .systemFont(ofSize: 12.5, weight: .semibold)
-            n.textColor = NSColor(calibratedRed: 0.635, green: 0.467, blue: 1.0, alpha: 1.0) // Bloxstrap purple
+            n.textColor = NSColor(calibratedRed: 0.69, green: 0.52, blue: 0.98, alpha: 1.0) // Bloxstrap purple
             n.frame = NSRect(x: 4, y: 4, width: 160, height: 18)
             row.addSubview(n)
             
@@ -738,6 +1042,9 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
             stack.addArrangedSubview(row)
         }
         
+        let allCodeBtn = createActionPill(frame: NSRect(x: 0, y: 0, width: 200, height: 30), icon: "👥", title: "See all code contributors", url: "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/graphs/contributors")
+        stack.addArrangedSubview(allCodeBtn)
+        
         let licHeader = createSectionHeader("Licenses")
         stack.addArrangedSubview(licHeader)
         let licDesc = createSubtitleLabel("Bloxstrap Gold is distributed under the GNU General Public License v3.0 (GPL-3.0). Free forever.")
@@ -746,11 +1053,11 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         return scrollView
     }
     
-    // MARK: - PAGE 4: INSTALLATION / BLOXSTRAP GOLD OVERLAY
-    private func buildInstallationGoldPage(bounds: NSRect) -> NSView {
+    // MARK: - PAGE 4: BLOXSTRAP GOLD TAB
+    private func buildGoldPage(bounds: NSRect) -> NSView {
         let (scrollView, stack) = createScrollablePage(bounds: bounds)
         
-        let title = createPageHeader(title: "Installation & Gold", subtitle: "Configure bootstrapper install path, active license tier, and multi-client manager.")
+        let title = createPageHeader(title: "Bloxstrap Gold Edition", subtitle: "Manage license authentication, multi-instance Roblox clients, and account profiles.")
         stack.addArrangedSubview(title)
         
         let statusCard = createOptionCard(height: 95)
@@ -768,16 +1075,24 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         let changeKeyBtn = NSButton(frame: NSRect(x: 16, y: 8, width: 140, height: 24))
         changeKeyBtn.title = "🔑 Change Key"
-        changeKeyBtn.bezelStyle = .rounded
-        changeKeyBtn.font = .systemFont(ofSize: 10.5)
+        changeKeyBtn.isBordered = false
+        changeKeyBtn.wantsLayer = true
+        changeKeyBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.22, green: 0.21, blue: 0.26, alpha: 1.0).cgColor
+        changeKeyBtn.layer?.cornerRadius = 4
+        changeKeyBtn.font = .systemFont(ofSize: 11, weight: .medium)
+        changeKeyBtn.contentTintColor = .white
         changeKeyBtn.target = self
         changeKeyBtn.action = #selector(onChangeKeyClicked)
         statusCard.addSubview(changeKeyBtn)
         
         let webBtn = NSButton(frame: NSRect(x: 165, y: 8, width: 185, height: 24))
         webBtn.title = "🌐 bloxstrapgold.github.io"
-        webBtn.bezelStyle = .rounded
-        webBtn.font = .systemFont(ofSize: 10.5)
+        webBtn.isBordered = false
+        webBtn.wantsLayer = true
+        webBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.22, green: 0.21, blue: 0.26, alpha: 1.0).cgColor
+        webBtn.layer?.cornerRadius = 4
+        webBtn.font = .systemFont(ofSize: 11, weight: .medium)
+        webBtn.contentTintColor = .white
         webBtn.target = self
         webBtn.action = #selector(onOpenStore)
         statusCard.addSubview(webBtn)
@@ -797,10 +1112,11 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         let launchBtn = NSButton(frame: NSRect(x: 16, y: 12, width: 190, height: 32))
         launchBtn.title = "🚀 Launch Extra Instance"
-        launchBtn.bezelStyle = .rounded
-        launchBtn.font = .boldSystemFont(ofSize: 11.5)
+        launchBtn.isBordered = false
         launchBtn.wantsLayer = true
         launchBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.898, green: 0.725, blue: 0.282, alpha: 1.0).cgColor
+        launchBtn.layer?.cornerRadius = 4
+        launchBtn.font = .boldSystemFont(ofSize: 11.5)
         launchBtn.contentTintColor = .black
         launchBtn.target = self
         launchBtn.action = #selector(onLaunchInstance)
@@ -808,8 +1124,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         let killBtn = NSButton(frame: NSRect(x: 215, y: 12, width: 150, height: 32))
         killBtn.title = "🛑 Close All Instances"
-        killBtn.bezelStyle = .rounded
-        killBtn.font = .systemFont(ofSize: 11)
+        killBtn.isBordered = false
+        killBtn.wantsLayer = true
+        killBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.22, green: 0.21, blue: 0.26, alpha: 1.0).cgColor
+        killBtn.layer?.cornerRadius = 4
+        killBtn.font = .systemFont(ofSize: 11, weight: .medium)
+        killBtn.contentTintColor = .white
         killBtn.target = self
         killBtn.action = #selector(onTerminateAllInstances)
         multiCard.addSubview(killBtn)
@@ -822,6 +1142,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         instancesStackView.alignment = .leading
         instancesStackView.spacing = 4
         pScroll.documentView = instancesStackView
+        multiCard.addSubview(pScroll)
         stack.addArrangedSubview(multiCard)
         
         // Account Switcher Card (Roblox Account Manager style)
@@ -837,8 +1158,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         let addAccBtn = NSButton(frame: NSRect(x: 530, y: 104, width: 140, height: 26))
         addAccBtn.title = "＋ Add Alt Profile"
-        addAccBtn.bezelStyle = .rounded
+        addAccBtn.isBordered = false
+        addAccBtn.wantsLayer = true
+        addAccBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.22, green: 0.21, blue: 0.26, alpha: 1.0).cgColor
+        addAccBtn.layer?.cornerRadius = 4
         addAccBtn.font = .systemFont(ofSize: 10.5, weight: .medium)
+        addAccBtn.contentTintColor = .white
         addAccBtn.target = self
         addAccBtn.action = #selector(onAddAltProfile)
         accCard.addSubview(addAccBtn)
@@ -852,8 +1177,8 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         accountsStackView.spacing = 4
         accScroll.documentView = accountsStackView
         accCard.addSubview(accScroll)
-        
         stack.addArrangedSubview(accCard)
+        
         renderAccountsList()
         return scrollView
     }
@@ -866,12 +1191,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         let rpcSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
         rpcSwitch.isOn = true
-        let optRpc = createOptionControl(header: "Discord Rich Presence", desc: "Show game activity, server details, and your Bloxstrap Gold VIP tier on Discord.", control: rpcSwitch)
+        let optRpc = createOptionControl(header: "Discord Rich Presence", hasHelpBadge: false, desc: "Show game activity, server details, and your Bloxstrap Gold VIP tier on Discord.", control: rpcSwitch)
         stack.addArrangedSubview(optRpc)
         
         let locSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
         locSwitch.isOn = true
-        let optLoc = createOptionControl(header: "Show server location details", desc: "Display region and ping telemetry using server IP queries.", control: locSwitch)
+        let optLoc = createOptionControl(header: "Show server location details", hasHelpBadge: false, desc: "Display region and ping telemetry using server IP queries.", control: locSwitch)
         stack.addArrangedSubview(optLoc)
         return scrollView
     }
@@ -883,11 +1208,11 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         stack.addArrangedSubview(title)
         
         let themePopup = createStyledPopup(items: ["Dark (Windows 11 Mica)", "Gold Edition", "Light"], selected: "Dark (Windows 11 Mica)")
-        let optTheme = createOptionControl(header: "Theme", desc: "Change the visual theme of the Bloxstrap Menu.", control: themePopup)
+        let optTheme = createOptionControl(header: "Theme", hasHelpBadge: false, desc: "Change the visual theme of the Bloxstrap Menu.", control: themePopup)
         stack.addArrangedSubview(optTheme)
         
         let stylePopup = createStyledPopup(items: ["Fluent", "Classic Fluent", "Progress Bar", "Byfron"], selected: "Fluent")
-        let optStyle = createOptionControl(header: "Bootstrapper style", desc: "Choose the style of dialog shown when Roblox starts.", control: stylePopup)
+        let optStyle = createOptionControl(header: "Bootstrapper style", hasHelpBadge: false, desc: "Choose the style of dialog shown when Roblox starts.", control: stylePopup)
         stack.addArrangedSubview(optStyle)
         return scrollView
     }
@@ -900,13 +1225,37 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         
         let updateSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
         updateSwitch.isOn = true
-        let optUpdate = createOptionControl(header: "Automatically check for updates", desc: "Periodically check for new releases of Bloxstrap Gold.", control: updateSwitch)
+        let optUpdate = createOptionControl(header: "Automatically check for updates", hasHelpBadge: false, desc: "Periodically check for new releases of Bloxstrap Gold.", control: updateSwitch)
         stack.addArrangedSubview(optUpdate)
         
         let multiSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
         multiSwitch.isOn = true
-        let optMulti = createOptionControl(header: "Allow multi-instance launching", desc: "Permit running multiple Roblox clients simultaneously.", control: multiSwitch)
+        let optMulti = createOptionControl(header: "Allow multi-instance launching", hasHelpBadge: false, desc: "Permit running multiple Roblox clients simultaneously.", control: multiSwitch)
         stack.addArrangedSubview(optMulti)
+        return scrollView
+    }
+    
+    // MARK: - PAGE 8: INSTALLATION
+    private func buildInstallationPage(bounds: NSRect) -> NSView {
+        let (scrollView, stack) = createScrollablePage(bounds: bounds)
+        let title = createPageHeader(title: "Installation", subtitle: "Configure bootstrapper install folder and shortcuts.")
+        stack.addArrangedSubview(title)
+        
+        let pathField = NSTextField(frame: NSRect(x: 0, y: 0, width: 220, height: 28))
+        pathField.stringValue = "~/Library/Application Support/Roblox"
+        pathField.isEditable = false
+        pathField.textColor = NSColor(calibratedRed: 0.70, green: 0.70, blue: 0.78, alpha: 1.0)
+        pathField.font = .monospacedSystemFont(ofSize: 11, weight: .regular)
+        pathField.wantsLayer = true
+        pathField.layer?.backgroundColor = NSColor(calibratedRed: 0.173, green: 0.169, blue: 0.204, alpha: 1.0).cgColor
+        pathField.layer?.cornerRadius = 4
+        let optPath = createOptionControl(header: "Install location", hasHelpBadge: false, desc: "Where Roblox client files and mods are stored.", control: pathField)
+        stack.addArrangedSubview(optPath)
+        
+        let shortcutSwitch = FluentToggleSwitch(frame: NSRect(x: 0, y: 0, width: 44, height: 22))
+        shortcutSwitch.isOn = true
+        let optShort = createOptionControl(header: "Create desktop shortcuts", hasHelpBadge: false, desc: "Add quick launch icons for Roblox Player and Bloxstrap Menu.", control: shortcutSwitch)
+        stack.addArrangedSubview(optShort)
         return scrollView
     }
     
@@ -982,7 +1331,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         btn.title = ""
         btn.isBordered = false
         btn.wantsLayer = true
-        btn.layer?.backgroundColor = NSColor(calibratedRed: 0.165, green: 0.165, blue: 0.185, alpha: 1.0).cgColor
+        btn.layer?.backgroundColor = NSColor(calibratedRed: 0.145, green: 0.141, blue: 0.176, alpha: 1.0).cgColor // #25242D
         btn.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.06).cgColor
         btn.layer?.borderWidth = 1.0
         btn.layer?.cornerRadius = 6
@@ -1015,15 +1364,34 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         return btn
     }
     
-    // Exact Bloxstrap OptionControl Card
-    private func createOptionControl(header: String, desc: String, control: NSView, height: CGFloat = 64) -> NSView {
+    // Exact Bloxstrap OptionControl Card with Question Mark (?) badge
+    private func createOptionControl(header: String, hasHelpBadge: Bool = false, desc: String, control: NSView, height: CGFloat = 64) -> NSView {
         let card = createOptionCard(height: height)
         
         let t = NSTextField(labelWithString: header)
         t.font = .systemFont(ofSize: 13, weight: .semibold)
         t.textColor = .white
-        t.frame = NSRect(x: 14, y: height - 26, width: 480, height: 18)
+        t.sizeToFit()
+        t.frame.origin = CGPoint(x: 14, y: height - 26)
         card.addSubview(t)
+        
+        if hasHelpBadge {
+            // Circular (?) Help Badge
+            let badge = NSView(frame: NSRect(x: t.frame.maxX + 6, y: height - 24, width: 15, height: 15))
+            badge.wantsLayer = true
+            badge.layer?.backgroundColor = NSColor(calibratedRed: 0.173, green: 0.169, blue: 0.204, alpha: 1.0).cgColor
+            badge.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.15).cgColor
+            badge.layer?.borderWidth = 1.0
+            badge.layer?.cornerRadius = 7.5
+            
+            let q = NSTextField(labelWithString: "?")
+            q.font = .boldSystemFont(ofSize: 9)
+            q.textColor = NSColor(calibratedRed: 0.75, green: 0.75, blue: 0.82, alpha: 1.0)
+            q.alignment = .center
+            q.frame = NSRect(x: 0, y: -0.5, width: 15, height: 15)
+            badge.addSubview(q)
+            card.addSubview(badge)
+        }
         
         let d = NSTextField(wrappingLabelWithString: desc)
         d.font = .systemFont(ofSize: 11.5)
@@ -1041,7 +1409,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
     private func createOptionCard(height: CGFloat) -> NSView {
         let card = NSView(frame: NSRect(x: 0, y: 0, width: 720, height: height))
         card.wantsLayer = true
-        card.layer?.backgroundColor = NSColor(calibratedRed: 0.165, green: 0.165, blue: 0.185, alpha: 1.0).cgColor
+        card.layer?.backgroundColor = NSColor(calibratedRed: 0.145, green: 0.141, blue: 0.176, alpha: 1.0).cgColor // #25242D
         card.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.06).cgColor
         card.layer?.borderWidth = 1.0
         card.layer?.cornerRadius = 6
@@ -1052,7 +1420,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
     }
     
     private func createStyledPopup(items: [String], selected: String) -> NSPopUpButton {
-        let popup = NSPopUpButton(frame: NSRect(x: 0, y: 0, width: 175, height: 28))
+        let popup = NSPopUpButton(frame: NSRect(x: 0, y: 0, width: 185, height: 28))
         popup.addItems(withTitles: items)
         if items.contains(selected) {
             popup.selectItem(withTitle: selected)
@@ -1063,8 +1431,14 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
     private func createActionPill(frame: NSRect, icon: String, title: String, url: String) -> NSButton {
         let btn = NSButton(frame: frame)
         btn.title = "  \(icon)  \(title)"
-        btn.bezelStyle = .rounded
+        btn.isBordered = false
+        btn.wantsLayer = true
+        btn.layer?.backgroundColor = NSColor(calibratedRed: 0.173, green: 0.169, blue: 0.204, alpha: 1.0).cgColor // #2B2A34
+        btn.layer?.borderColor = NSColor(calibratedWhite: 1.0, alpha: 0.10).cgColor
+        btn.layer?.borderWidth = 1.0
+        btn.layer?.cornerRadius = 4
         btn.font = .systemFont(ofSize: 11.5, weight: .medium)
+        btn.contentTintColor = .white
         btn.target = self
         btn.action = #selector(onActionPillClicked(_:))
         btn.toolTip = url
@@ -1146,7 +1520,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
                 
                 let kBtn = NSButton(frame: NSRect(x: 580, y: 2, width: 65, height: 22))
                 kBtn.title = "Kill"
-                kBtn.bezelStyle = .inline
+                kBtn.isBordered = false
+                kBtn.wantsLayer = true
+                kBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.22, green: 0.21, blue: 0.26, alpha: 1.0).cgColor
+                kBtn.layer?.cornerRadius = 4
+                kBtn.font = .systemFont(ofSize: 10, weight: .bold)
+                kBtn.contentTintColor = .white
                 kBtn.tag = pid
                 kBtn.target = self
                 kBtn.action = #selector(onKillSingleInstance(_:))
@@ -1171,7 +1550,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         for acc in AppState.shared.data.accounts {
             let row = NSView(frame: NSRect(x: 0, y: 0, width: 670, height: 26))
             row.wantsLayer = true
-            row.layer?.backgroundColor = NSColor(calibratedRed: 0.16, green: 0.16, blue: 0.18, alpha: 1.0).cgColor
+            row.layer?.backgroundColor = NSColor(calibratedRed: 0.173, green: 0.169, blue: 0.204, alpha: 1.0).cgColor
             row.layer?.cornerRadius = 4
             
             let icon = NSTextField(labelWithString: "👤")
@@ -1193,8 +1572,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
             
             let launchBtn = NSButton(frame: NSRect(x: 550, y: 2, width: 110, height: 22))
             launchBtn.title = "▶ Launch Alt"
-            launchBtn.bezelStyle = .rounded
+            launchBtn.isBordered = false
+            launchBtn.wantsLayer = true
+            launchBtn.layer?.backgroundColor = NSColor(calibratedRed: 0.22, green: 0.21, blue: 0.26, alpha: 1.0).cgColor
+            launchBtn.layer?.cornerRadius = 4
             launchBtn.font = .systemFont(ofSize: 9.5, weight: .bold)
+            launchBtn.contentTintColor = .white
             launchBtn.target = self
             launchBtn.action = #selector(onLaunchInstance)
             row.addSubview(launchBtn)
@@ -1215,4 +1598,3 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, NST
         renderAccountsList()
     }
 }
-

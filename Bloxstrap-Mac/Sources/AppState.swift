@@ -139,7 +139,7 @@ public class AppState {
     
     public func verifyAndApplyKey(_ key: String) -> Bool {
         let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        guard trimmed.hasPrefix("GOLD-") && trimmed.count >= 6 else {
+        guard trimmed.hasPrefix("GOLD-7DAY-") && trimmed.count >= 14 else {
             return false
         }
         data.vipKey = trimmed
