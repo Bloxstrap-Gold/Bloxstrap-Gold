@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "project": "Bloxstrap Gold",
+  "version": "2.9.0",
+  "updated_at": "2026-10-21T16:45:00Z",
+  "app_developer_notes": "Single source of truth shared between Website and Desktop App.",
+  "license_key": {
+    "format": "^GOLD-7DAY-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$",
+    "vault_gate_regex": "^GOLD-.{2,}$",
+    "example": "GOLD-7DAY-8849-F291-C84B-9102-E7A4"
+  },
+  "deep_linking": {
+    "protocol": "bloxstrap-gold",
+    "activation_template": "bloxstrap-gold://activate?key={KEY}",
+    "supported_platforms": ["windows", "macos"]
+  },
+  "checkout_behavior": {
+    "pay_button_motion": "stationary",
+    "processing_duration_ms": 2600,
+    "stages": [
+      { "delay_ms": 0, "status": "Contacting payment network..." },
+      { "delay_ms": 900, "status": "Authorizing with card issuer..." },
+      { "delay_ms": 1800, "status": "Finalizing 3D Secure protocol..." }
+    ],
+    "declined_error_message": "Error, purchase failed, please pay later."
+  },
+  "tiers": {
+    "1": {
+      "id": 1,
+      "name": "Gold Basic",
+      "badge": "Barely Gold Edition",
+      "desc": "For people who can only afford to farm on one alt while their main lags.",
+      "instance_limit": 2,
+      "fps_cap": 240,
+      "features": [
+        "Up to 2 instances (1 for you, 1 alt that will probably crash)",
+        "Hard 240 FPS limit (you don't deserve uncapped yet)",
+        "Standard Roblox crash screens (good luck reconnecting)",
+        "Low-tier bronze Discord status that basically says 'I tried'",
+        "Basic FastFlags only (nothing that actually helps your ping)",
+        "Email support (replies in 3 to 5 business days if we feel like it)"
+      ],
+      "pricing_usd": {
+        "weekly": 2.99,
+        "monthly": 6.99,
+        "quarterly": 16.99,
+        "yearly": 49.99,
+        "lifetime": 99.99
+      }
+    },
+    "2": {
+      "id": 2,
+      "name": "Gold Plus",
+      "badge": "Aggressively Mid Edition",
+      "desc": "5 instances. Your fans will sound like a jet engine, but at least your friends think you have money.",
+      "featured": true,
+      "instance_limit": 5,
+      "fps_cap": "monitor_refresh",
+      "features": [
+        "Up to 5 instances (your CPU is going to melt)",
+        "FPS locked to your monitor refresh rate (why would you need more?)",
+        "18k gold Discord badge (everyone will know you couldn't afford Ultra)",
+        "Standard memory cleanup (still starts leaking RAM after 2 hours)",
+        "Server ping display (so you can watch yourself lag in real-time)",
+        "Priority ticket queue (strictly behind all Ultra members)"
+      ],
+      "pricing_usd": {
+        "weekly": 4.99,
+        "monthly": 12.99,
+        "quarterly": 29.99,
+        "yearly": 89.99,
+        "lifetime": 189.99
+      }
+    },
+    "3": {
+      "id": 3,
+      "name": "Gold Deluxe",
+      "badge": "Almost Rich Edition",
+      "desc": "Unlimited instances, but you're still missing the god-tier privileges and everyone knows it.",
+      "instance_limit": 999,
+      "fps_cap": 9999,
+      "features": [
+        "Unlimited instances (until Windows runs out of pagefile and dies)",
+        "Uncapped 9999 FPS target (renders frames your eyes physically can't see)",
+        "Solid gold Discord badge (looks nice, but everyone knows Ultra exists)",
+        "Manual FastFlag editor (you have to write your own JSON, no hand-holding)",
+        "Auto-reconnect prompt when Roblox kicks you with Error 273",
+        "You still don't get the Ultra badge, which is frankly embarrassing"
+      ],
+      "pricing_usd": {
+        "weekly": 7.99,
+        "monthly": 19.99,
+        "quarterly": 46.99,
+        "yearly": 139.99,
+        "lifetime": 349.99
+      }
+    },
+    "4": {
+      "id": 4,
+      "name": "Gold ULTRA",
+      "badge": "God Complex Edition",
+      "desc": "For people with more money than sense. Infinite alts, zero lag, and Roblox legally required to respect you.",
+      "apex": true,
+      "instance_limit": 9999,
+      "fps_cap": 9999,
+      "features": [
+        "Infinite instances with zero RAM guilt (we bully Windows into prioritizing your alts)",
+        "Roblox Error 273 & 268 bypass (reconnects before the server even knows you got kicked)",
+        "Uncapped 9999 FPS (draws frames your monitor physically cannot display just to flex)",
+        "Original 2006 'OOF' sound with max bass boost (replaces modern death squish)",
+        "Obsidian & Liquid Gold Discord Rich Presence (friends will ask why you spent $200 on Bloxstrap)",
+        "P-Core CPU priority (pushes Chrome and Discord to the background so Roblox gets 100% CPU)",
+        "Instant Place Join (skips server loading screen animations and matchmaking queues)",
+        "Pre-tuned god-tier FastFlags (all 12 allowlisted flags dialed in so you never drop a frame)",
+        "Anti-freeze crash protector (if one alt freezes, the other 40 keep farming)",
+        "Zero-cooldown server hopping (hops servers faster than Roblox's API can rate-limit you)",
+        "Direct route optimizer (picks the fastest server and bullies it into letting you in)",
+        "The right to look down on everyone on Basic, Plus, and Deluxe",
+        "Everything in the lower tiers, but without the shame"
+      ],
+      "pricing_usd": {
+        "weekly": 59.99,
+        "monthly": 199.99,
+        "quarterly": 499.99,
+        "yearly": 1599.99,
+        "lifetime": 2999.99
+      }
+    }
+  },
+  "allowlisted_fastflags_sept_2025": [
+    "DFIntTaskSchedulerTargetFps",
+    "DFFlagDisableDPIScale",
+    "FIntDebugForceMSAASamples",
+    "DFFlagTextureQualityOverrideEnabled",
+    "DFIntTextureQualityOverride",
+    "FFlagHandleAltEnterFullscreenManually",
+    "FFlagDebugDisplayFPS",
+    "FFlagDebugGraphicsPreferD3D11",
+    "FFlagDebugGraphicsPreferVulkan",
+    "FIntFRMMaxGrassDistance",
+    "FFlagFixGraphicsQuality",
+    "DFIntCanHideGuiGroupId"
+  ]
+}

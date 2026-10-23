@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Interop;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
@@ -21,7 +21,9 @@ namespace Bloxstrap.UI.Elements.Base
             const int customThemeIndex = 2; // index for CustomTheme merged dictionary
 
             _themeService.SetTheme(App.Settings.Prop.Theme.GetFinal() == Enums.Theme.Dark ? ThemeType.Dark : ThemeType.Light);
-            _themeService.SetSystemAccent();
+            
+            // Bloxstrap Gold: Luxurious Gold accent (#D4AF37)
+            _themeService.SetAccent(System.Windows.Media.Color.FromRgb(212, 175, 55));
 
             // there doesn't seem to be a way to query the name for merged dictionaries
             var dict = new ResourceDictionary { Source = new Uri($"pack://application:,,,/UI/Style/{Enum.GetName(App.Settings.Prop.Theme.GetFinal())}.xaml") };
@@ -30,6 +32,9 @@ namespace Bloxstrap.UI.Elements.Base
 #if QA_BUILD
             this.BorderBrush = System.Windows.Media.Brushes.Red;
             this.BorderThickness = new Thickness(4);
+#else
+            this.BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(200, 212, 175, 55));
+            this.BorderThickness = new Thickness(1.5);
 #endif
         }
 

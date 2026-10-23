@@ -1,4 +1,4 @@
-﻿namespace Bloxstrap.Models.Persistable
+namespace Bloxstrap.Models.Persistable
 {
     public class State
     {
@@ -7,5 +7,13 @@
         public bool ForceReinstall { get; set; } = false;
 
         public WindowState SettingsWindow { get; set; } = new();
+        
+        public DateTime? GoldFirstRunDate { get; set; } = null;
+
+        public bool HasSeenGoldGreeting { get; set; } = false;
+
+        public bool ForceGoldTrialExpired { get; set; } = false;
+        
+        public bool IsPaymentIgnored { get; set; } = false;
     }
 }

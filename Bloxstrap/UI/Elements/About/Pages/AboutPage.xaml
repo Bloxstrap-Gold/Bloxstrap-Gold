@@ -1,4 +1,4 @@
-﻿<ui:UiPage x:Class="Bloxstrap.UI.Elements.About.Pages.AboutPage"
+<ui:UiPage x:Class="Bloxstrap.UI.Elements.About.Pages.AboutPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -39,12 +39,37 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Bloxstrap" Margin="0,0,4,0" FontSize="24" FontWeight="Medium" />
+                    <TextBlock Grid.Column="0" Text="Bloxstrap Gold" Margin="0,0,4,0" FontSize="24" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
                     <TextBlock Grid.Column="1" Text="{Binding Version, Mode=OneTime}" Margin="4,0,0,2" VerticalAlignment="Bottom" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
                 </Grid>
-                <TextBlock Text="{x:Static resources:Strings.Menu_About_Description}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                <TextBlock Text="The luxurious Roblox bootstrapper with built-in multi-instance (Parody Remake)" Foreground="{StaticResource GoldLightBrush}" />
             </StackPanel>
         </Grid>
+
+        <!-- Bloxstrap Gold Remake & Parody Notice Card -->
+        <Border Margin="0,0,0,20" Padding="16" CornerRadius="8" BorderThickness="1.5"
+                BorderBrush="{StaticResource GoldBorderBrush}" Background="{StaticResource GoldDarkGradientBrush}">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="👑" FontSize="20" VerticalAlignment="Center" Margin="0,0,8,0" />
+                    <TextBlock Text="Bloxstrap Gold — Parody Remake &amp; Joke Notice" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" VerticalAlignment="Center" />
+                </StackPanel>
+                
+                <TextBlock Text="Bloxstrap Gold is a joke remake and parody of the original Bloxstrap. The '7-day free trial' and 'pay for it' prompts are 100% satirical comedy. You never have to pay anything — Bloxstrap Gold is completely free and open-source forever!"
+                           TextWrapping="Wrap" Foreground="{StaticResource GoldLightBrush}" Margin="0,0,0,12" FontSize="13" LineHeight="18" />
+                
+                <TextBlock Text="Built-in Multi-Instance Program Credits" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GoldPrimaryBrush}" Margin="0,4,0,4" />
+                <TextBlock Text="Multi-instance client launching is built directly into Bloxstrap Gold by handling and bypassing the Windows ROBLOX_singletonMutex. Full credit, gratitude, and appreciation go to:"
+                           TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,8" FontSize="12" />
+                
+                <StackPanel Margin="6,0,0,0">
+                    <controls:MarkdownTextBlock MarkdownText="• **[MultipleRobloxInstances](https://github.com/Avaluate/MultipleRobloxInstances)** by **Avaluate / Fliktem** — open-source multi-instance utility and singleton mutex research." />
+                    <controls:MarkdownTextBlock MarkdownText="• **[Roblox Account Manager (RAM)](https://github.com/ic3w0lf22/Roblox-Account-Manager)** by **ic3w0lf22** — community standard account and multi-instance manager." />
+                    <controls:MarkdownTextBlock MarkdownText="• **[Fishstrap](https://github.com/fishstrap/fishstrap)** — multi-instance watcher background architecture." />
+                    <controls:MarkdownTextBlock MarkdownText="• **[Bloxstrap](https://github.com/bloxstraplabs/bloxstrap)** by **pizzaboxer** and contributors — original bootstrapper project." />
+                </StackPanel>
+            </StackPanel>
+        </Border>
 
         <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal">
             <ui:Anchor Margin="0,0,8,8" Content="{x:Static resources:Strings.Menu_About_GithubRepository}" Icon="Code24" NavigateUri="https://github.com/bloxstraplabs/bloxstrap" />

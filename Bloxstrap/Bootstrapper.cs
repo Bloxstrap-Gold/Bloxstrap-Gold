@@ -1,4 +1,4 @@
-﻿// To debug the automatic updater:
+// To debug the automatic updater:
 // - Uncomment the definition below
 // - Publish the executable
 // - Launch the executable (click no when it asks you to upgrade)
@@ -604,6 +604,10 @@ namespace Bloxstrap
                 logCreatedEvent.Set();
             };
 
+            // launch multi-instance watcher if enabled
+            if (_launchMode == LaunchMode.Player && App.Settings.Prop.MultiInstanceLaunching)
+                LaunchMultiInstanceWatcher();
+
             // v2.2.0 - byfron will trip if we keep a process handle open for over a minute, so we're doing this now
             try
             {
@@ -697,6 +701,33 @@ namespace Bloxstrap
 
             // allow for window to show, since the log is created pretty far beforehand
             Thread.Sleep(1000);
+        }
+
+        private static void LaunchMultiInstanceWatcher()
+        {
+            const string LOG_IDENT = "Bootstrapper::LaunchMultiInstanceWatcher";
+
+            if (Utilities.DoesMutexExist("ROBLOX_singletonMutex"))
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Roblox singleton mutex already exists");
+                return;
+            }
+
+            try
+            {
+                using EventWaitHandle initEventHandle = new EventWaitHandle(false, EventResetMode.AutoReset, "Bloxstrap-MultiInstanceWatcherInitialisationFinished");
+                Process.Start(Paths.Process, "-multiinstancewatcher");
+
+                bool initSuccess = initEventHandle.WaitOne(TimeSpan.FromSeconds(2));
+                if (initSuccess)
+                    App.Logger.WriteLine(LOG_IDENT, "MultiInstanceWatcher initialization finished signalled.");
+                else
+                    App.Logger.WriteLine(LOG_IDENT, "Did not receive initialization finished signal, continuing anyway.");
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException(LOG_IDENT, ex);
+            }
         }
 
         private bool ShouldRunAsAdmin()

@@ -23,6 +23,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -41,7 +42,57 @@
 
         <ui:TitleBar Padding="8" x:Name="RootTitleBar" Grid.Row="0" ForceShutdown="False" MinimizeToTray="False" UseSnapLayout="True" Title="{x:Static resources:Strings.Menu_Title}" Icon="pack://application:,,,/Bloxstrap.ico" />
 
-        <Grid x:Name="RootGrid" Grid.Row="1" Margin="12,12,0,0" Visibility="Visible">
+        <!-- Bloxstrap Gold VIP Banner -->
+        <Border x:Name="GoldBanner" Grid.Row="1" Margin="12,4,12,6" Padding="14,10" CornerRadius="8" BorderThickness="1.5"
+                BorderBrush="{StaticResource GoldBorderBrush}" Background="{StaticResource GoldDarkGradientBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Column: Gold Branding & Trial Info -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="GoldBannerIcon" Text="👑" FontSize="26" VerticalAlignment="Center" Margin="0,0,12,0" />
+                    <StackPanel VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="GoldBannerTitle" Text="BLOXSTRAP GOLD EDITION" FontSize="14" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
+                            <Border Margin="8,0,0,0" Padding="6,1" CornerRadius="4" Background="#33FFD700" BorderBrush="#80FFD700" BorderThickness="1">
+                                <TextBlock x:Name="GoldBannerBadge" Text="VIP TRIAL" FontSize="10" FontWeight="Bold" Foreground="{StaticResource GoldLightBrush}" />
+                            </Border>
+                        </StackPanel>
+                        <TextBlock x:Name="GoldBannerSubtitle" Text="Your free trial runs out in 7 days." FontSize="12" Foreground="{StaticResource GoldLightBrush}" Margin="0,2,0,0" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Right Column: Action Buttons & Runaway Pay Button -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Trial Active Container -->
+                    <StackPanel x:Name="TrialActiveContainer" Orientation="Horizontal" VerticalAlignment="Center">
+                        <ui:Button x:Name="TrialLockedButton" Content="🔒 Purchase (Locked)" Appearance="Secondary" IsEnabled="False"
+                                   ToolTip="Purchases are locked during your free trial!" Margin="0,0,8,0" />
+                        <ui:Button x:Name="DemoExpireButton" Content="⚡ Fast-Forward 7 Days" Appearance="Default"
+                                   Click="DemoExpireButton_Click" ToolTip="Test what happens when the 7 days expire!" />
+                    </StackPanel>
+
+                    <!-- Trial Expired Container with Evasive Pay Button -->
+                    <StackPanel x:Name="TrialExpiredContainer" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
+                        <Canvas x:Name="PayButtonCanvas" Width="220" Height="40" ClipToBounds="False" Background="Transparent"
+                                MouseMove="PayButtonCanvas_MouseMove">
+                            <ui:Button x:Name="PayButton" Content="💳 PAY FOR IT ($999.99)" Appearance="Primary"
+                                       Background="{StaticResource GoldGradientBrush}" Foreground="Black" FontWeight="Bold"
+                                       BorderBrush="#FFFFFF" BorderThickness="1.5"
+                                       Canvas.Left="10" Canvas.Top="3"
+                                       MouseEnter="PayButton_MouseEnter" Click="PayButton_Click" />
+                        </Canvas>
+                        <ui:Button x:Name="DemoResetButton" Content="↺ Reset (7 Days)" Appearance="Default" Margin="8,0,0,0"
+                                   Click="DemoResetButton_Click" ToolTip="Reset free trial back to 7 days" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid x:Name="RootGrid" Grid.Row="2" Margin="12,6,0,0" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -53,6 +104,7 @@
 
             <ui:NavigationFluent x:Name="RootNavigation" Grid.Row="1" Grid.Column="0" Margin="0,0,12,0" Frame="{Binding ElementName=RootFrame}" SelectedPageIndex="0">
                 <ui:NavigationFluent.Items>
+                    <ui:NavigationItem Content="Bloxstrap Gold" PageType="{x:Type pages:GoldPage}" Icon="Trophy24" Tag="gold" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Integrations_Title}" PageType="{x:Type pages:IntegrationsPage}" Icon="Add28" Tag="integrations" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Behaviour_Title}" PageType="{x:Type pages:BehaviourPage}" Icon="PlaySettings20" Tag="bootstrapper" />
                     <ui:NavigationItem Content="{x:Static resources:Strings.Menu_Mods_Title}" PageType="{x:Type pages:ModsPage}" Icon="WrenchScrewdriver20" Tag="mods" />
@@ -78,7 +130,7 @@
             </Grid>
         </Grid>
 
-        <StatusBar x:Name="RootStatusBar" Grid.Row="2" Padding="14,10" BorderThickness="0,1,0,0">
+        <StatusBar x:Name="RootStatusBar" Grid.Row="3" Padding="14,10" BorderThickness="0,1,0,0">
             <StatusBar.Background>
                 <SolidColorBrush Color="{ui:ThemeResource ApplicationBackgroundColor}" Opacity="0" />
             </StatusBar.Background>

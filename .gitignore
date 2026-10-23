@@ -4,6 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # User-specific files
+/main
 *.rsuser
 *.suo
 *.user
@@ -348,3 +349,14 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# macOS & Build Artifacts
+.DS_Store
+*.app/
+*.dmg
+Bloxstrap-Mac/BloxstrapGold.app/
+
+# Bridge logs & caches
+bridge/__pycache__/
+*.log
+

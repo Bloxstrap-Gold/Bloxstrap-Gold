@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bloxstrap Gold — Premium Bootstrapper for Roblox</title>
+  <meta name="description" content="Bloxstrap Gold brings built-in multi-instance support, advanced FastFlag controls, and a sleek gold interface to your Roblox desktop experience.">
+  <meta name="author" content="Bloxstrap Gold">
+  <meta name="theme-color" content="#e2c076">
+  
+  <link rel="icon" type="image/svg+xml" href="images/bloxstrap-gold-logo.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Sleek Product Announcement Pill (Deadpan & Ultra-Clean) -->
+    <div class="product-announcement-bar">
+      <span>✨</span>
+      <span><strong>Bloxstrap Gold v2.8:</strong> Built-in multi-instance process isolation is now available.</span>
+      <a href="#pricing">Upgrade now &rarr;</a>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <header>
+      <nav class="navbar">
+        <a href="#" class="nav-brand">
+          <img src="images/bloxstrap-gold-logo.svg" alt="Bloxstrap Gold" class="nav-logo">
+        </a>
+
+        <div class="nav-links">
+          <a href="#simulator" class="nav-link">Simulator</a>
+          <a href="#preview" class="nav-link">App Preview</a>
+          <a href="#fastflags" class="nav-link">FastFlags</a>
+          <a href="#pricing" class="nav-link">Pricing</a>
+          <a href="#comparison" class="nav-link">Compare</a>
+          <a href="#faq" class="nav-link">FAQ</a>
+          <a href="https://github.com/bloxstraplabs/bloxstrap" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+          <a href="#pricing" class="nav-btn">Get Gold</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+      <section class="hero">
+        <div class="hero-tag">
+          <span>👑</span> Bloxstrap Gold Edition
+        </div>
+
+        <h1 class="hero-title">
+          Get more out of Roblox.<br>Now in <span class="gold-text">Gold</span>.
+        </h1>
+
+        <p class="hero-subtitle">
+          Bloxstrap Gold adds native multi-instance execution, expanded FastFlag performance controls, and a refined gold theme to your Roblox desktop setup.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#pricing" class="btn-primary">
+            View Tiers &amp; Pricing
+          </a>
+
+          <button class="btn-secondary" onclick="openCheckout(2, 'yearly')">
+            Download 7-Day Free Trial
+          </button>
+        </div>
+
+        <div class="hero-meta">
+          <p>
+            Requires Windows and the 
+            <a href="https://aka.ms/dotnet-core-applaunch?missing_runtime=true&arch=x64&rid=win11-x64&apphost_version=6.0.20&gui=true" target="_blank">Microsoft .NET 6 Desktop Runtime</a>.
+          </p>
+          <div class="winget-snippet">
+            <span>&gt; winget install bloxstrap</span>
+            <button class="winget-copy-btn" id="wingetCopyBtn">Copy</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Multi-Instance Simulator -->
+      <section class="spotlight-section" id="simulator">
+        <div class="spotlight-info">
+          <div class="hero-tag" style="margin-bottom: 0.75rem;">Interactive Simulator</div>
+          <h2>Built-in Multi-Instance</h2>
+          <p>
+            Run multiple Roblox accounts concurrently on a single PC without needing external mutex unlockers, batch scripts, or suspicious background utilities.
+          </p>
+          <p>
+            Process isolation and session tokens are managed automatically. Try spawning simulated client instances in the dashboard to test how it works:
+          </p>
+          <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">
+            Process Isolation Engine: <strong style="color: var(--gold-light);">Active &amp; Unrestricted</strong>
+          </div>
+        </div>
+
+        <div class="sim-dashboard">
+          <div class="sim-header">
+            <span style="font-weight: 700; font-size: 0.88rem; color: #fff;">Client Session Manager</span>
+            <div class="sim-metrics-wrap">
+              <span class="sim-metric-badge" id="simulatedInstanceCount">2 Active</span>
+              <span class="sim-metric-badge" id="simulatedTotalRam">0.78 GB RAM</span>
+            </div>
+          </div>
+
+          <div class="sim-instances-list" id="simulatedInstancesList">
+            <!-- Rendered dynamically via app.js -->
+          </div>
+
+          <div class="sim-actions-bar">
+            <button class="btn-sim-action" id="addInstanceBtn">+ Launch Client Instance</button>
+            <button class="btn-sim-action" id="launchAllBtn" style="background: rgba(255,255,255,0.06); color: #fff;">Launch Max Available</button>
+          </div>
+
+          <div class="sim-limit-error" id="instanceLimitError"></div>
+        </div>
+      </section>
+
+      <!-- Interactive Bloxstrap App Window Previewer -->
+      <section class="interactive-app-section" id="preview">
+        <div class="section-title-wrap" style="text-align: center; margin-bottom: 2rem;">
+          <h2 class="section-title">Interactive App Preview</h2>
+          <p class="section-desc">Toggle between themes and explore the Bloxstrap settings menu.</p>
+        </div>
+
+        <div class="theme-toggle-wrap">
+          <button class="theme-toggle-btn active" data-theme="gold">
+            🟡 Gold Edition Theme
+          </button>
+          <button class="theme-toggle-btn" data-theme="standard">
+            🟣 Standard Bloxstrap
+          </button>
+        </div>
+
+        <div class="mock-window gold-theme" id="bloxstrapAppWindow">
+          <div class="window-titlebar">
+            <span>Bloxstrap Menu</span>
+            <div class="window-controls-dots">
+              <div class="window-dot"></div>
+              <div class="window-dot"></div>
+              <div class="window-dot"></div>
+            </div>
+          </div>
+
+          <div class="window-body">
+            <div class="window-sidebar">
+              <button class="app-tab-btn active" data-tab="general">General</button>
+              <button class="app-tab-btn" data-tab="integrations">Integrations</button>
+              <button class="app-tab-btn" data-tab="fastflags">FastFlags</button>
+              <button class="app-tab-btn" data-tab="appearance">Appearance</button>
+            </div>
+
+            <div class="window-content-pane">
+              <!-- Tab: General -->
+              <div class="app-tab-content" id="tab-general">
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">Multi-Instance Execution</div>
+                    <div class="setting-desc">Allow launching more than one Roblox game client at once.</div>
+                  </div>
+                  <input type="checkbox" checked style="accent-color: var(--gold);">
+                </div>
+
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">Check for updates on launch</div>
+                    <div class="setting-desc">Automatically check for new bootstrapper releases.</div>
+                  </div>
+                  <input type="checkbox" checked style="accent-color: var(--gold);">
+                </div>
+
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">Analytics &amp; Telemetry</div>
+                    <div class="setting-desc">Disabled by default for full user privacy.</div>
+                  </div>
+                  <span style="font-size: 0.8rem; color: #10b981;">Disabled</span>
+                </div>
+              </div>
+
+              <!-- Tab: Integrations -->
+              <div class="app-tab-content" id="tab-integrations" style="display: none;">
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">Discord Rich Presence</div>
+                    <div class="setting-desc">Display active game details and Gold status badge on Discord.</div>
+                  </div>
+                  <input type="checkbox" checked style="accent-color: var(--gold);">
+                </div>
+
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">Show Server Location</div>
+                    <div class="setting-desc">Query ipinfo.io to display server country and city.</div>
+                  </div>
+                  <input type="checkbox" checked style="accent-color: var(--gold);">
+                </div>
+              </div>
+
+              <!-- Tab: FastFlags -->
+              <div class="app-tab-content" id="tab-fastflags" style="display: none;">
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">Framerate Limit</div>
+                    <div class="setting-desc">Adjust the engine framerate cap.</div>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <input type="range" min="0" max="3" step="1" value="2" id="appFpsSlider" style="accent-color: var(--gold);">
+                    <span id="appFpsDisplay" style="font-size: 0.85rem; font-weight: 700; min-width: 65px; color: var(--gold-light);">240 FPS</span>
+                  </div>
+                </div>
+
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">DirectX / Vulkan Mode</div>
+                    <div class="setting-desc">Override preferred graphics backend.</div>
+                  </div>
+                  <select class="custom-select" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: 4px;">
+                    <option>Direct3D 11 (Default)</option>
+                    <option>Vulkan (Optimized)</option>
+                    <option>OpenGL</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Tab: Appearance -->
+              <div class="app-tab-content" id="tab-appearance" style="display: none;">
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">Classic "Oof" Death Sound</div>
+                    <div class="setting-desc">Restore the original 2006 audio asset.</div>
+                  </div>
+                  <button class="btn-sim-action" id="playOofBtn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
+                    🔊 Preview Sound
+                  </button>
+                </div>
+
+                <div class="app-setting-item">
+                  <div>
+                    <div class="setting-title">Mouse Cursor Style</div>
+                    <div class="setting-desc">Custom cursor replacements that persist game updates.</div>
+                  </div>
+                  <select class="custom-select" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: 4px;">
+                    <option>Gold Edition Cursor</option>
+                    <option>Classic 2006 Cursor</option>
+                    <option>2013 Cursor</option>
+                    <option>Default Roblox</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           FAST FLAGS VAULT (GATED BY GOLD KEY)
+           ========================================== -->
+      <section class="fflag-vault-section" id="fastflags">
+        <div class="section-title-wrap" style="text-align: center; margin-bottom: 2rem;">
+          <div class="hero-tag" style="margin-bottom: 0.75rem;">Roblox Client Engine</div>
+          <h2 class="section-title">FastFlags Vault &amp; Allowlist Engine</h2>
+          <p class="section-desc">Test flags against Roblox's official September 2025 allowlist and generate verified ClientAppSettings.json files.</p>
+        </div>
+
+        <!-- Gated Lock View (Shown when not unlocked) -->
+        <div class="vault-locked-card" id="vaultLockedCard">
+          <div class="vault-lock-icon-wrap">
+            <div class="vault-lock-ring"></div>
+            <div class="vault-lock-icon" id="vaultLockIcon">🔒</div>
+          </div>
+          <h3 class="vault-locked-title">Protected FastFlag Repository</h3>
+          <p class="vault-locked-desc">
+            Access to verified allowlist telemetry, engine thread overrides, and custom ClientAppSettings generation requires an active Bloxstrap Gold license.
+          </p>
+
+          <div class="vault-key-form">
+            <div class="vault-input-wrap">
+              <span class="vault-key-prefix">KEY:</span>
+              <input type="text" id="vaultKeyInput" class="vault-key-input" placeholder="GOLD-XXXX-XXXX-XXXX" maxlength="32" autocomplete="off" spellcheck="false">
+              <button type="button" id="vaultUnlockBtn" class="btn-vault-unlock">
+                <span>Unlock Vault</span> &rarr;
+              </button>
+            </div>
+            <div class="vault-key-hint" id="vaultKeyHint">
+              Key format: Must begin with <code>GOLD-</code> (e.g. <code>GOLD-7DAY-TRIAL</code>)
+            </div>
+            <div class="vault-key-error" id="vaultKeyError">
+              Invalid license format. Key must begin with "GOLD-".
+            </div>
+          </div>
+
+          <div class="vault-trial-link">
+            <span>Don't have a license key?</span>
+            <a href="#pricing" onclick="openCheckout(2, 'yearly')">Start 7-day trial to get an instant key &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Unlocked Vault View (Hidden by default, shown when unlocked) -->
+        <div class="vault-unlocked-card" id="vaultUnlockedCard" style="display: none;">
+          <div class="vault-unlocked-header">
+            <div class="vault-status-indicator">
+              <span class="vault-status-dot"></span>
+              <span>Vault Unlocked &bull; License: <strong id="activeVaultKeyDisplay" class="tabular">GOLD-ACTIVE</strong></span>
+            </div>
+            <button class="vault-relock-btn" id="vaultRelockBtn">Lock Vault</button>
+          </div>
+
+          <!-- Allowlist Verification Engine / Search Box -->
+          <div class="vault-tool-block">
+            <div class="vault-tool-header">
+              <div>
+                <h4 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem;">Official Roblox Client Allowlist Validator</h4>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin: 0;">Roblox only accepts allowlisted flags in ClientAppSettings.json. Unlisted flags are quietly discarded on launch.</p>
+              </div>
+              <span class="allowlist-ver-badge">Allowlist v2.8 (Sept 2025 Standard)</span>
+            </div>
+
+            <div class="allowlist-search-wrap">
+              <input type="text" id="allowlistSearchInput" class="allowlist-search-input" placeholder="Type a flag name (e.g. DFIntTaskSchedulerTargetFps, FFlagSimHumanoidTimestepModel)...">
+              <button class="allowlist-clear-btn" id="allowlistClearBtn">Clear</button>
+            </div>
+
+            <div class="allowlist-results-container" id="allowlistResultsList">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Live Preset Tuner & ClientAppSettings.json Generator -->
+          <div class="vault-generator-grid">
+            <div class="vault-controls-card">
+              <h4 style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem;">Allowlisted Engine Tuning Presets</h4>
+              <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 1.25rem;">Adjust verified flags to generate your production configuration.</p>
+
+              <div class="vault-control-item">
+                <div class="v-control-info">
+                  <strong>TaskScheduler Target Framerate</strong>
+                  <span>DFIntTaskSchedulerTargetFps (Uncapped target)</span>
+                </div>
+                <div class="v-control-input">
+                  <input type="number" id="vTargetFps" class="v-num-input tabular" value="9999" min="30" max="9999">
+                </div>
+              </div>
+
+              <div class="vault-control-item">
+                <div class="v-control-info">
+                  <strong>Disable High-DPI Display Scaling</strong>
+                  <span>DFFlagDisableDPIScale (Crisp native resolution)</span>
+                </div>
+                <label class="gold-switch">
+                  <input type="checkbox" id="vDisableDpi" checked>
+                  <span class="gold-slider"></span>
+                </label>
+              </div>
+
+              <div class="vault-control-item">
+                <div class="v-control-info">
+                  <strong>MSAA Anti-Aliasing Level</strong>
+                  <span>FIntDebugForceMSAASamples (Edge smoothing)</span>
+                </div>
+                <select id="vMsaaSamples" class="v-select">
+                  <option value="1">1x (Off)</option>
+                  <option value="2">2x MSAA</option>
+                  <option value="4" selected>4x MSAA (Recommended)</option>
+                </select>
+              </div>
+
+              <div class="vault-control-item">
+                <div class="v-control-info">
+                  <strong>Texture Quality Override</strong>
+                  <span>DFIntTextureQualityOverride (Forces high-res textures)</span>
+                </div>
+                <select id="vTextureQuality" class="v-select">
+                  <option value="0">0 (Lowest / Potato)</option>
+                  <option value="1">1 (Medium)</option>
+                  <option value="2">2 (High)</option>
+                  <option value="3" selected>3 (Maximum Resolution)</option>
+                </select>
+              </div>
+
+              <div class="vault-control-item">
+                <div class="v-control-info">
+                  <strong>Manual Alt+Enter Fullscreen</strong>
+                  <span>FFlagHandleAltEnterFullscreenManually</span>
+                </div>
+                <label class="gold-switch">
+                  <input type="checkbox" id="vAltEnter" checked>
+                  <span class="gold-slider"></span>
+                </label>
+              </div>
+
+              <div class="vault-control-item">
+                <div class="v-control-info">
+                  <strong>HUD Frame Counter</strong>
+                  <span>FFlagDebugDisplayFPS (Built-in Roblox FPS overlay)</span>
+                </div>
+                <label class="gold-switch">
+                  <input type="checkbox" id="vDebugFps" checked>
+                  <span class="gold-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="vault-output-card">
+              <div class="vault-output-header">
+                <span class="vault-file-label">ClientAppSettings.json</span>
+                <div class="vault-output-btns">
+                  <button class="btn-vault-action" id="copyVaultJsonBtn">Copy JSON</button>
+                  <button class="btn-vault-action btn-gold-action" id="downloadVaultJsonBtn">Download File</button>
+                </div>
+              </div>
+              <pre class="vault-code-block" id="vaultJsonOutput"></pre>
+              <div class="vault-install-tip">
+                <span>📁 Place in:</span>
+                <code>%localappdata%\Roblox\ClientSettings\ClientAppSettings.json</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           REFINED CHOOSING WINDOW WITH RENEWAL PILL
+           ========================================== -->
+      <section class="pricing-section" id="pricing">
+        <div class="choosing-window">
+          <div class="choosing-header">
+            <h3>Choose Your Privilege Tier</h3>
+            <p>Select your preferred renewal cycle. Toggling renewal modes updates all 4 tiers simultaneously.</p>
+          </div>
+
+          <!-- Centered Segmented Renewal Mode Pill Toggle -->
+          <div class="renewal-pill-container">
+            <div class="renewal-segmented-pill">
+              <button class="renewal-pill-btn" data-cycle="weekly">Weekly</button>
+              <button class="renewal-pill-btn" data-cycle="monthly">Monthly</button>
+              <button class="renewal-pill-btn" data-cycle="quarterly">Quarterly</button>
+              <button class="renewal-pill-btn active" data-cycle="yearly">
+                Yearly <span class="pill-savings-tag">Save ~40%</span>
+              </button>
+              <button class="renewal-pill-btn" data-cycle="lifetime">Lifetime</button>
+            </div>
+          </div>
+
+          <!-- Tax and Currency Toolbar -->
+          <div class="pricing-meta-toolbar">
+            <div class="selector-pill">
+              <span>📍 Tax:</span>
+              <select class="custom-select" id="regionSelector">
+                <option value="us">United States (State tax at checkout)</option>
+                <option value="eu">European Union (20% VAT included)</option>
+              </select>
+            </div>
+
+            <div class="selector-pill">
+              <span>💱 Currency:</span>
+              <select class="custom-select" id="currencySelector">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 4 Side-by-Side Tier Cards Grid -->
+          <div class="pricing-cards-grid" id="pricingCardsGrid">
+            <!-- Rendered reactively via app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           POLISHED TIER COMPARISON MATRIX
+           ========================================== -->
+      <section class="comparison-section" id="comparison">
+        <div class="section-title-wrap" style="text-align: center; margin-bottom: 2.5rem;">
+          <h2 class="section-title" style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem;">Tier Comparison Matrix</h2>
+          <p class="section-desc" style="color: var(--text-muted); font-size: 1rem;">A complete side-by-side feature breakdown across all tiers.</p>
+        </div>
+
+        <div class="comp-table-wrap">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th style="width: 22%;">Feature</th>
+                <th style="width: 15%;">Standard Bloxstrap</th>
+                <th style="width: 15%;">Gold Basic</th>
+                <th style="width: 16%;" class="col-featured">Gold Plus <span class="comp-badge-pill" style="margin-left: 0.2rem;">Popular</span></th>
+                <th style="width: 15%;">Gold Deluxe</th>
+                <th style="width: 17%;" class="col-ultra">Gold ULTRA <span class="comp-badge-pill" style="background: rgba(255,215,0,0.2); color: #ffd700; margin-left: 0.2rem;">Apex</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Simultaneous Instances</strong></td>
+                <td>1 client (don't even think about an alt)</td>
+                <td>Up to 2 (barely enough to trade)</td>
+                <td class="col-featured"><strong style="color: var(--gold-light);">Up to 5 (PC sounds like a jet engine)</strong></td>
+                <td><strong style="color: var(--gold-light);">Unlimited (until your RAM dies)</strong></td>
+                <td class="col-ultra"><strong style="color: #ffd700;">Infinite (Windows bullied into compliance)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Roblox Kicks &amp; Error 273</strong></td>
+                <td>You get kicked, sit and cry</td>
+                <td>Manual relaunch</td>
+                <td class="col-featured">Restart prompt</td>
+                <td>1-click token restore</td>
+                <td class="col-ultra"><strong style="color: #ffd700;">Auto-reconnects before the server realizes</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Framerate Cap</strong></td>
+                <td>60 FPS (like it's 2012)</td>
+                <td>240 FPS (hard cap, no fun)</td>
+                <td class="col-featured">Monitor refresh rate max</td>
+                <td>9999 FPS target</td>
+                <td class="col-ultra"><strong style="color: #ffd700;">Uncapped 9999 FPS (pure overkill flex)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Discord Status Flex</strong></td>
+                <td>Shows everyone you're broke</td>
+                <td>Bronze "I tried" badge</td>
+                <td class="col-featured">18k Gold (still not Ultra)</td>
+                <td>24k Solid Gold</td>
+                <td class="col-ultra"><strong style="color: #ffd700;">Obsidian Liquid Gold (god complex)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>FastFlag Tuning</strong></td>
+                <td>Default Roblox settings (terrible)</td>
+                <td>Bare minimum presets</td>
+                <td class="col-featured">Manual sliders (good luck)</td>
+                <td>Raw JSON editor (do it yourself)</td>
+                <td class="col-ultra"><strong style="color: #ffd700;">Pre-tuned God Vault (zero effort, max FPS)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Death Sound</strong></td>
+                <td>Modern plastic squish sound</td>
+                <td>Standard 2006 OOF</td>
+                <td class="col-featured">Clean stereo OOF</td>
+                <td>Bass-boosted OOF</td>
+                <td class="col-ultra"><strong style="color: #ffd700;">Max-Bass 2006 OOF (rattles your desk)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>CPU &amp; Windows Priority</strong></td>
+                <td>Roblox gets whatever is left</td>
+                <td>Normal priority</td>
+                <td class="col-featured">Above normal</td>
+                <td>High priority</td>
+                <td class="col-ultra"><strong style="color: #ffd700;">REALTIME (Discord &amp; Chrome get starved)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Server Queue &amp; Hopping</strong></td>
+                <td>Wait behind 40 people in queue</td>
+                <td>Wait behind 35 people</td>
+                <td class="col-featured">Standard queue</td>
+                <td>Fast queue</td>
+                <td class="col-ultra"><strong style="color: #ffd700;">Instant hop (skips loading screen)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Support &amp; Respect</strong></td>
+                <td>Ignored on GitHub</td>
+                <td>3-5 business days if we feel like it</td>
+                <td class="col-featured">Support queue (behind Ultra)</td>
+                <td>Priority email</td>
+                <td class="col-ultra"><strong style="color: #ffd700;">4-minute direct line + VIP respect</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Effective Monthly Rate</strong></td>
+                <td>Free (and it shows)</td>
+                <td class="tabular">From $4.16/mo (budget)</td>
+                <td class="col-featured tabular"><strong style="color: var(--gold-light);">From $7.49/mo (mid)</strong></td>
+                <td class="tabular"><strong style="color: var(--gold-light);">From $11.66/mo (almost rich)</strong></td>
+                <td class="col-ultra tabular"><strong style="color: #ffd700;">From $133.33/mo ($199.99/mo)</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="faq-section" id="faq">
+        <div class="section-title-wrap" style="text-align: center; margin-bottom: 2rem;">
+          <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Is Bloxstrap Gold actually a paid program?</span>
+              <span class="faq-toggle-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+              No, it is not. Bloxstrap is free, open-source software under the GPL-3.0 license. This project is a lighthearted community creation. We do not collect money or payment credentials. You can click "Pay later" at checkout to download the app directly for free.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Why does the checkout say "Error, purchase failed, please pay later"?</span>
+              <span class="faq-toggle-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+              Because we don't accept your money. When you click "Pay", the checkout system deliberately stops the transaction and prompts you to click "Pay later", granting you full free access.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How does price scaling work across intervals?</span>
+              <span class="faq-toggle-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+              The pricing follows standard subscription economics: weekly subscriptions have the highest effective rate per month for maximum flexibility, monthly is lower, quarterly saves roughly 20-25%, yearly saves over 40%, and the lifetime license provides permanent access that pays for itself.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How does built-in multi-instance work?</span>
+              <span class="faq-toggle-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+              Standard Roblox prevents launching more than one client at a time using a single-instance system mutex. Bloxstrap Gold manages process mutexes cleanly, allowing you to run multiple game windows simultaneously on separate accounts.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Can using this get me banned?</span>
+              <span class="faq-toggle-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+              No. Bloxstrap is a launcher/bootstrapper, not an exploit. It does not inject code into the Roblox engine or modify gameplay. It configures user preferences and launches the official Roblox client.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Who created Bloxstrap?</span>
+              <span class="faq-toggle-icon">▼</span>
+            </button>
+            <div class="faq-answer">
+              Bloxstrap was created by <strong>pizzaboxer</strong> and open-source contributors at <a href="https://github.com/bloxstraplabs/bloxstrap" target="_blank" style="color: var(--gold-light);">bloxstraplabs/bloxstrap</a>.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-nav-links">
+        <a href="#simulator" class="footer-nav-link">Simulator</a>
+        <a href="#preview" class="footer-nav-link">App Preview</a>
+        <a href="#pricing" class="footer-nav-link">Pricing</a>
+        <a href="#comparison" class="footer-nav-link">Compare</a>
+        <a href="#faq" class="footer-nav-link">FAQ</a>
+        <a href="#" class="footer-nav-link open-tos-link">Terms of Service</a>
+        <a href="#" class="footer-nav-link open-privacy-link">Privacy Policy</a>
+        <a href="https://github.com/bloxstraplabs/bloxstrap" target="_blank" rel="noopener" class="footer-nav-link">Official GitHub</a>
+      </div>
+      <p style="margin-bottom: 0.5rem;">
+        &copy; 2026 Bloxstrap Gold. Bloxstrap is free, open-source software under GPL-3.0.
+      </p>
+      <p style="font-size: 0.78rem; color: #64748b;">
+        Bloxstrap and Bloxstrap Gold are community software and are not affiliated with, endorsed by, or sponsored by Roblox Corporation.
+      </p>
+    </footer>
+  </div>
+
+  <!-- ==========================================
+       DEADPAN LUXURY PAYING WINDOW (CHECKOUT MODAL)
+       ========================================== -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-content wide-paying-window">
+      <button class="modal-close-btn" id="closeCheckoutBtn">&times;</button>
+
+      <div id="checkoutFormView" class="checkout-two-column">
+        <!-- Left Column: 3D Virtual Gold Card & Breakdown -->
+        <div class="checkout-left-summary">
+          <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--gold-light); letter-spacing: 0.08em; margin-bottom: 0.25rem;">
+            Order Overview
+          </div>
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff;" id="checkoutSummaryTier">Gold Plus (Most Popular)</h3>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;" id="checkoutSummaryCycle">Yearly Plan (/ year)</div>
+
+          <!-- 3D Virtual Gold Credit Card -->
+          <div class="virtual-card-wrapper">
+            <div class="virtual-gold-card" id="virtualGoldCard">
+              <div class="vc-top-row">
+                <div class="vc-chip"></div>
+                <div class="vc-brand">BLOXSTRAP GOLD</div>
+              </div>
+              <div class="vc-number" id="vcNumber">•••• •••• •••• ••••</div>
+              <div class="vc-bottom-row">
+                <div>
+                  <div style="font-size: 0.65rem; opacity: 0.75;">CARDHOLDER</div>
+                  <div class="vc-holder-name" id="vcName">YOUR NAME</div>
+                </div>
+                <div>
+                  <div style="font-size: 0.65rem; opacity: 0.75;">EXPIRES</div>
+                  <div class="vc-exp" id="vcExp">MM/YY</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing summary -->
+          <div class="checkout-summary-box">
+            <div class="summary-row">
+              <span>Subtotal:</span>
+              <span id="checkoutBasePrice" class="tabular">$119.99</span>
+            </div>
+            <div class="summary-row">
+              <span id="checkoutTaxLabel">Estimated Tax:</span>
+              <span id="checkoutTaxPrice" class="tabular">$9.60</span>
+            </div>
+            <div class="summary-row total-row">
+              <span>Total:</span>
+              <span class="summary-total-price tabular" id="checkoutTotalPrice">$129.59</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Form inputs & Pay Buttons -->
+        <div class="checkout-right-form">
+          <div class="checkout-security-badge">
+            <span>🔒</span>
+            <span>256-bit encrypted checkout. Multi-instance licenses provisioned instantly.</span>
+          </div>
+
+          <!-- Error Banner with exact message from prompt -->
+          <div class="checkout-error-banner" id="checkoutErrorBanner">
+            Error, purchase failed, please pay later.
+          </div>
+
+          <form onsubmit="return false;" autocomplete="off">
+            <div class="form-group">
+              <label class="form-label" for="cardName">Cardholder name</label>
+              <input type="text" id="cardName" class="form-input" placeholder="Jane Doe" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cardNumber">Card number</label>
+              <input type="text" id="cardNumber" class="form-input tabular" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="off">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cardExp">Expiration</label>
+                <input type="text" id="cardExp" class="form-input tabular" placeholder="MM/YY" maxlength="5" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cardCvc">CVC</label>
+                <input type="password" id="cardCvc" class="form-input tabular" placeholder="123" maxlength="4" autocomplete="off">
+              </div>
+            </div>
+
+            <!-- Pay Buttons -->
+            <div class="pay-buttons-container">
+              <button type="button" class="btn-buy-pay" id="buyPayBtn">
+                Pay $129.59
+              </button>
+
+              <button type="button" class="btn-pay-later" id="payLaterBtn">
+                Pay later
+              </button>
+            </div>
+            <p class="pay-later-caption">
+              Authorize zero-deposit invoice with immediate license provisioning.
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Success / Download View -->
+      <div class="success-view" id="checkoutSuccessView">
+        <div style="font-size: 3rem; margin-bottom: 0.75rem;">👑</div>
+        <h3 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">
+          Your 7-day free trial has started.
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 480px; margin: 0 auto 1.5rem auto;">
+          Download Bloxstrap Gold below and enjoy built-in multi-instance support and the gold theme.
+        </p>
+
+        <div style="margin-bottom: 1.5rem;">
+          <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--gold-light); font-weight: 700; margin-bottom: 0.35rem;">Enterprise License Key</div>
+          <div class="license-key-box" id="generatedLicenseKey" title="Click to copy">GOLD-7DAY-8849-F291-C84B-9102-E7A4</div>
+          <div id="copyKeyFeedback" style="font-size: 0.75rem; color: #4ade80; height: 16px; margin-top: 0.25rem;"></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 360px; margin: 0 auto;">
+          <a id="deepLinkActivateBtn" href="bloxstrap-gold://activate?key=GOLD-7DAY-8849-F291-C84B-9102-E7A4" class="btn-primary" style="justify-content: center; text-decoration: none; background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); color: #000; font-weight: 800; box-shadow: 0 4px 15px rgba(255,215,0,0.35);">
+            ⚡ Open in Bloxstrap Gold (1-Click Activate)
+          </a>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+            <a href="https://github.com/bloxstraplabs/bloxstrap/releases/latest" target="_blank" class="btn-secondary" style="justify-content: center; text-decoration: none; font-size: 0.85rem; padding: 0.6rem 0.5rem;">
+              🪟 Windows (.exe)
+            </a>
+            <a href="https://github.com/bloxstraplabs/bloxstrap/releases/latest" target="_blank" class="btn-secondary" style="justify-content: center; text-decoration: none; font-size: 0.85rem; padding: 0.6rem 0.5rem;">
+              🍏 macOS (.dmg)
+            </a>
+          </div>
+
+          <button class="btn-secondary" id="successUnlockVaultBtn" style="justify-content: center; border-color: var(--gold-border); color: var(--gold-light);">
+            ✨ Unlock FastFlags Vault with Key
+          </button>
+          <button class="btn-secondary" onclick="closeCheckout()" style="justify-content: center; opacity: 0.7;">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms of Service Modal -->
+  <div class="modal-overlay" id="tosModal">
+    <div class="modal-content" style="max-width: 680px; padding: 2rem;">
+      <button class="modal-close-btn" id="closeTosBtn">&times;</button>
+      <div class="checkout-header" style="text-align: left; margin-bottom: 1.25rem;">
+        <h3 class="checkout-title" style="font-size: 1.4rem; font-weight: 700;">Terms of Service</h3>
+        <p class="checkout-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">Open-Source Licensing &amp; Project Disclosure</p>
+      </div>
+
+      <div style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; max-height: 60vh; overflow-y: auto;">
+        <h4 style="color: #fff; margin: 1rem 0 0.25rem 0;">1. Satirical Nature &amp; Licensing</h4>
+        <p>
+          Bloxstrap Gold is a parody community project. The original Bloxstrap software is free, open-source software licensed under the GNU General Public License v3.0 (GPL-3.0).
+        </p>
+
+        <h4 style="color: #fff; margin: 1rem 0 0.25rem 0;">2. Payments and Pricing</h4>
+        <p>
+          We do not charge real money or accept real credit cards. Any attempt to submit payment details will intentionally fail with an error prompting you to click "Pay later". The "Pay later" option provides full access to the application for free.
+        </p>
+
+        <h4 style="color: #fff; margin: 1rem 0 0.25rem 0;">3. Attribution and Credits</h4>
+        <p>
+          Bloxstrap was created by <strong>pizzaboxer</strong> and community contributors at <a href="https://github.com/bloxstraplabs/bloxstrap" target="_blank" style="color: var(--gold-light);">github.com/bloxstraplabs/bloxstrap</a>. Built-in multi-instance functionality is based on open-source Roblox multi-client research.
+        </p>
+
+        <h4 style="color: #fff; margin: 1rem 0 0.25rem 0;">4. Disclaimer</h4>
+        <p>
+          Bloxstrap and Bloxstrap Gold are not affiliated with or endorsed by Roblox Corporation.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div class="modal-overlay" id="privacyModal">
+    <div class="modal-content" style="max-width: 680px; padding: 2rem;">
+      <button class="modal-close-btn" id="closePrivacyBtn">&times;</button>
+      <div class="checkout-header" style="text-align: left; margin-bottom: 1.25rem;">
+        <h3 class="checkout-title" style="font-size: 1.4rem; font-weight: 700;">Privacy Policy</h3>
+        <p class="checkout-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">Information Collection &amp; Telemetry Usage</p>
+      </div>
+
+      <div style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; max-height: 60vh; overflow-y: auto;">
+        <h4 style="color: #fff; margin: 1rem 0 0.25rem 0;">1. Zero Financial Data Collection</h4>
+        <p>
+          We do not collect, process, or store credit card numbers, billing addresses, or payment credentials. All mock form interactions are processed strictly on the client side in your browser and are never transmitted to any server.
+        </p>
+
+        <h4 style="color: #fff; margin: 1rem 0 0.25rem 0;">2. Analytics and Tracking</h4>
+        <p>
+          This website does not use tracking cookies or third-party behavioral analytics.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
