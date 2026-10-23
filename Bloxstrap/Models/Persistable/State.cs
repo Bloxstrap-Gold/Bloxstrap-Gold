@@ -15,5 +15,9 @@ namespace Bloxstrap.Models.Persistable
         public bool ForceGoldTrialExpired { get; set; } = false;
         
         public bool IsPaymentIgnored { get; set; } = false;
+
+        public string? GoldLicenseKey { get; set; } = null;
+
+        public string? GoldTier { get; set; } = null;
     }
 }
