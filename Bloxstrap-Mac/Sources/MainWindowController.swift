@@ -28,9 +28,9 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         super.init(window: window)
         setupWebView()
         
-        // Instance polling timer
+        // Instance polling timer - only poll running process instances, NEVER push full settings state on a timer!
         instanceTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
-            self?.pushStateToWeb()
+            self?.pushRunningInstancesToWeb()
         }
     }
     
@@ -54,6 +54,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         webView = WKWebView(frame: contentView.bounds, configuration: config)
         webView.autoresizingMask = [.width, .height]
         webView.navigationDelegate = self
+        webView.uiDelegate = self
         webView.setValue(false, forKey: "drawsBackground") // Transparent backdrop
         
         contentView.addSubview(webView)
@@ -786,6 +787,22 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         }
     }
     
+    private func pushRunningInstancesToWeb() {
+        let pids = MultiInstanceManager.shared.getRunningInstances()
+        var instancesPayload: [[String: Any]] = []
+        for pid in pids {
+            let ram = MultiInstanceManager.shared.getMemoryForPid(pid: pid)
+            instancesPayload.append(["pid": pid, "ram": ram])
+        }
+        if let jsonData = try? JSONSerialization.data(withJSONObject: instancesPayload, options: []),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            let js = "window.updateInstancesFromHost && window.updateInstancesFromHost(\(jsonString));"
+            DispatchQueue.main.async { [weak self] in
+                self?.webView.evaluateJavaScript(js, completionHandler: nil)
+            }
+        }
+    }
+    
     public func handleDeepLinkActivation(key: String) {
         let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines)
         if AppState.shared.verifyAndApplyKey(trimmed) {
@@ -799,3 +816,28 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         webView.evaluateJavaScript("document.querySelector('[data-tab=\"about\"]').click();", completionHandler: nil)
     }
 }
+
+// MARK: - WKUIDelegate for Native Alert and Confirm Handlers
+extension MainWindowController: WKUIDelegate {
+    public func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+        let alert = NSAlert()
+        alert.messageText = "Bloxstrap Gold"
+        alert.informativeText = message
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+        completionHandler()
+    }
+
+    public func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
+        let alert = NSAlert()
+        alert.messageText = "Bloxstrap Gold"
+        alert.informativeText = message
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Confirm")
+        alert.addButton(withTitle: "Cancel")
+        let res = alert.runModal()
+        completionHandler(res == .alertFirstButtonReturn)
+    }
+}
+

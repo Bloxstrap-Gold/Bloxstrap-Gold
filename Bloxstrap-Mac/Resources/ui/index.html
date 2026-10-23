@@ -1608,6 +1608,37 @@
       gap: 10px;
       margin-top: 18px;
     }
+
+    .place-preset-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #c5c4d2;
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .place-preset-chip:hover {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(245, 158, 11, 0.45);
+      color: #fcd34d;
+      transform: translateY(-1px);
+    }
+
+    .place-preset-chip.active {
+      background: rgba(245, 158, 11, 0.28);
+      border-color: #f59e0b;
+      color: #fcd34d;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+    }
   </style>
 </head>
 <body>
@@ -2787,42 +2818,69 @@
       </div>
 
       <!-- Default Place ID -->
-      <div class="form-group" style="margin-bottom: 12px;">
+      <div class="form-group" style="margin-bottom: 14px;">
         <div class="form-label">Default Place ID / Experience (Optional)</div>
         <input type="text" class="fluent-input mono" id="modalDefaultPlace" placeholder="e.g. 2753915549" style="width: 100%; text-align: left;">
-        <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-          <button type="button" class="tag-pill" data-modal-place="2753915549">Blox Fruits</button>
-          <button type="button" class="tag-pill" data-modal-place="8737899170">Pet Sim 99</button>
-          <button type="button" class="tag-pill" data-modal-place="4924922222">Brookhaven</button>
-          <button type="button" class="tag-pill" data-modal-place="6516141723">Doors</button>
-          <button type="button" class="tag-pill" data-modal-place="189707">Natural Disaster</button>
-          <button type="button" class="tag-pill" data-modal-place="6872265039">BedWars</button>
-          <button type="button" class="tag-pill" data-modal-place="13772394625">Blade Ball</button>
+        <div style="display: flex; gap: 7px; margin-top: 8px; flex-wrap: wrap;" id="modalPlaceChipsContainer">
+          <button type="button" class="place-preset-chip" data-modal-place="2753915549">🎮 Blox Fruits</button>
+          <button type="button" class="place-preset-chip" data-modal-place="8737899170">🐾 Pet Sim 99</button>
+          <button type="button" class="place-preset-chip" data-modal-place="4924922222">🏡 Brookhaven</button>
+          <button type="button" class="place-preset-chip" data-modal-place="6516141723">🚪 Doors</button>
+          <button type="button" class="place-preset-chip" data-modal-place="189707">🌪 Natural Disaster</button>
+          <button type="button" class="place-preset-chip" data-modal-place="6872265039">⚔️ BedWars</button>
+          <button type="button" class="place-preset-chip" data-modal-place="13772394625">⚡ Blade Ball</button>
         </div>
       </div>
 
       <!-- Session Cookie with Eye Toggle & Paste -->
-      <div class="form-group" style="margin-bottom: 12px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="form-label">Session Cookie (.ROBLOSECURITY - Optional)</span>
-          <span style="font-size: 10.5px; color: #10b981;">🔒 Encrypted Locally Only</span>
+      <div class="form-group" style="margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span class="form-label" style="margin-bottom: 0;">Session Cookie (.ROBLOSECURITY - Optional)</span>
+          <span style="font-size: 10.5px; color: #10b981; font-weight: 600;">🔒 Encrypted Locally Only</span>
         </div>
         <div style="display: flex; gap: 8px;">
-          <input type="password" class="fluent-input" id="modalCookie" placeholder="_|WARNING:-DO-NOT-SHARE-THIS..." style="flex: 1;">
-          <button type="button" class="pill-btn" id="btnToggleCookieVisibility" title="Show / Hide Cookie">👁</button>
-          <button type="button" class="pill-btn" id="btnPasteCookie" title="Paste from clipboard">📋 Paste</button>
+          <input type="password" class="fluent-input mono" id="modalCookie" placeholder="_|WARNING:-DO-NOT-SHARE-THIS..." style="flex: 1; font-size: 11px;">
+          <button type="button" class="pill-btn" id="btnToggleCookieVisibility" style="padding: 0 12px; font-size: 11.5px;" title="Show / Hide Cookie">👁 Show</button>
+          <button type="button" class="pill-btn gold" id="btnPasteCookie" style="padding: 0 12px; font-size: 11.5px;" title="Paste from clipboard">📋 Paste</button>
         </div>
-        <div style="font-size: 10.5px; color: #8e8d98; margin-top: 3px;">Stored strictly locally in macOS Application Support for 1-click RAM authentication.</div>
+        <div style="font-size: 11px; color: #8e8d98; margin-top: 4px;">Stored strictly locally in macOS Application Support for 1-click RAM authentication.</div>
       </div>
 
-      <!-- Pin Checkbox -->
-      <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #fcd34d; margin-bottom: 16px; cursor: pointer;">
-        <input type="checkbox" id="modalPinAccount"> 📌 Pin this account to the top of the manager
-      </label>
+      <!-- Pin Checkbox (Fluent Toggle Card) -->
+      <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); padding: 10px 14px; border-radius: 6px; margin-bottom: 18px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 17px;">📌</span>
+          <div>
+            <div style="font-size: 12.5px; font-weight: 600; color: #fcd34d;">Pin account to top of manager</div>
+            <div style="font-size: 11px; color: #a1a0ac;">Keep this profile elevated at the very top for fast 1-click launching</div>
+          </div>
+        </div>
+        <label class="fluent-toggle">
+          <input type="checkbox" id="modalPinAccount">
+          <span class="fluent-toggle-slider"></span>
+        </label>
+      </div>
 
-      <div class="modal-actions">
-        <button class="pill-btn" id="btnCancelAccountModal">Cancel</button>
-        <button class="pill-btn primary" id="btnSaveAccountModal">Save Account</button>
+      <div class="modal-actions" style="margin-top: 18px;">
+        <button type="button" class="pill-btn" id="btnCancelAccountModal" style="padding: 7px 20px; font-size: 12.5px;">Cancel</button>
+        <button type="button" class="pill-btn primary" id="btnSaveAccountModal" style="padding: 7px 24px; font-size: 12.5px; font-weight: 700;">Save Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: CONFIRM DELETE PROFILE / BATCH (IN-APP FLUENT DIALOG)
+       ======================================================================== -->
+  <div class="modal-overlay" id="confirmDeleteModal" style="display: none; z-index: 2000;">
+    <div class="modal-card" style="width: 440px; text-align: center; border-color: rgba(239, 68, 68, 0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.85);">
+      <div style="width: 52px; height: 52px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 14px auto;">🗑</div>
+      <div class="modal-title" id="confirmDeleteTitle" style="font-size: 17px; margin-bottom: 8px; color: #ffffff;">Delete Account Profile?</div>
+      <div class="modal-desc" id="confirmDeleteMsg" style="font-size: 12.5px; color: #b0afbc; margin-bottom: 22px; line-height: 1.5;">
+        Are you sure you want to remove this profile from Roblox Account Manager?
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button type="button" class="pill-btn" id="btnCancelConfirmDelete" style="padding: 7px 22px; font-size: 12.5px;">Cancel</button>
+        <button type="button" class="pill-btn danger" id="btnExecuteConfirmDelete" style="padding: 7px 24px; font-size: 12.5px; font-weight: 700; background: #dc2626; border-color: #ef4444;">Delete Profile</button>
       </div>
     </div>
   </div>
@@ -3234,10 +3292,16 @@
       }
     }
 
-    // Called by Swift host on launch and updates
+    // Called by Swift host on launch and save
     window.updateStateFromHost = function(newState) {
       Object.assign(appState, newState);
       renderState();
+    };
+
+    // Called by Swift background instance monitor - updates ONLY running instances, NEVER resets menus!
+    window.updateInstancesFromHost = function(instances) {
+      appState.instances = instances;
+      renderInstancesList();
     };
 
     window.onSettingsSaved = function() {
@@ -3252,6 +3316,20 @@
         toast.style.display = "none";
       }, 2500);
     };
+
+    function setValIfNotActive(id, val) {
+      const el = document.getElementById(id);
+      if (el && document.activeElement !== el) {
+        el.value = val;
+      }
+    }
+
+    function setCheckedIfNotActive(id, boolVal) {
+      const el = document.getElementById(id);
+      if (el && document.activeElement !== el) {
+        el.checked = boolVal;
+      }
+    }
 
     function renderState() {
       // First-time Welcome Intro Modal
@@ -3279,76 +3357,60 @@
       if (introBadge) introBadge.textContent = appState.currentTierBadge;
 
       // FastFlags Tab
-      document.getElementById("inputFps").value = appState.targetFps;
-      document.getElementById("selectLighting").value = appState.preferredLighting;
-      document.getElementById("selectEscapeMenu").value = appState.escapeMenuVersion;
-      document.getElementById("toggleHideGuis").checked = appState.hideGuisEnabled;
-      const toggleFpsCounter = document.getElementById("toggleShowFpsCounter");
-      if (toggleFpsCounter) toggleFpsCounter.checked = appState.showFpsCounter !== false;
-      const selectGrass = document.getElementById("selectGrassDistance");
-      if (selectGrass) selectGrass.value = String(appState.grassDistance !== undefined ? appState.grassDistance : 300);
-      const selectShadow = document.getElementById("selectShadowIntensity");
-      if (selectShadow) selectShadow.value = String(appState.shadowIntensity !== undefined ? appState.shadowIntensity : 100);
+      setValIfNotActive("inputFps", appState.targetFps);
+      setValIfNotActive("selectLighting", appState.preferredLighting);
+      setValIfNotActive("selectEscapeMenu", appState.escapeMenuVersion);
+      setCheckedIfNotActive("toggleHideGuis", appState.hideGuisEnabled);
+      setCheckedIfNotActive("toggleShowFpsCounter", appState.showFpsCounter !== false);
+      setValIfNotActive("selectGrassDistance", String(appState.grassDistance !== undefined ? appState.grassDistance : 300));
+      setValIfNotActive("selectShadowIntensity", String(appState.shadowIntensity !== undefined ? appState.shadowIntensity : 100));
 
       // Mods & Modern Engine Settings Tab
-      const preserveDpiToggle = document.getElementById("togglePreserveDpi");
-      if (preserveDpiToggle) preserveDpiToggle.checked = appState.preserveRenderingQualityDpi !== false;
-      const textureQualitySelect = document.getElementById("selectTextureQuality");
-      if (textureQualitySelect) textureQualitySelect.value = appState.textureQuality || "Default";
-
-      document.getElementById("toggleOof").checked = appState.customDeathSound !== false;
-      const selectDeathSound = document.getElementById("selectDeathSoundPreset");
-      if (selectDeathSound) selectDeathSound.value = appState.deathSoundPreset || "Classic OOF (2006)";
-      document.getElementById("selectMouseCursor").value = appState.mouseCursor || "Default (2020)";
-      document.getElementById("toggleOldAvatarBg").checked = !!appState.oldAvatarBackground;
-      document.getElementById("selectEmojiFont").value = appState.emojiFont || "Default";
-      const selectDelay = document.getElementById("selectTitlebarDelay");
-      if (selectDelay) selectDelay.value = String(appState.titlebarDelay !== undefined ? appState.titlebarDelay : 350);
+      setCheckedIfNotActive("togglePreserveDpi", appState.preserveRenderingQualityDpi !== false);
+      setValIfNotActive("selectTextureQuality", appState.textureQuality || "Default");
+      setCheckedIfNotActive("toggleOof", appState.customDeathSound !== false);
+      setValIfNotActive("selectDeathSoundPreset", appState.deathSoundPreset || "Classic OOF (2006)");
+      setValIfNotActive("selectMouseCursor", appState.mouseCursor || "Default (2020)");
+      setCheckedIfNotActive("toggleOldAvatarBg", !!appState.oldAvatarBackground);
+      setValIfNotActive("selectEmojiFont", appState.emojiFont || "Default");
+      setValIfNotActive("selectTitlebarDelay", String(appState.titlebarDelay !== undefined ? appState.titlebarDelay : 350));
 
       // Integrations Tab
-      document.getElementById("toggleActivityTracking").checked = appState.activityTrackingEnabled !== false;
-      document.getElementById("toggleShowServerDetails").checked = appState.showServerDetailsEnabled !== false;
-      document.getElementById("toggleDontExit").checked = appState.dontExitToDesktopApp !== false;
-      document.getElementById("toggleDiscordActivity").checked = appState.discordActivityEnabled !== false;
-      document.getElementById("toggleDiscordJoin").checked = appState.discordActivityJoinEnabled !== false;
-      document.getElementById("toggleDiscordAccount").checked = appState.discordAccountOnProfile !== false;
+      setCheckedIfNotActive("toggleActivityTracking", appState.activityTrackingEnabled !== false);
+      setCheckedIfNotActive("toggleShowServerDetails", appState.showServerDetailsEnabled !== false);
+      setCheckedIfNotActive("toggleDontExit", appState.dontExitToDesktopApp !== false);
+      setCheckedIfNotActive("toggleDiscordActivity", appState.discordActivityEnabled !== false);
+      setCheckedIfNotActive("toggleDiscordJoin", appState.discordActivityJoinEnabled !== false);
+      setCheckedIfNotActive("toggleDiscordAccount", appState.discordAccountOnProfile !== false);
 
       // Appearance Tab
-      document.getElementById("selectTheme").value = appState.theme || "Dark (Windows 11 Mica)";
-      document.getElementById("selectLanguage").value = appState.language || "System default";
-      document.getElementById("selectBootstrapperStyle").value = appState.bootstrapperStyle || "Fluent";
-      document.getElementById("selectRobloxIcon").value = appState.robloxIcon || "2022 (Modern Silver)";
-      document.getElementById("inputCustomTitle").value = appState.customTitle || "Roblox";
+      setValIfNotActive("selectTheme", appState.theme || "Dark (Windows 11 Mica)");
+      setValIfNotActive("selectLanguage", appState.language || "System default");
+      setValIfNotActive("selectBootstrapperStyle", appState.bootstrapperStyle || "Fluent");
+      setValIfNotActive("selectRobloxIcon", appState.robloxIcon || "2022 (Modern Silver)");
+      setValIfNotActive("inputCustomTitle", appState.customTitle || "Roblox");
 
       // Behaviour Tab
-      document.getElementById("toggleAutoUpdate").checked = appState.autoUpdateChecking !== false;
-      document.getElementById("toggleConfirmLaunches").checked = !!appState.confirmLaunches;
-      document.getElementById("toggleBackgroundUpdates").checked = appState.backgroundUpdates !== false;
-      document.getElementById("toggleForceReinstall").checked = !!appState.forceRobloxReinstall;
-      document.getElementById("toggleTelemetry").checked = !!appState.telemetryEnabled;
-      const toggleStreamer = document.getElementById("toggleStreamerMode");
-      if (toggleStreamer) toggleStreamer.checked = !!appState.streamerMode;
-      const toggleDisTelem = document.getElementById("toggleDisableTelemetry");
-      if (toggleDisTelem) toggleDisTelem.checked = appState.disableTelemetry !== false;
-      const selectBgFps = document.getElementById("selectBackgroundFpsLimit");
-      if (selectBgFps) selectBgFps.value = String(appState.backgroundFpsLimit !== undefined ? appState.backgroundFpsLimit : 15);
+      setCheckedIfNotActive("toggleAutoUpdate", appState.autoUpdateChecking !== false);
+      setCheckedIfNotActive("toggleConfirmLaunches", !!appState.confirmLaunches);
+      setCheckedIfNotActive("toggleBackgroundUpdates", appState.backgroundUpdates !== false);
+      setCheckedIfNotActive("toggleForceReinstall", !!appState.forceRobloxReinstall);
+      setCheckedIfNotActive("toggleTelemetry", !!appState.telemetryEnabled);
+      setCheckedIfNotActive("toggleStreamerMode", !!appState.streamerMode);
+      setCheckedIfNotActive("toggleDisableTelemetry", appState.disableTelemetry !== false);
+      setValIfNotActive("selectBackgroundFpsLimit", String(appState.backgroundFpsLimit !== undefined ? appState.backgroundFpsLimit : 15));
 
       // Bootstrapper Debug Options
-      const toggleDev = document.getElementById("toggleDeveloperMode");
-      if (toggleDev) toggleDev.checked = !!appState.developerMode;
-      const selectChannel = document.getElementById("selectRobloxChannel");
-      if (selectChannel) selectChannel.value = appState.robloxChannel || "LIVE";
-      const toggleNoCleanup = document.getElementById("toggleDisablePackageCleanup");
-      if (toggleNoCleanup) toggleNoCleanup.checked = !!appState.debugDisablePackageCleanup;
-      const toggleBypassPing = document.getElementById("toggleBypassConnectivity");
-      if (toggleBypassPing) toggleBypassPing.checked = !!appState.bypassConnectivityChecks;
-      const toggleVerbose = document.getElementById("toggleVerboseLogging");
-      if (toggleVerbose) toggleVerbose.checked = !!appState.verboseBootstrapperLogging;
+      setCheckedIfNotActive("toggleDeveloperMode", !!appState.developerMode);
+      setValIfNotActive("selectRobloxChannel", appState.robloxChannel || "LIVE");
+      setCheckedIfNotActive("toggleDisablePackageCleanup", !!appState.debugDisablePackageCleanup);
+      setCheckedIfNotActive("toggleBypassConnectivity", !!appState.bypassConnectivityChecks);
+      setCheckedIfNotActive("toggleVerboseLogging", !!appState.verboseBootstrapperLogging);
 
       // Installation Tab
-      document.getElementById("toggleDesktopShortcuts").checked = appState.createDesktopShortcuts !== false;
-      document.getElementById("toggleAppsShortcut").checked = appState.createAppsShortcut !== false;
-      document.getElementById("toggleRegisterUrlHandler").checked = appState.registerUrlHandler !== false;
+      setCheckedIfNotActive("toggleDesktopShortcuts", appState.createDesktopShortcuts !== false);
+      setCheckedIfNotActive("toggleAppsShortcut", appState.createAppsShortcut !== false);
+      setCheckedIfNotActive("toggleRegisterUrlHandler", appState.registerUrlHandler !== false);
 
       // Gold Tab
       document.getElementById("goldTierTitle").textContent = "BLOXSTRAP " + appState.currentTierName.toUpperCase();
@@ -3693,19 +3755,59 @@
           openEditAccountModal(acc);
         });
 
-        // Delete
+        // Delete (In-App Fluent Confirmation Modal)
         card.querySelector(".btn-card-delete").addEventListener("click", () => {
-          if (confirm(`Are you sure you want to delete profile @${acc.username}?`)) {
-            appState.accounts = (appState.accounts || []).filter(a => a.id !== acc.id);
-            selectedAccountIds.delete(acc.id);
-            renderAccountsList();
-            sendToHost("deleteAccount", { id: acc.id });
-          }
+          promptDeleteAccount(acc);
         });
 
         fullContainer.appendChild(card);
       });
     }
+
+    // --- IN-APP FLUENT DELETE CONFIRMATION HANDLERS ---
+    let pendingDeleteTarget = null;
+
+    function promptDeleteAccount(acc) {
+      pendingDeleteTarget = { type: "single", id: acc.id, username: acc.username, displayName: acc.displayName };
+      document.getElementById("confirmDeleteTitle").textContent = `Delete @${acc.username}?`;
+      document.getElementById("confirmDeleteMsg").textContent = `Are you sure you want to remove profile @${acc.username} (${acc.displayName}) from Roblox Account Manager? This cannot be undone.`;
+      document.getElementById("confirmDeleteModal").style.display = "flex";
+    }
+
+    function promptBatchDelete(ids) {
+      if (ids.length === 0) return;
+      pendingDeleteTarget = { type: "batch", ids: ids };
+      document.getElementById("confirmDeleteTitle").textContent = `Delete ${ids.length} Accounts?`;
+      document.getElementById("confirmDeleteMsg").textContent = `Are you sure you want to permanently remove ${ids.length} selected account profiles from Roblox Account Manager?`;
+      document.getElementById("confirmDeleteModal").style.display = "flex";
+    }
+
+    document.getElementById("btnCancelConfirmDelete")?.addEventListener("click", () => {
+      document.getElementById("confirmDeleteModal").style.display = "none";
+      pendingDeleteTarget = null;
+    });
+
+    document.getElementById("btnExecuteConfirmDelete")?.addEventListener("click", () => {
+      if (!pendingDeleteTarget) return;
+      if (pendingDeleteTarget.type === "single") {
+        const targetId = pendingDeleteTarget.id;
+        const targetUser = pendingDeleteTarget.username;
+        appState.accounts = (appState.accounts || []).filter(a => a.id !== targetId);
+        selectedAccountIds.delete(targetId);
+        renderAccountsList();
+        sendToHost("deleteAccount", { id: targetId });
+        showToast(`🗑 Removed @${targetUser} from RAM`);
+      } else if (pendingDeleteTarget.type === "batch") {
+        const ids = pendingDeleteTarget.ids;
+        appState.accounts = (appState.accounts || []).filter(a => !ids.includes(a.id));
+        ids.forEach(id => selectedAccountIds.delete(id));
+        renderAccountsList();
+        sendToHost("deleteMultipleAccounts", { ids });
+        showToast(`🗑 Removed ${ids.length} accounts from RAM`);
+      }
+      document.getElementById("confirmDeleteModal").style.display = "none";
+      pendingDeleteTarget = null;
+    });
 
     function escapeHtml(str) {
       if (!str) return "";
@@ -3812,13 +3914,7 @@
     if (batchDeleteBtn) {
       batchDeleteBtn.addEventListener("click", () => {
         if (selectedAccountIds.size === 0) return;
-        if (confirm(`Are you sure you want to delete ${selectedAccountIds.size} selected accounts?`)) {
-          const ids = Array.from(selectedAccountIds);
-          appState.accounts = (appState.accounts || []).filter(a => !selectedAccountIds.has(a.id));
-          selectedAccountIds.clear();
-          renderAccountsList();
-          sendToHost("deleteMultipleAccounts", { ids });
-        }
+        promptBatchDelete(Array.from(selectedAccountIds));
       });
     }
 
@@ -3946,8 +4042,16 @@
       modalUserId.value = "1";
       modalTag.value = "Alt";
       modalNote.value = "";
-      if (modalDefaultPlace) modalDefaultPlace.value = "";
-      if (modalCookie) modalCookie.value = "";
+      if (modalDefaultPlace) {
+        modalDefaultPlace.value = "";
+        updatePlaceChipsActiveState("");
+      }
+      if (modalCookie) {
+        modalCookie.value = "";
+        modalCookie.type = "password";
+      }
+      const eyeBtn = document.getElementById("btnToggleCookieVisibility");
+      if (eyeBtn) eyeBtn.textContent = "👁 Show";
       if (modalPinAccount) modalPinAccount.checked = false;
       accountModal.style.display = "flex";
       modalUsername.focus();
@@ -3966,31 +4070,59 @@
       modalUserId.value = acc.userId || "1";
       modalTag.value = acc.tag || "Alt";
       modalNote.value = acc.note || "";
-      if (modalDefaultPlace) modalDefaultPlace.value = acc.defaultPlaceId || "";
-      if (modalCookie) modalCookie.value = acc.cookie || "";
+      if (modalDefaultPlace) {
+        modalDefaultPlace.value = acc.defaultPlaceId || "";
+        updatePlaceChipsActiveState(acc.defaultPlaceId || "");
+      }
+      if (modalCookie) {
+        modalCookie.value = acc.cookie || "";
+        modalCookie.type = "password";
+      }
+      const eyeBtn = document.getElementById("btnToggleCookieVisibility");
+      if (eyeBtn) eyeBtn.textContent = "👁 Show";
       if (modalPinAccount) modalPinAccount.checked = !!acc.isPinned;
       accountModal.style.display = "flex";
       modalDisplayName.focus();
     }
 
+    function updatePlaceChipsActiveState(val) {
+      const trimmed = String(val || "").trim();
+      document.querySelectorAll("[data-modal-place]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.modalPlace === trimmed);
+      });
+    }
+
     // Modal place preset buttons
     document.querySelectorAll("[data-modal-place]").forEach(btn => {
       btn.addEventListener("click", () => {
-        if (modalDefaultPlace) modalDefaultPlace.value = btn.dataset.modalPlace;
+        if (modalDefaultPlace) {
+          modalDefaultPlace.value = btn.dataset.modalPlace;
+          updatePlaceChipsActiveState(btn.dataset.modalPlace);
+        }
       });
+    });
+
+    modalDefaultPlace?.addEventListener("input", (e) => {
+      updatePlaceChipsActiveState(e.target.value);
     });
 
     // Cookie visibility toggle & paste
     document.getElementById("btnToggleCookieVisibility")?.addEventListener("click", () => {
       if (modalCookie) {
-        modalCookie.type = modalCookie.type === "password" ? "text" : "password";
+        const isPassword = modalCookie.type === "password";
+        modalCookie.type = isPassword ? "text" : "password";
+        const eyeBtn = document.getElementById("btnToggleCookieVisibility");
+        if (eyeBtn) eyeBtn.textContent = isPassword ? "👁 Hide" : "👁 Show";
       }
     });
 
     document.getElementById("btnPasteCookie")?.addEventListener("click", async () => {
       try {
         const text = await navigator.clipboard.readText();
-        if (text && modalCookie) modalCookie.value = text.trim();
+        if (text && modalCookie) {
+          modalCookie.value = text.trim();
+          showToast("📋 Cookie pasted from clipboard");
+        }
       } catch (e) {
         if (modalCookie) modalCookie.focus();
       }
