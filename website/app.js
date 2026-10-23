@@ -20,77 +20,76 @@ const TIERS_META = {
   1: {
     id: 1,
     name: 'Gold Basic',
-    badge: 'Barely Gold Edition',
+    badge: 'Standard Edition',
     icon: '🪙',
-    desc: 'For people who can only afford to farm on one alt while their main lags.',
+    desc: 'Entry-level dual-instance bootstrapper with basic FPS uncapping and gold styling.',
     instanceLimit: 2,
     features: [
-      'Up to 2 instances (1 for you, 1 alt that will probably crash)',
-      'Hard 240 FPS limit (you don\'t deserve uncapped yet)',
-      'Standard Roblox crash screens (good luck reconnecting)',
-      'Low-tier bronze Discord status that basically says "I tried"',
-      'Basic FastFlags only (nothing that actually helps your ping)',
+      'Up to 2 simultaneous Roblox client instances',
+      '240 FPS target framerate cap',
+      'Basic FastFlag presets (FPS & DPI scaling)',
+      'Standard Roblox client crash handling',
+      'Bronze Gold Discord Rich Presence badge',
       'Email support (replies in 3 to 5 business days if we feel like it)'
     ]
   },
   2: {
     id: 2,
     name: 'Gold Plus',
-    badge: 'Aggressively Mid Edition',
+    badge: 'Plus Edition',
     icon: '👑',
-    desc: '5 instances. Your fans will sound like a jet engine, but at least your friends think you have money.',
+    desc: 'Expanded 5-instance capacity, monitor-refresh framerates, and live telemetry.',
     instanceLimit: 5,
     featured: true,
     ribbon: 'Most Popular',
     features: [
-      'Up to 5 instances (your CPU is going to melt)',
-      'FPS locked to your monitor refresh rate (why would you need more?)',
-      '18k gold Discord badge (everyone will know you couldn\'t afford Ultra)',
-      'Standard memory cleanup (still starts leaking RAM after 2 hours)',
-      'Server ping display (so you can watch yourself lag in real-time)',
+      'Up to 5 simultaneous Roblox client instances',
+      'Framerate uncapped to monitor refresh rate (144Hz / 240Hz)',
+      '18k Polished Gold Discord Rich Presence badge',
+      'Automated background instance memory cleanup',
+      'Live server location and ping display (ipinfo.io)',
       'Priority ticket queue (strictly behind all Ultra members)'
     ]
   },
   3: {
     id: 3,
     name: 'Gold Deluxe',
-    badge: 'Almost Rich Edition',
+    badge: 'Deluxe Edition',
     icon: '💎',
-    desc: 'Unlimited instances, but you\'re still missing the god-tier privileges and everyone knows it.',
+    desc: 'Unlimited instances, fully uncapped framerates, and raw FastFlag memory access.',
     instanceLimit: 999,
-    ribbon: 'Upper Class',
+    ribbon: 'Ultimate',
     features: [
-      'Unlimited instances (until Windows runs out of pagefile and dies)',
-      'Uncapped 9999 FPS target (renders frames your eyes physically can\'t see)',
-      'Solid gold Discord badge (looks nice, but everyone knows Ultra exists)',
-      'Manual FastFlag editor (you have to write your own JSON, no hand-holding)',
-      'Auto-reconnect prompt when Roblox kicks you with Error 273',
-      'You still don\'t get the Ultra badge, which is frankly embarrassing'
+      'Unlimited simultaneous Roblox client instances',
+      'Fully uncapped framerate (up to 9999 FPS target)',
+      '24k Solid Gold Discord Rich Presence badge',
+      'Full FastFlag JSON editor with custom flag injection',
+      'Automatic token restore on disconnect (Error 273)',
+      'Dedicated priority email support queue'
     ]
   },
   4: {
     id: 4,
     name: 'Gold ULTRA',
-    badge: 'God Complex Edition',
+    badge: 'Ultra Edition',
     icon: '🌌',
-    desc: 'For people with more money than sense. Infinite alts, zero lag, and Roblox legally required to respect you.',
+    desc: 'The $200/mo apex tier. Infinite instance scaling, real-time CPU thread priority, instant reconnection, and VIP respect.',
     instanceLimit: 9999,
     ribbon: '$200/mo Apex',
     ultra: true,
     features: [
-      'Infinite instances with zero RAM guilt (we bully Windows into prioritizing your alts)',
-      'Roblox Error 273 & 268 bypass (reconnects before the server even knows you got kicked)',
-      'Uncapped 9999 FPS (draws frames your monitor physically cannot display just to flex)',
-      'Original 2006 "OOF" sound with max bass boost (replaces modern death squish)',
-      'Obsidian & Liquid Gold Discord Rich Presence (friends will ask why you spent $200 on Bloxstrap)',
-      'P-Core CPU priority (pushes Chrome and Discord to the background so Roblox gets 100% CPU)',
-      'Instant Place Join (skips server loading screen animations and matchmaking queues)',
-      'Pre-tuned god-tier FastFlags (all 12 allowlisted flags dialed in so you never drop a frame)',
-      'Anti-freeze crash protector (if one alt freezes, the other 40 keep farming)',
-      'Zero-cooldown server hopping (hops servers faster than Roblox\'s API can rate-limit you)',
-      'Direct route optimizer (picks the fastest server and bullies it into letting you in)',
-      'The right to look down on everyone on Basic, Plus, and Deluxe',
-      'Everything in the lower tiers, but without the shame'
+      'Infinite simultaneous instances with dedicated CPU core pinning',
+      'Instant auto-reconnect on client disconnects & Error 273',
+      'Fully uncapped 9999 FPS with zero-latency frame pacing',
+      'Classic 2006 "OOF" death sound with studio audio EQ',
+      'Obsidian & Liquid Gold animated Discord Rich Presence badge',
+      'Real-time process priority scheduling (REALTIME_PRIORITY_CLASS)',
+      'Instant place joining with matchmaking queue bypass',
+      'Pre-configured God Vault FastFlags (Max Performance & Visuals)',
+      'Background instance watchdog & automated freeze recovery',
+      'Zero-cooldown server hopper with automated ping sorting',
+      'Direct low-latency route selection for game servers',
+      '4-minute direct line + VIP respect'
     ]
   }
 };
@@ -102,10 +101,10 @@ const PRICING_MATRIX = {
     label: 'Weekly',
     periodText: '/ week',
     tiers: {
-      1: { price: 2.99, monthlyEquiv: 11.96, savings: 'Billed weekly • Minimal commitment' },
-      2: { price: 4.99, monthlyEquiv: 19.96, savings: 'Billed weekly • Mid-tier tax' },
-      3: { price: 7.99, monthlyEquiv: 31.96, savings: 'Billed weekly • Expensive, still not Ultra' },
-      4: { price: 59.99, monthlyEquiv: 239.96, savings: 'Billed weekly • $60/wk just to flex on alts' }
+      1: { price: 2.99, monthlyEquiv: 11.96, savings: 'Billed weekly • Cancel anytime' },
+      2: { price: 4.99, monthlyEquiv: 19.96, savings: 'Billed weekly • Cancel anytime' },
+      3: { price: 7.99, monthlyEquiv: 31.96, savings: 'Billed weekly • Cancel anytime' },
+      4: { price: 59.99, monthlyEquiv: 239.96, savings: 'Billed weekly • Maximum flexibility' }
     }
   },
   monthly: {
@@ -113,10 +112,10 @@ const PRICING_MATRIX = {
     label: 'Monthly',
     periodText: '/ month',
     tiers: {
-      1: { price: 6.99, monthlyEquiv: 6.99, savings: 'Save 42% vs weekly • Still budget' },
-      2: { price: 12.99, monthlyEquiv: 12.99, savings: 'Save 35% vs weekly • Aggressively mid' },
-      3: { price: 19.99, monthlyEquiv: 19.99, savings: 'Save 38% vs weekly • Upper peasant tier' },
-      4: { price: 199.99, monthlyEquiv: 199.99, savings: 'The full $200/mo god complex' }
+      1: { price: 6.99, monthlyEquiv: 6.99, savings: 'Standard monthly rate' },
+      2: { price: 12.99, monthlyEquiv: 12.99, savings: 'Save 35% vs weekly' },
+      3: { price: 19.99, monthlyEquiv: 19.99, savings: 'Save 38% vs weekly' },
+      4: { price: 199.99, monthlyEquiv: 199.99, savings: 'The $200/mo apex standard' }
     }
   },
   quarterly: {
@@ -124,10 +123,10 @@ const PRICING_MATRIX = {
     label: 'Quarterly',
     periodText: '/ quarter',
     tiers: {
-      1: { price: 16.99, monthlyEquiv: 5.66, savings: 'Save 19% (~$5.66/mo) • Budget quarterly' },
-      2: { price: 29.99, monthlyEquiv: 9.99, savings: 'Save 23% (~$9.99/mo) • Mid quarterly' },
-      3: { price: 46.99, monthlyEquiv: 15.66, savings: 'Save 22% (~$15.66/mo) • Deluxe quarterly' },
-      4: { price: 499.99, monthlyEquiv: 166.66, savings: 'Save 17% (~$166.66/mo) • Sovereign quarterly' }
+      1: { price: 16.99, monthlyEquiv: 5.66, savings: 'Save 19% (~$5.66/mo)' },
+      2: { price: 29.99, monthlyEquiv: 9.99, savings: 'Save 23% (~$9.99/mo)' },
+      3: { price: 46.99, monthlyEquiv: 15.66, savings: 'Save 22% (~$15.66/mo)' },
+      4: { price: 499.99, monthlyEquiv: 166.66, savings: 'Save 17% (~$166.66/mo)' }
     }
   },
   yearly: {
@@ -135,10 +134,10 @@ const PRICING_MATRIX = {
     label: 'Yearly',
     periodText: '/ year',
     tiers: {
-      1: { price: 49.99, monthlyEquiv: 4.16, savings: 'Save 40% on being budget (~$4.16/mo)' },
-      2: { price: 89.99, monthlyEquiv: 7.49, savings: 'Save 42% on being mid (~$7.49/mo)' },
-      3: { price: 139.99, monthlyEquiv: 11.66, savings: 'Save 41% on being almost rich (~$11.66/mo)' },
-      4: { price: 1599.99, monthlyEquiv: 133.33, savings: 'Save 33% on pure sovereign supremacy' }
+      1: { price: 49.99, monthlyEquiv: 4.16, savings: 'Save 40% (~$4.16/mo)' },
+      2: { price: 89.99, monthlyEquiv: 7.49, savings: 'Save 42% (~$7.49/mo)' },
+      3: { price: 139.99, monthlyEquiv: 11.66, savings: 'Save 41% (~$11.66/mo)' },
+      4: { price: 1599.99, monthlyEquiv: 133.33, savings: 'Save 33% (~$133.33/mo)' }
     }
   },
   lifetime: {
@@ -146,10 +145,10 @@ const PRICING_MATRIX = {
     label: 'Lifetime',
     periodText: 'one-time',
     tiers: {
-      1: { price: 99.99, monthlyEquiv: null, savings: 'Pay once, stay budget forever' },
-      2: { price: 189.99, monthlyEquiv: null, savings: 'Pay once, stay mid forever' },
-      3: { price: 349.99, monthlyEquiv: null, savings: 'Pay once, almost rich forever' },
-      4: { price: 2999.99, monthlyEquiv: null, savings: 'One-time $3,000 investment in Roblox supremacy' }
+      1: { price: 99.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
+      2: { price: 189.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
+      3: { price: 349.99, monthlyEquiv: null, savings: 'Pay once, permanent access' },
+      4: { price: 4799.99, monthlyEquiv: null, savings: '3-year equivalent permanent sovereign license' }
     }
   }
 };
@@ -464,7 +463,8 @@ function setupPayingWindow() {
 
   // REALISTIC PAYMENT PROCESSING LOGIC:
   // The button stays firmly stationary (no running away).
-  // Clicking simulates real gateway handshakes before declining with prompt's exact error string.
+  // Clicking simulates real gateway handshakes: ~35% chance card "goes through" (authorizes at $0.00),
+  // otherwise declines with prompt's exact error string.
   if (buyPayBtn) {
     buyPayBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -490,15 +490,34 @@ function setupPayingWindow() {
         buyPayBtn.innerHTML = '<span class="btn-spinner"></span> Finalizing 3D Secure protocol...';
       }, 1800);
 
-      // Stage 4: Decline & Prompt-Mandated Error Message
+      // Stage 4: Gate resolution (~35% chance card "goes through", 65% declines)
       setTimeout(() => {
-        buyPayBtn.classList.remove('processing');
-        buyPayBtn.innerHTML = originalText;
-        buyPayBtn.style.pointerEvents = 'auto';
+        const isApproved = Math.random() < 0.35;
 
-        if (errorBanner) {
-          errorBanner.classList.add('show');
-          errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (isApproved) {
+          buyPayBtn.innerHTML = '✓ Payment Approved!';
+          buyPayBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+          buyPayBtn.style.borderColor = '#10b981';
+          buyPayBtn.style.color = '#ffffff';
+
+          setTimeout(() => {
+            buyPayBtn.classList.remove('processing');
+            buyPayBtn.innerHTML = originalText;
+            buyPayBtn.style.background = '';
+            buyPayBtn.style.borderColor = '';
+            buyPayBtn.style.color = '';
+            buyPayBtn.style.pointerEvents = 'auto';
+            startFreeTrial(true);
+          }, 700);
+        } else {
+          buyPayBtn.classList.remove('processing');
+          buyPayBtn.innerHTML = originalText;
+          buyPayBtn.style.pointerEvents = 'auto';
+
+          if (errorBanner) {
+            errorBanner.classList.add('show');
+            errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
         }
       }, 2600);
     });
@@ -508,7 +527,7 @@ function setupPayingWindow() {
   // Directly beneath the pay button. Never moves. Triggers the 7-day free trial.
   if (payLaterBtn) {
     payLaterBtn.addEventListener('click', () => {
-      startFreeTrial();
+      startFreeTrial(false);
     });
   }
 
@@ -524,7 +543,7 @@ function setupPayingWindow() {
 
   if (successUnlockVaultBtn) {
     successUnlockVaultBtn.addEventListener('click', () => {
-      const generatedKey = document.getElementById('generatedLicenseKey')?.textContent || 'GOLD-7DAY-8849-F291-C84B-9102-E7A4';
+      const generatedKey = document.getElementById('generatedLicenseKey')?.textContent || 'GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN';
       unlockVaultWithKey(generatedKey);
       closeCheckout();
       const vaultSec = document.getElementById('fastflags');
@@ -552,6 +571,9 @@ function openCheckout(tierId = 2, cycle = 'yearly') {
   if (buyPayBtn) {
     buyPayBtn.classList.remove('processing');
     buyPayBtn.style.pointerEvents = 'auto';
+    buyPayBtn.style.background = '';
+    buyPayBtn.style.borderColor = '';
+    buyPayBtn.style.color = '';
   }
 
   // Calculate prices
@@ -600,19 +622,40 @@ function closeCheckout() {
   document.body.style.overflow = '';
 }
 
-function generateEnterpriseKey() {
+function generateEnterpriseKey(tierId = selectedCheckoutTier) {
+  const tierTags = {
+    1: 'BASIC',
+    2: 'PLUS',
+    3: 'DELUXE',
+    4: 'ULTRA'
+  };
+  const tag = tierTags[tierId] || 'PLUS';
   const seg = () => Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `GOLD-7DAY-${seg()}-${seg()}-${seg()}-${seg()}`;
+  return `GOLD-7DAY-${tag}-${seg()}-${seg()}-${seg()}`;
 }
 
-function startFreeTrial() {
+function startFreeTrial(isApproved = false) {
   const formView = document.getElementById('checkoutFormView');
   const successView = document.getElementById('checkoutSuccessView');
   const licenseKeyEl = document.getElementById('generatedLicenseKey');
   const deepLinkActivateBtn = document.getElementById('deepLinkActivateBtn');
+  const titleEl = document.getElementById('checkoutSuccessTitle');
+  const subtitleEl = document.getElementById('checkoutSuccessSubtitle');
 
-  // Generate authentic multi-segment enterprise key
-  const generatedKey = generateEnterpriseKey();
+  const meta = TIERS_META[selectedCheckoutTier] || TIERS_META[2];
+
+  // Generate tier-tagged multi-segment enterprise key
+  const generatedKey = generateEnterpriseKey(selectedCheckoutTier);
+
+  if (titleEl) {
+    titleEl.textContent = isApproved ? 'Payment Approved!' : 'Your 7-day free trial has started.';
+  }
+
+  if (subtitleEl) {
+    subtitleEl.textContent = isApproved
+      ? `Transaction authorized at $0.00. Your Bloxstrap Gold ${meta.name} license is provisioned below:`
+      : 'Download Bloxstrap Gold below and enjoy built-in multi-instance support and the gold theme.';
+  }
 
   if (licenseKeyEl) {
     licenseKeyEl.textContent = generatedKey;

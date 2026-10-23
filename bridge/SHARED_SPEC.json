@@ -5,9 +5,9 @@
   "updated_at": "2026-10-21T16:45:00Z",
   "app_developer_notes": "Single source of truth shared between Website and Desktop App.",
   "license_key": {
-    "format": "^GOLD-7DAY-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$",
+    "format": "^GOLD-7DAY-(BASIC|PLUS|DELUXE|ULTRA)-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$",
     "vault_gate_regex": "^GOLD-.{2,}$",
-    "example": "GOLD-7DAY-8849-F291-C84B-9102-E7A4"
+    "example": "GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN"
   },
   "deep_linking": {
     "protocol": "bloxstrap-gold",
@@ -17,6 +17,7 @@
   "checkout_behavior": {
     "pay_button_motion": "stationary",
     "processing_duration_ms": 2600,
+    "card_approval_chance": 0.35,
     "stages": [
       { "delay_ms": 0, "status": "Contacting payment network..." },
       { "delay_ms": 900, "status": "Authorizing with card issuer..." },
@@ -28,16 +29,16 @@
     "1": {
       "id": 1,
       "name": "Gold Basic",
-      "badge": "Barely Gold Edition",
-      "desc": "For people who can only afford to farm on one alt while their main lags.",
+      "badge": "Standard Edition",
+      "desc": "Entry-level dual-instance bootstrapper with basic FPS uncapping and gold styling.",
       "instance_limit": 2,
       "fps_cap": 240,
       "features": [
-        "Up to 2 instances (1 for you, 1 alt that will probably crash)",
-        "Hard 240 FPS limit (you don't deserve uncapped yet)",
-        "Standard Roblox crash screens (good luck reconnecting)",
-        "Low-tier bronze Discord status that basically says 'I tried'",
-        "Basic FastFlags only (nothing that actually helps your ping)",
+        "Up to 2 simultaneous Roblox client instances",
+        "240 FPS target framerate cap",
+        "Basic FastFlag presets (FPS & DPI scaling)",
+        "Standard Roblox client crash handling",
+        "Bronze Gold Discord Rich Presence badge",
         "Email support (replies in 3 to 5 business days if we feel like it)"
       ],
       "pricing_usd": {
@@ -51,17 +52,17 @@
     "2": {
       "id": 2,
       "name": "Gold Plus",
-      "badge": "Aggressively Mid Edition",
-      "desc": "5 instances. Your fans will sound like a jet engine, but at least your friends think you have money.",
+      "badge": "Plus Edition",
+      "desc": "Expanded 5-instance capacity, monitor-refresh framerates, and live telemetry.",
       "featured": true,
       "instance_limit": 5,
       "fps_cap": "monitor_refresh",
       "features": [
-        "Up to 5 instances (your CPU is going to melt)",
-        "FPS locked to your monitor refresh rate (why would you need more?)",
-        "18k gold Discord badge (everyone will know you couldn't afford Ultra)",
-        "Standard memory cleanup (still starts leaking RAM after 2 hours)",
-        "Server ping display (so you can watch yourself lag in real-time)",
+        "Up to 5 simultaneous Roblox client instances",
+        "Framerate uncapped to monitor refresh rate (144Hz / 240Hz)",
+        "18k Polished Gold Discord Rich Presence badge",
+        "Automated background instance memory cleanup",
+        "Live server location and ping display (ipinfo.io)",
         "Priority ticket queue (strictly behind all Ultra members)"
       ],
       "pricing_usd": {
@@ -75,17 +76,17 @@
     "3": {
       "id": 3,
       "name": "Gold Deluxe",
-      "badge": "Almost Rich Edition",
-      "desc": "Unlimited instances, but you're still missing the god-tier privileges and everyone knows it.",
+      "badge": "Deluxe Edition",
+      "desc": "Unlimited instances, fully uncapped framerates, and raw FastFlag memory access.",
       "instance_limit": 999,
       "fps_cap": 9999,
       "features": [
-        "Unlimited instances (until Windows runs out of pagefile and dies)",
-        "Uncapped 9999 FPS target (renders frames your eyes physically can't see)",
-        "Solid gold Discord badge (looks nice, but everyone knows Ultra exists)",
-        "Manual FastFlag editor (you have to write your own JSON, no hand-holding)",
-        "Auto-reconnect prompt when Roblox kicks you with Error 273",
-        "You still don't get the Ultra badge, which is frankly embarrassing"
+        "Unlimited simultaneous Roblox client instances",
+        "Fully uncapped framerate (up to 9999 FPS target)",
+        "24k Solid Gold Discord Rich Presence badge",
+        "Full FastFlag JSON editor with custom flag injection",
+        "Automatic token restore on disconnect (Error 273)",
+        "Dedicated priority email support queue"
       ],
       "pricing_usd": {
         "weekly": 7.99,
@@ -98,32 +99,31 @@
     "4": {
       "id": 4,
       "name": "Gold ULTRA",
-      "badge": "God Complex Edition",
-      "desc": "For people with more money than sense. Infinite alts, zero lag, and Roblox legally required to respect you.",
+      "badge": "Ultra Edition",
+      "desc": "The $200/mo apex tier. Infinite instance scaling, real-time CPU thread priority, instant reconnection, and VIP respect.",
       "apex": true,
       "instance_limit": 9999,
       "fps_cap": 9999,
       "features": [
-        "Infinite instances with zero RAM guilt (we bully Windows into prioritizing your alts)",
-        "Roblox Error 273 & 268 bypass (reconnects before the server even knows you got kicked)",
-        "Uncapped 9999 FPS (draws frames your monitor physically cannot display just to flex)",
-        "Original 2006 'OOF' sound with max bass boost (replaces modern death squish)",
-        "Obsidian & Liquid Gold Discord Rich Presence (friends will ask why you spent $200 on Bloxstrap)",
-        "P-Core CPU priority (pushes Chrome and Discord to the background so Roblox gets 100% CPU)",
-        "Instant Place Join (skips server loading screen animations and matchmaking queues)",
-        "Pre-tuned god-tier FastFlags (all 12 allowlisted flags dialed in so you never drop a frame)",
-        "Anti-freeze crash protector (if one alt freezes, the other 40 keep farming)",
-        "Zero-cooldown server hopping (hops servers faster than Roblox's API can rate-limit you)",
-        "Direct route optimizer (picks the fastest server and bullies it into letting you in)",
-        "The right to look down on everyone on Basic, Plus, and Deluxe",
-        "Everything in the lower tiers, but without the shame"
+        "Infinite simultaneous instances with dedicated CPU core pinning",
+        "Instant auto-reconnect on client disconnects & Error 273",
+        "Fully uncapped 9999 FPS with zero-latency frame pacing",
+        "Classic 2006 'OOF' death sound with studio audio EQ",
+        "Obsidian & Liquid Gold animated Discord Rich Presence badge",
+        "Real-time process priority scheduling (REALTIME_PRIORITY_CLASS)",
+        "Instant place joining with matchmaking queue bypass",
+        "Pre-configured God Vault FastFlags (Max Performance & Visuals)",
+        "Background instance watchdog & automated freeze recovery",
+        "Zero-cooldown server hopper with automated ping sorting",
+        "Direct low-latency route selection for game servers",
+        "4-minute direct line + VIP respect"
       ],
       "pricing_usd": {
         "weekly": 59.99,
         "monthly": 199.99,
         "quarterly": 499.99,
         "yearly": 1599.99,
-        "lifetime": 2999.99
+        "lifetime": 4799.99
       }
     }
   },

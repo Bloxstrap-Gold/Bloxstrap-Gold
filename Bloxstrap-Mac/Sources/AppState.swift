@@ -12,7 +12,16 @@ public class AppState {
         public var vipKey: String? = nil
         public var isFastFlagsUnlocked: Bool = false
         public var multiInstanceEnabled: Bool = true
-        public var targetFps: Int = 240
+        public var targetFps: Int = 9999
+        public var preferredLighting: String = "Future (Phase 3)"
+        public var escapeMenuVersion: String = "Version 4 (2023)"
+        public var hideGuisEnabled: Bool = true
+        public var renderingMode: String = "Direct3D 11"
+        public var exclusiveFullscreen: Bool = false
+        public var alternateQualitySelector: Bool = false
+        public var inGameMenuVersion: String = "Version 3 (2021)"
+        public var disableFullscreenOptimizations: Bool = false
+        public var customDeathSound: Bool = true
     }
     
     private let fileManager = FileManager.default
@@ -45,6 +54,93 @@ public class AppState {
         }
     }
     
+    // MARK: - Key Authentication & Tier Detection
+    
+    public var isAuthenticated: Bool {
+        guard let key = data.vipKey else { return false }
+        return key.uppercased().hasPrefix("GOLD-7DAY-")
+    }
+    
+    public var currentTierName: String {
+        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-7DAY-") else {
+            return "Unauthenticated"
+        }
+        if key.contains("-ULTRA-") {
+            return "Gold ULTRA"
+        } else if key.contains("-DELUXE-") {
+            return "Gold Deluxe"
+        } else if key.contains("-PLUS-") {
+            return "Gold Plus"
+        } else if key.contains("-BASIC-") {
+            return "Gold Basic"
+        } else {
+            return "Gold VIP Trial"
+        }
+    }
+    
+    public var currentTierBadge: String {
+        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-7DAY-") else {
+            return "🔒 LOCKED"
+        }
+        if key.contains("-ULTRA-") {
+            return "👑 ULTRA VIP"
+        } else if key.contains("-DELUXE-") {
+            return "🥇 DELUXE"
+        } else if key.contains("-PLUS-") {
+            return "🥈 PLUS"
+        } else if key.contains("-BASIC-") {
+            return "🥉 BASIC"
+        } else {
+            return "🟢 VIP TRIAL"
+        }
+    }
+    
+    public var currentTierPrice: String {
+        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-7DAY-") else {
+            return "$0.00"
+        }
+        if key.contains("-ULTRA-") {
+            return "$199.99/mo"
+        } else if key.contains("-DELUXE-") {
+            return "$19.99/mo"
+        } else if key.contains("-PLUS-") {
+            return "$12.99/mo"
+        } else if key.contains("-BASIC-") {
+            return "$6.99/mo"
+        } else {
+            return "FREE FOREVER"
+        }
+    }
+    
+    public func detectTier(from key: String) -> String {
+        let upper = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        guard upper.hasPrefix("GOLD-7DAY-") else { return "Invalid" }
+        if upper.contains("-ULTRA-") { return "Gold ULTRA ($199.99/mo)" }
+        if upper.contains("-DELUXE-") { return "Gold Deluxe ($19.99/mo)" }
+        if upper.contains("-PLUS-") { return "Gold Plus ($12.99/mo)" }
+        if upper.contains("-BASIC-") { return "Gold Basic ($6.99/mo)" }
+        return "VIP Free Trial (7 Days)"
+    }
+    
+    public func verifyAndApplyKey(_ key: String) -> Bool {
+        let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        guard trimmed.hasPrefix("GOLD-") && trimmed.count >= 6 else {
+            return false
+        }
+        data.vipKey = trimmed
+        data.isFastFlagsUnlocked = true
+        data.isPaymentIgnored = true
+        save()
+        return true
+    }
+    
+    public func deauthenticate() {
+        data.vipKey = nil
+        data.isFastFlagsUnlocked = false
+        data.isPaymentIgnored = false
+        save()
+    }
+    
     public var daysPassed: Int {
         let firstRun = data.firstRunDate ?? Date()
         let diff = Date().timeIntervalSince(firstRun)
@@ -56,29 +152,13 @@ public class AppState {
     }
     
     public var isExpired: Bool {
-        // If payment was ignored, user has bypassed payment permanently!
-        if data.isPaymentIgnored {
-            return false
-        }
+        if data.isPaymentIgnored { return false }
         return data.forceTrialExpired || daysRemaining == 0
-    }
-    
-    public func verifyAndApplyKey(_ key: String) -> Bool {
-        let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        if trimmed.hasPrefix("GOLD-") && trimmed.count >= 6 {
-            data.vipKey = trimmed
-            data.isFastFlagsUnlocked = true
-            save()
-            return true
-        }
-        return false
     }
     
     public func setPaymentIgnored(_ ignored: Bool) {
         data.isPaymentIgnored = ignored
-        if ignored {
-            data.forceTrialExpired = false
-        }
+        if ignored { data.forceTrialExpired = false }
         save()
     }
     
@@ -98,9 +178,10 @@ public class AppState {
     
     public func resetTrial() {
         data.forceTrialExpired = false
+        data.firstRunDate = Date()
+        data.hasSeenGoldGreeting = true
         data.isPaymentIgnored = false
         data.isBannerDismissed = false
-        data.firstRunDate = Date()
         save()
     }
 }

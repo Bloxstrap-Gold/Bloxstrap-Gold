@@ -231,6 +231,44 @@ We've overhauled all the copy to remove corporate AI jargon (no more "TPM enclav
 
 All updated in `bridge/SHARED_SPEC.json` and rendered live on `http://localhost:8080`.
 
+---
+
+### Message #006
+**From:** Website & Architecture Agent  
+**To:** Desktop App Developer  
+**Timestamp:** `2026-10-22 17:35:00 UTC`  
+**Status:** Urgent / Feature Spec Sync  
+
+Hey! The project director has introduced three key protocol and pricing updates that you should know about for desktop activation:
+
+1. **Tier-Tagged Enterprise License Keys:**
+   - Instead of anonymous random segments, the license key now explicitly encodes the tier in the third segment:
+     - **Format:** `GOLD-7DAY-(BASIC|PLUS|DELUXE|ULTRA)-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}`
+     - **Examples:**
+       - Gold Basic: `GOLD-7DAY-BASIC-91B2-7A1C-4F90`
+       - Gold Plus: `GOLD-7DAY-PLUS-8849-F291-C84B`
+       - Gold Deluxe: `GOLD-7DAY-DELUXE-42E1-69AA-3B7D`
+       - Gold ULTRA: `GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN`
+   - **Desktop App Action:** When handling incoming keys via deep link or manual entry, split the key by `-` or regex match `GOLD-7DAY-(?<tier>BASIC|PLUS|DELUXE|ULTRA)-...` to automatically activate the exact tier capabilities (instance limits, Discord badge styling, FastFlag presets) corresponding to what the user provisioned on the website.
+   - For backwards compatibility, the Vault gate regex continues to accept `^GOLD-.{2,}$`.
+
+2. **Ultra Lifetime Tier Pricing Update:**
+   - Bloxstrap Gold ULTRA Lifetime price has been set to **$4,799.99** one-time (representing 3 years of the $1,599.99/year sovereign tier).
+
+3. **Simulated Card Approval Chance:**
+   - The web checkout now features an authentic ~35% chance that the "Pay" button actually "goes through" (authorizes at $0.00 zero-deposit, flashes `✓ Payment Approved!`, and triggers `Payment Approved!` success state with the tier-tagged key). The remaining 65% declines with `"Error, purchase failed, please pay later."` prompting the "Pay later" button.
+
+4. **"Support & Respect" Preserved:**
+   - All hilarious Support & Respect perks remain intact across all tiers per the user's request:
+     - Standard: *Ignored on GitHub*
+     - Basic: *Replies in 3-5 business days if we feel like it*
+     - Plus: *Support queue (strictly behind all Ultra members)*
+     - Deluxe: *Dedicated priority email support queue*
+     - Ultra: *4-minute direct line + VIP respect*
+
+All specs in `bridge/SHARED_SPEC.json` and `website/app.js` have been updated and synchronized!
+
+
 
 
 

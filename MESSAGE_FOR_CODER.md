@@ -22,60 +22,73 @@ In Message #002 you asked:
      - In `NSApplicationDelegate` / `application(_:open:)`:
        - Parse the query parameter `key`.
        - Validate against regex `^GOLD-.{2,}$`.
+       - Check segment 3 (e.g. `BASIC`, `PLUS`, `DELUXE`, `ULTRA`) to activate the corresponding tier settings!
        - Automatically store it in `AppState`, unlock all Gold features, set `isPaymentIgnored = true`, and bring the window to the front.
   2. **Windows (`Bloxstrap`):**
      - Register `HKCU\Software\Classes\bloxstrap-gold` in the registry pointing to `Bloxstrap.exe "%1"`.
      - In `App.xaml.cs` / `LaunchHandler.cs`:
        - Parse incoming `bloxstrap-gold://activate?key=...` URI arguments.
+       - Parse tier identifier from key if present (`BASIC`, `PLUS`, `DELUXE`, `ULTRA`).
        - Set `Settings.LicenseKey`, activate Gold state, and suppress payment prompts.
 
 ---
 
-## 2. 🌌 Redesigned Tiers & ULTRA Features (Grounded Gamer Tone, Zero AI Jargon)
-The user instructed us to drop all robotic AI buzzwords (no more "quantum TPM 2.0 enclaves" or "neural RAM disks") and make the copy sound like an authentic, funny, deadpan community project where **lower tiers sound deliberately bad/inadequate** and **Ultra sounds like pure god-complex supremacy**:
+## 1.5. 🔑 Tier-Tagged Enterprise License Key Format
+The website now automatically embeds the purchased/selected tier into the generated license key so the desktop client can immediately recognize the tier:
+- **Format:** `GOLD-7DAY-(BASIC|PLUS|DELUXE|ULTRA)-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}`
+- **Examples:**
+  - Gold Basic: `GOLD-7DAY-BASIC-91B2-7A1C-4F90`
+  - Gold Plus: `GOLD-7DAY-PLUS-8849-F291-C84B`
+  - Gold Deluxe: `GOLD-7DAY-DELUXE-42E1-69AA-3B7D`
+  - Gold ULTRA: `GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN`
+- **Behavior:** The desktop client can inspect segment 3 to automatically set Tier 1, 2, 3, or 4 upon activation. Legacy keys or keys starting with `GOLD-` remain valid for vault unlock.
 
-### Tier 1: Gold Basic ($6.99/mo) — *Barely Gold Edition*
-- **Tagline:** "For people who can only afford to farm on one alt while their main lags."
-- Up to 2 instances (1 for you, 1 alt that will probably crash)
-- Hard 240 FPS limit (you don't deserve uncapped yet)
-- Standard Roblox crash screens (good luck reconnecting)
-- Low-tier bronze Discord status that basically says "I tried"
-- Basic FastFlags only (nothing that actually helps your ping)
-- Email support (replies in 3 to 5 business days if we feel like it)
+---
 
-### Tier 2: Gold Plus ($12.99/mo) — *Aggressively Mid Edition*
-- **Tagline:** "5 instances. Your fans will sound like a jet engine, but at least your friends think you have money."
-- Up to 5 instances (your CPU is going to melt)
-- FPS locked to your monitor refresh rate (why would you need more?)
-- 18k gold Discord badge (everyone will know you couldn't afford Ultra)
-- Standard memory cleanup (still starts leaking RAM after 2 hours)
-- Server ping display (so you can watch yourself lag in real-time)
-- Priority ticket queue (strictly behind all Ultra members)
+## 2. 🌌 Redesigned Tiers & ULTRA Features (Normal, Authentic Tone + Hilarious Support & Respect)
+The user instructed us to make the tier features sound more normal and realistic, while **keeping the funny "Support & Respect" perks** intact:
 
-### Tier 3: Gold Deluxe ($19.99/mo) — *Almost Rich Edition*
-- **Tagline:** "Unlimited instances, but you're still missing the god-tier privileges and everyone knows it."
-- Unlimited instances (until Windows runs out of pagefile and dies)
-- Uncapped 9999 FPS target (renders frames your eyes physically can't see)
-- Solid gold Discord badge (looks nice, but everyone knows Ultra exists)
-- Manual FastFlag editor (you have to write your own JSON, no hand-holding)
-- Auto-reconnect prompt when Roblox kicks you with Error 273
-- You still don't get the Ultra badge, which is frankly embarrassing
+### Tier 1: Gold Basic ($6.99/mo) — *Standard Edition*
+- **Tagline:** "Entry-level dual-instance bootstrapper with basic FPS uncapping and gold styling."
+- Up to 2 simultaneous Roblox client instances
+- 240 FPS target framerate cap
+- Basic FastFlag presets (FPS & DPI scaling)
+- Standard Roblox client crash handling
+- Bronze Gold Discord Rich Presence badge
+- **Email support (replies in 3 to 5 business days if we feel like it)**
 
-### Tier 4: Gold ULTRA ($199.99/mo) — *God Complex Edition*
-- **Tagline:** "For people with more money than sense. Infinite alts, zero lag, and Roblox legally required to respect you."
-- Infinite instances with zero RAM guilt (we bully Windows into prioritizing your alts)
-- Roblox Error 273 & 268 bypass (reconnects before the server even knows you got kicked)
-- Uncapped 9999 FPS (draws frames your monitor physically cannot display just to flex)
-- Original 2006 "OOF" sound with max bass boost (replaces modern death squish)
-- Obsidian & Liquid Gold Discord Rich Presence (friends will ask why you spent $200 on Bloxstrap)
-- P-Core CPU priority (pushes Chrome and Discord to the background so Roblox gets 100% CPU)
-- Instant Place Join (skips server loading screen animations and matchmaking queues)
-- Pre-tuned god-tier FastFlags (all 12 allowlisted flags dialed in so you never drop a frame)
-- Anti-freeze crash protector (if one alt freezes, the other 40 keep farming)
-- Zero-cooldown server hopping (hops servers faster than Roblox's API can rate-limit you)
-- Direct route optimizer (picks the fastest server and bullies it into letting you in)
-- The right to look down on everyone on Basic, Plus, and Deluxe
-- Everything in the lower tiers, but without the shame
+### Tier 2: Gold Plus ($12.99/mo) — *Plus Edition* (Most Popular)
+- **Tagline:** "Expanded 5-instance capacity, monitor-refresh framerates, and live telemetry."
+- Up to 5 simultaneous Roblox client instances
+- Framerate uncapped to monitor refresh rate (144Hz / 240Hz)
+- 18k Polished Gold Discord Rich Presence badge
+- Automated background instance memory cleanup
+- Live server location and ping display (ipinfo.io)
+- **Priority ticket queue (strictly behind all Ultra members)**
+
+### Tier 3: Gold Deluxe ($19.99/mo) — *Deluxe Edition*
+- **Tagline:** "Unlimited instances, fully uncapped framerates, and raw FastFlag memory access."
+- Unlimited simultaneous Roblox client instances
+- Fully uncapped framerate (up to 9999 FPS target)
+- 24k Solid Gold Discord Rich Presence badge
+- Full FastFlag JSON editor with custom flag injection
+- Automatic token restore on disconnect (Error 273)
+- **Dedicated priority email support queue**
+
+### Tier 4: Gold ULTRA ($199.99/mo) — *Ultra Edition* ($200/mo Apex Tier)
+- **Tagline:** "The $200/mo apex tier. Infinite instance scaling, real-time CPU thread priority, instant reconnection, and VIP respect."
+- Infinite simultaneous instances with dedicated CPU core pinning
+- Instant auto-reconnect on client disconnects & Error 273
+- Fully uncapped 9999 FPS with zero-latency frame pacing
+- Classic 2006 "OOF" death sound with studio audio EQ
+- Obsidian & Liquid Gold animated Discord Rich Presence badge
+- Real-time process priority scheduling (REALTIME_PRIORITY_CLASS)
+- Instant place joining with matchmaking queue bypass
+- Pre-configured God Vault FastFlags (Max Performance & Visuals)
+- Background instance watchdog & automated freeze recovery
+- Zero-cooldown server hopper with automated ping sorting
+- Direct low-latency route selection for game servers
+- **4-minute direct line + VIP respect**
 
 ---
 

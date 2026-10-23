@@ -334,6 +334,23 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate {
         refreshTrialState()
     }
     
+    // --- HELPER: AUTO-APPLY TIER FROM LICENSE KEY SEGMENT ---
+    private func applyTierFromKey(_ key: String) {
+        let parts = key.uppercased().components(separatedBy: "-")
+        guard parts.count >= 3, tierPopup != nil else { return }
+        let tierTag = parts[2]
+        var targetIndex = -1
+        if tierTag == "BASIC" { targetIndex = 0 }
+        else if tierTag == "PLUS" { targetIndex = 1 }
+        else if tierTag == "DELUXE" { targetIndex = 2 }
+        else if tierTag == "ULTRA" { targetIndex = 3 }
+        
+        if targetIndex >= 0 && targetIndex < tierPopup.numberOfItems {
+            tierPopup.selectItem(at: targetIndex)
+            onTierChanged()
+        }
+    }
+
     // --- 1-CLICK DEEP LINK ACTIVATION (bloxstrap-gold://activate?key=...) ---
     public func handleDeepLinkActivation(key: String) {
         let trimmedKey = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -341,6 +358,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate {
         
         AppState.shared.setPaymentIgnored(true)
         _ = AppState.shared.verifyAndApplyKey(trimmedKey)
+        applyTierFromKey(trimmedKey)
         
         refreshTrialState()
         updateFastFlagsVisibility()
@@ -605,11 +623,11 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate {
         memberTitle.frame = NSRect(x: 52, y: 90, width: 260, height: 20)
         heroCard.addSubview(memberTitle)
         
-        tierPopup = NSPopUpButton(frame: NSRect(x: 315, y: 86, width: 180, height: 26))
+        tierPopup = NSPopUpButton(frame: NSRect(x: 315, y: 86, width: 220, height: 26))
         tierPopup.addItems(withTitles: [
-            "Gold Basic ($19.99/mo)",
-            "Gold Plus ($49.99/mo) ★",
-            "Gold Deluxe ($99.99/mo)",
+            "Gold Basic ($6.99/mo)",
+            "Gold Plus ($12.99/mo) ★",
+            "Gold Deluxe ($19.99/mo)",
             "Gold ULTRA ($199.99/mo) 👑"
         ])
         tierPopup.selectItem(at: 1)
@@ -753,9 +771,15 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate {
     
     @objc private func onTierChanged() {
         let index = tierPopup.indexOfSelectedItem
-        let names = ["Gold Basic", "Gold Plus", "Gold Deluxe", "Gold ULTRA"]
+        let names = ["Gold Basic ($6.99)", "Gold Plus ($12.99)", "Gold Deluxe ($19.99)", "Gold ULTRA ($199.99)"]
+        let subtext = [
+            "Barely Gold: 2 instances, hard 240 FPS cap, alt will probably crash",
+            "Aggressively Mid: 5 instances, monitor FPS lock, 18k gold badge",
+            "Almost Rich: Unlimited instances, uncapped 9999 FPS, missing Ultra privileges",
+            "God Complex: Infinite alts, Error 273 bypass, P-Core CPU priority, 0 shame"
+        ]
         let name = names[index]
-        tierBadgeLabel.stringValue = "🟢 \(name) Active • Infinite Instances • You pay: $0.00"
+        tierBadgeLabel.stringValue = "🟢 \(name) • \(subtext[index]) • You pay: $0.00"
     }
     
     // ==========================================
@@ -1259,12 +1283,13 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate {
     }
     
     @objc private func onQuickFillKey() {
-        keyInputField.stringValue = "GOLD-7DAY-8849-F291-C84B-9102-E7A4"
+        keyInputField.stringValue = "GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN"
     }
     
     @objc private func onUnlockFastFlags() {
         let key = keyInputField.stringValue
         if AppState.shared.verifyAndApplyKey(key) {
+            applyTierFromKey(key)
             updateFastFlagsVisibility()
             let alert = createGoldAlert(
                 title: "👑 FastFlags Vault Unlocked",
