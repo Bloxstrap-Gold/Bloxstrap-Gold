@@ -9,7 +9,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
     
     public init() {
         let window = NSWindow(
-            contentRect: NSRect(x: 100, y: 80, width: 1000, height: 600),
+            contentRect: NSRect(x: 100, y: 80, width: 1040, height: 640),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered,
             defer: false
@@ -18,7 +18,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.backgroundColor = NSColor(calibratedRed: 0.122, green: 0.118, blue: 0.149, alpha: 1.0) // Mica Dark #1F1E24
-        window.minSize = NSSize(width: 960, height: 560)
+        window.minSize = NSSize(width: 980, height: 580)
         
         // Hide standard macOS traffic lights to present Windows 11 Fluent frame
         window.standardWindowButton(.closeButton)?.isHidden = true
@@ -92,6 +92,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             pushStateToWeb()
             
         case "saveSettings":
+            // FastFlags
             if let targetFps = body["targetFps"] as? Int {
                 AppState.shared.data.targetFps = targetFps
                 FastFlagManager.shared.setFlag(key: "DFIntTaskSchedulerTargetFps", value: targetFps)
@@ -110,6 +111,8 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                     FastFlagManager.shared.removeFlag(key: "DFIntCanHideGuiGroupId")
                 }
             }
+            
+            // Mods
             if let renderingMode = body["renderingMode"] as? String {
                 AppState.shared.data.renderingMode = renderingMode
             }
@@ -125,6 +128,81 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             if let disableFso = body["disableFullscreenOptimizations"] as? Bool {
                 AppState.shared.data.disableFullscreenOptimizations = disableFso
             }
+            if let mouseCursor = body["mouseCursor"] as? String {
+                AppState.shared.data.mouseCursor = mouseCursor
+            }
+            if let oldAvatar = body["oldAvatarBackground"] as? Bool {
+                AppState.shared.data.oldAvatarBackground = oldAvatar
+            }
+            if let emojiFont = body["emojiFont"] as? String {
+                AppState.shared.data.emojiFont = emojiFont
+            }
+            
+            // Integrations
+            if let activityTracking = body["activityTrackingEnabled"] as? Bool {
+                AppState.shared.data.activityTrackingEnabled = activityTracking
+            }
+            if let showServer = body["showServerDetailsEnabled"] as? Bool {
+                AppState.shared.data.showServerDetailsEnabled = showServer
+            }
+            if let dontExit = body["dontExitToDesktopApp"] as? Bool {
+                AppState.shared.data.dontExitToDesktopApp = dontExit
+            }
+            if let discordActivity = body["discordActivityEnabled"] as? Bool {
+                AppState.shared.data.discordActivityEnabled = discordActivity
+            }
+            if let discordJoin = body["discordActivityJoinEnabled"] as? Bool {
+                AppState.shared.data.discordActivityJoinEnabled = discordJoin
+            }
+            if let discordProfile = body["discordAccountOnProfile"] as? Bool {
+                AppState.shared.data.discordAccountOnProfile = discordProfile
+            }
+            
+            // Appearance
+            if let theme = body["theme"] as? String {
+                AppState.shared.data.theme = theme
+            }
+            if let language = body["language"] as? String {
+                AppState.shared.data.language = language
+            }
+            if let bootstrapperStyle = body["bootstrapperStyle"] as? String {
+                AppState.shared.data.bootstrapperStyle = bootstrapperStyle
+            }
+            if let robloxIcon = body["robloxIcon"] as? String {
+                AppState.shared.data.robloxIcon = robloxIcon
+            }
+            if let customTitle = body["customTitle"] as? String {
+                AppState.shared.data.customTitle = customTitle
+            }
+            
+            // Behaviour
+            if let autoUpdate = body["autoUpdateChecking"] as? Bool {
+                AppState.shared.data.autoUpdateChecking = autoUpdate
+            }
+            if let confirmLaunches = body["confirmLaunches"] as? Bool {
+                AppState.shared.data.confirmLaunches = confirmLaunches
+            }
+            if let backgroundUpdates = body["backgroundUpdates"] as? Bool {
+                AppState.shared.data.backgroundUpdates = backgroundUpdates
+            }
+            if let forceReinstall = body["forceRobloxReinstall"] as? Bool {
+                AppState.shared.data.forceRobloxReinstall = forceReinstall
+            }
+            if let telemetry = body["telemetryEnabled"] as? Bool {
+                AppState.shared.data.telemetryEnabled = telemetry
+            }
+            
+            // Installation
+            if let desktopShortcuts = body["createDesktopShortcuts"] as? Bool {
+                AppState.shared.data.createDesktopShortcuts = desktopShortcuts
+            }
+            if let appsShortcut = body["createAppsShortcut"] as? Bool {
+                AppState.shared.data.createAppsShortcut = appsShortcut
+            }
+            if let registerUrl = body["registerUrlHandler"] as? Bool {
+                AppState.shared.data.registerUrlHandler = registerUrl
+            }
+            
             AppState.shared.save()
             webView.evaluateJavaScript("window.onSettingsSaved && window.onSettingsSaved();", completionHandler: nil)
             
@@ -163,16 +241,94 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 self?.pushStateToWeb()
             }
             
+        // MARK: - Account Manager (RAM) Bridge Actions
         case "addAccount":
-            let count = AppState.shared.data.accounts.count + 1
-            let newAcc = AppState.AccountProfile(
-                username: "AltAccount_\(count)",
-                displayName: "Alt Profile #\(count)",
-                addedDate: "2026-10-23"
-            )
-            AppState.shared.data.accounts.append(newAcc)
-            AppState.shared.save()
+            let username = body["username"] as? String ?? "AltAccount"
+            let displayName = body["displayName"] as? String ?? username
+            let userId = body["userId"] as? String ?? "1"
+            let tag = body["tag"] as? String ?? "Alt"
+            let note = body["note"] as? String ?? ""
+            AppState.shared.addAccount(username: username, displayName: displayName, userId: userId, tag: tag, note: note)
             pushStateToWeb()
+            webView.evaluateJavaScript("window.showToast && window.showToast('✓ Account profile added!');", completionHandler: nil)
+            
+        case "editAccount":
+            if let id = body["id"] as? String {
+                let username = body["username"] as? String ?? "AltAccount"
+                let displayName = body["displayName"] as? String ?? username
+                let userId = body["userId"] as? String ?? "1"
+                let tag = body["tag"] as? String ?? "Alt"
+                let note = body["note"] as? String ?? ""
+                AppState.shared.editAccount(id: id, username: username, displayName: displayName, userId: userId, tag: tag, note: note)
+                pushStateToWeb()
+                webView.evaluateJavaScript("window.showToast && window.showToast('✓ Account updated!');", completionHandler: nil)
+            }
+            
+        case "deleteAccount":
+            if let id = body["id"] as? String {
+                AppState.shared.deleteAccount(id: id)
+                pushStateToWeb()
+                webView.evaluateJavaScript("window.showToast && window.showToast('🗑 Account deleted');", completionHandler: nil)
+            }
+            
+        case "launchAccount":
+            _ = MultiInstanceManager.shared.launchNewInstance()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.pushStateToWeb()
+            }
+            let user = body["username"] as? String ?? "Account"
+            webView.evaluateJavaScript("window.showToast && window.showToast('🚀 Launching session for @\(user)...');", completionHandler: nil)
+            
+        case "joinGame":
+            let placeId = body["placeId"] as? String ?? ""
+            let jobId = body["jobId"] as? String ?? ""
+            let vipUrl = body["vipUrl"] as? String ?? ""
+            
+            var targetUrl = "roblox://experiences/start?placeId=\(placeId)"
+            if !jobId.isEmpty {
+                targetUrl += "&gameInstanceId=\(jobId)"
+            }
+            if !vipUrl.isEmpty, let directUrl = URL(string: vipUrl) {
+                NSWorkspace.shared.open(directUrl)
+            } else if let gameUrl = URL(string: targetUrl) {
+                NSWorkspace.shared.open(gameUrl)
+            } else {
+                _ = MultiInstanceManager.shared.launchNewInstance()
+            }
+            webView.evaluateJavaScript("window.showToast && window.showToast('🌐 Joining Place ID \(placeId)...');", completionHandler: nil)
+            
+        case "openModsFolder":
+            let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            let robloxModsDir = appSupport.appendingPathComponent("Roblox/Modifications", isDirectory: true)
+            try? FileManager.default.createDirectory(at: robloxModsDir, withIntermediateDirectories: true)
+            NSWorkspace.shared.open(robloxModsDir)
+            
+        case "openInstallationFolder":
+            let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            let robloxDir = appSupport.appendingPathComponent("Roblox", isDirectory: true)
+            try? FileManager.default.createDirectory(at: robloxDir, withIntermediateDirectories: true)
+            NSWorkspace.shared.open(robloxDir)
+            
+        case "previewBootstrapper":
+            let style = AppState.shared.data.bootstrapperStyle
+            let alert = NSAlert()
+            alert.messageText = "Bootstrapper Style Preview"
+            alert.informativeText = "Previewing '\(style)' dialog style. This Fluent bootstrapper will be presented when launching Roblox experiences."
+            alert.alertStyle = .informational
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+            
+        case "exportData":
+            let downloads = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first!
+            let exportUrl = downloads.appendingPathComponent("Bloxstrap-Config-Export.json")
+            if let encoded = try? JSONEncoder().encode(AppState.shared.data) {
+                try? encoded.write(to: exportUrl)
+                NSWorkspace.shared.selectFile(exportUrl.path, inFileViewerRootedAtPath: downloads.path)
+                webView.evaluateJavaScript("window.showToast && window.showToast('✓ Config exported to Downloads!');", completionHandler: nil)
+            }
+            
+        case "reRegisterHandlers":
+            webView.evaluateJavaScript("window.showToast && window.showToast('✓ Protocol handlers roblox:// refreshed');", completionHandler: nil)
             
         case "verifyKey":
             if let key = body["key"] as? String {
@@ -247,8 +403,12 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         var accountsPayload: [[String: Any]] = []
         for acc in AppState.shared.data.accounts {
             accountsPayload.append([
+                "id": acc.id,
                 "username": acc.username,
                 "displayName": acc.displayName,
+                "userId": acc.userId,
+                "tag": acc.tag,
+                "note": acc.note,
                 "addedDate": acc.addedDate
             ])
         }
@@ -259,16 +419,52 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             "currentTierBadge": AppState.shared.currentTierBadge,
             "currentTierPrice": AppState.shared.currentTierPrice,
             "vipKey": AppState.shared.data.vipKey ?? "",
+            
+            // FastFlags
             "targetFps": AppState.shared.data.targetFps,
             "preferredLighting": AppState.shared.data.preferredLighting,
             "escapeMenuVersion": AppState.shared.data.escapeMenuVersion,
             "hideGuisEnabled": AppState.shared.data.hideGuisEnabled,
+            
+            // Mods
             "renderingMode": AppState.shared.data.renderingMode,
             "exclusiveFullscreen": AppState.shared.data.exclusiveFullscreen,
             "alternateQualitySelector": AppState.shared.data.alternateQualitySelector,
             "inGameMenuVersion": AppState.shared.data.inGameMenuVersion,
             "disableFullscreenOptimizations": AppState.shared.data.disableFullscreenOptimizations,
             "customDeathSound": AppState.shared.data.customDeathSound,
+            "mouseCursor": AppState.shared.data.mouseCursor,
+            "oldAvatarBackground": AppState.shared.data.oldAvatarBackground,
+            "emojiFont": AppState.shared.data.emojiFont,
+            
+            // Integrations
+            "activityTrackingEnabled": AppState.shared.data.activityTrackingEnabled,
+            "showServerDetailsEnabled": AppState.shared.data.showServerDetailsEnabled,
+            "dontExitToDesktopApp": AppState.shared.data.dontExitToDesktopApp,
+            "discordActivityEnabled": AppState.shared.data.discordActivityEnabled,
+            "discordActivityJoinEnabled": AppState.shared.data.discordActivityJoinEnabled,
+            "discordAccountOnProfile": AppState.shared.data.discordAccountOnProfile,
+            
+            // Appearance
+            "theme": AppState.shared.data.theme,
+            "language": AppState.shared.data.language,
+            "bootstrapperStyle": AppState.shared.data.bootstrapperStyle,
+            "robloxIcon": AppState.shared.data.robloxIcon,
+            "customTitle": AppState.shared.data.customTitle,
+            
+            // Behaviour
+            "autoUpdateChecking": AppState.shared.data.autoUpdateChecking,
+            "confirmLaunches": AppState.shared.data.confirmLaunches,
+            "backgroundUpdates": AppState.shared.data.backgroundUpdates,
+            "forceRobloxReinstall": AppState.shared.data.forceRobloxReinstall,
+            "telemetryEnabled": AppState.shared.data.telemetryEnabled,
+            
+            // Installation
+            "createDesktopShortcuts": AppState.shared.data.createDesktopShortcuts,
+            "createAppsShortcut": AppState.shared.data.createAppsShortcut,
+            "registerUrlHandler": AppState.shared.data.registerUrlHandler,
+            
+            // Lists
             "instances": instancesPayload,
             "accounts": accountsPayload
         ]

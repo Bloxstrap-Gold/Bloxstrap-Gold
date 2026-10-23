@@ -138,7 +138,7 @@
 
     /* Sidebar */
     .sidebar {
-      width: 216px;
+      width: 224px;
       background-color: var(--sidebar-bg);
       border-right: 1px solid rgba(255, 255, 255, 0.04);
       display: flex;
@@ -197,10 +197,15 @@
       display: inline-block;
     }
 
-    .sidebar-footer {
-      margin-top: auto;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    .nav-item-badge {
+      margin-left: auto;
+      background: rgba(176, 132, 249, 0.15);
+      border: 1px solid rgba(176, 132, 249, 0.4);
+      color: var(--accent-purple);
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
     }
 
     /* Content Area */
@@ -208,7 +213,7 @@
       flex: 1;
       background-color: var(--app-bg);
       overflow-y: auto;
-      padding: 24px 32px 30px 32px;
+      padding: 24px 34px 32px 34px;
     }
 
     .content-area::-webkit-scrollbar {
@@ -222,7 +227,7 @@
 
     .page-pane {
       display: none;
-      max-width: 720px;
+      max-width: 760px;
       animation: fadeIn 0.15s ease-out;
     }
 
@@ -394,22 +399,26 @@
     }
 
     /* --------------------------------------------------------------------------
-       CONTROLS (INPUTS, SELECTS, TOGGLES)
+       CONTROLS (INPUTS, SELECTS, TOGGLES, BUTTONS)
        -------------------------------------------------------------------------- */
     .fluent-input {
       background: #282732;
       border: 1px solid #3c3b49;
       border-radius: 4px;
       color: #ffffff;
-      font-family: var(--font-mono);
+      font-family: var(--font-family);
       font-size: 12.5px;
-      font-weight: 700;
       height: 32px;
-      width: 140px;
-      text-align: right;
+      min-width: 160px;
       padding: 0 10px;
       outline: none;
       transition: border-color 0.12s ease;
+    }
+
+    .fluent-input.mono {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      text-align: right;
     }
 
     .fluent-input:focus {
@@ -424,7 +433,7 @@
       font-family: var(--font-family);
       font-size: 12.5px;
       height: 32px;
-      min-width: 185px;
+      min-width: 195px;
       padding: 0 28px 0 10px;
       outline: none;
       cursor: pointer;
@@ -440,7 +449,7 @@
       border-color: var(--accent-purple);
     }
 
-    /* Fluent Toggle Switch (Exact 40x20 dimensions from Wpf.Ui) */
+    /* Fluent Toggle Switch (40x20 dimensions from Wpf.Ui) */
     .fluent-toggle {
       position: relative;
       width: 40px;
@@ -488,6 +497,300 @@
     .fluent-toggle input:checked + .fluent-toggle-slider::before {
       transform: translateX(20px);
       background-color: #16131f;
+    }
+
+    .pill-btn {
+      background: #2a2933;
+      border: 1px solid #3c3b49;
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      text-decoration: none;
+      transition: background 0.12s ease, border-color 0.12s ease;
+      outline: none;
+    }
+
+    .pill-btn:hover {
+      background: #34333f;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .pill-btn.primary {
+      background: var(--accent-purple);
+      border-color: var(--accent-purple);
+      color: #16131f;
+      font-weight: 700;
+    }
+
+    .pill-btn.primary:hover {
+      opacity: 0.92;
+    }
+
+    .pill-btn.gold {
+      background: linear-gradient(135deg, #fcd34d, #f59e0b);
+      border: none;
+      color: #000;
+      font-weight: 700;
+    }
+
+    .pill-btn.gold:hover {
+      opacity: 0.92;
+    }
+
+    .pill-btn.danger {
+      background: #3a2228;
+      border-color: #7f1d1d;
+      color: #fca5a5;
+    }
+
+    .pill-btn.danger:hover {
+      background: #991b1b;
+      color: #ffffff;
+    }
+
+    /* --------------------------------------------------------------------------
+       ROBLOX ACCOUNT MANAGER (RAM STYLE) TAB STYLES
+       -------------------------------------------------------------------------- */
+    .ram-toolbar {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .ram-search-box {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .ram-search-box input {
+      width: 100%;
+      height: 32px;
+      background: #1e1d24;
+      border: 1px solid #3c3b49;
+      border-radius: 4px;
+      color: #ffffff;
+      padding: 0 10px 0 30px;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .ram-search-box input:focus {
+      border-color: var(--accent-purple);
+    }
+
+    .ram-search-icon {
+      position: absolute;
+      left: 10px;
+      color: #8e8d98;
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    .tag-filter-pills {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tag-pill {
+      background: #1e1d24;
+      border: 1px solid #383745;
+      color: #a8a7b5;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+
+    .tag-pill:hover {
+      background: #2a2933;
+      color: #ffffff;
+    }
+
+    .tag-pill.active {
+      background: var(--accent-purple);
+      border-color: var(--accent-purple);
+      color: #16131f;
+    }
+
+    .account-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      transition: border-color 0.12s ease, transform 0.1s ease;
+    }
+
+    .account-card:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .account-card-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .account-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #18171e;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .account-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .account-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .account-display-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .account-username {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-family: var(--font-mono);
+    }
+
+    .account-tag-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .tag-main { background: rgba(176, 132, 249, 0.18); border: 1px solid #b084f9; color: #d8b4fe; }
+    .tag-alt { background: rgba(96, 165, 250, 0.18); border: 1px solid #60a5fa; color: #93c5fd; }
+    .tag-farming { background: rgba(52, 211, 153, 0.18); border: 1px solid #34d399; color: #6ee7b7; }
+    .tag-bank { background: rgba(245, 158, 11, 0.18); border: 1px solid #f59e0b; color: #fde68a; }
+    .tag-trading { background: rgba(244, 114, 182, 0.18); border: 1px solid #f472b6; color: #fbcfe8; }
+
+    .account-note {
+      font-size: 11.5px;
+      color: #9897a5;
+    }
+
+    .account-status-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .account-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    .account-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* --------------------------------------------------------------------------
+       BLOXSTRAP GOLD TAB STYLES
+       -------------------------------------------------------------------------- */
+    .gold-vip-card {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(180, 83, 9, 0.08));
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .gold-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .gold-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fcd34d;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gold-card-meta {
+      font-size: 12px;
+      color: #fef08a;
+      line-height: 1.5;
+    }
+
+    .gold-meta-sub {
+      color: #c5c5c5;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      margin-top: 4px;
+    }
+
+    .instances-list-wrap {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 10px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .instance-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    .instance-item-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-weight: 600;
     }
 
     /* --------------------------------------------------------------------------
@@ -541,26 +844,6 @@
       margin-bottom: 22px;
     }
 
-    .pill-btn {
-      background: #2a2933;
-      border: 1px solid #3c3b49;
-      color: #ffffff;
-      font-size: 11.5px;
-      font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      transition: background 0.12s ease;
-    }
-
-    .pill-btn:hover {
-      background: #34333f;
-    }
-
     .contributors-table {
       margin-top: 8px;
       margin-bottom: 16px;
@@ -585,104 +868,77 @@
     }
 
     /* --------------------------------------------------------------------------
-       BLOXSTRAP GOLD TAB (MEMBERSHIP + MULTI-INSTANCE + RAM)
+       CUSTOM INTEGRATIONS LIST & DETAILS
        -------------------------------------------------------------------------- */
-    .gold-vip-card {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(180, 83, 9, 0.08));
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      border-radius: 8px;
-      padding: 18px;
-      margin-bottom: 20px;
-    }
-
-    .gold-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .gold-card-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #fcd34d;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .gold-card-meta {
-      font-size: 12px;
-      color: #fef08a;
-      line-height: 1.5;
-    }
-
-    .gold-meta-sub {
-      color: #c5c5c5;
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      margin-top: 4px;
-    }
-
-    .gold-action-btn {
-      background: linear-gradient(135deg, #fcd34d, #f59e0b);
-      color: #000;
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-      transition: opacity 0.12s ease;
-    }
-
-    .gold-action-btn:hover {
-      opacity: 0.9;
-    }
-
-    .instances-list-wrap {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+    .integrations-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 6px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 200px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .integrations-left {
+      border-right: 1px solid var(--card-border);
       padding: 10px;
-      margin-top: 10px;
-      max-height: 130px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .integrations-list {
+      flex: 1;
       overflow-y: auto;
     }
 
-    .instance-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 10px;
-      background: rgba(255, 255, 255, 0.03);
+    .integration-item {
+      padding: 8px 10px;
       border-radius: 4px;
-      margin-bottom: 4px;
-      font-size: 11.5px;
-    }
-
-    .instance-item-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--font-mono);
-      font-weight: 600;
-    }
-
-    .instance-kill-btn {
-      background: #3a2228;
-      border: 1px solid #7f1d1d;
-      color: #fca5a5;
-      font-size: 10.5px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 500;
       cursor: pointer;
+      color: #c5c5c5;
+      background: transparent;
+      transition: background 0.1s ease;
     }
 
-    .instance-kill-btn:hover {
-      background: #991b1b;
+    .integration-item:hover {
+      background: rgba(255, 255, 255, 0.05);
       color: #ffffff;
+    }
+
+    .integration-item.selected {
+      background: #34333d;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .integrations-left-actions {
+      display: flex;
+      gap: 6px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .integrations-right {
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-label {
+      font-size: 11.5px;
+      color: var(--text-tertiary);
     }
 
     /* --------------------------------------------------------------------------
@@ -760,7 +1016,7 @@
     }
 
     /* --------------------------------------------------------------------------
-       KEY GATE ACTIVATION OVERLAY (GOLD-7DAY- REQUIREMENT)
+       MODALS (OVERLAYS)
        -------------------------------------------------------------------------- */
     .modal-overlay {
       position: fixed;
@@ -779,79 +1035,38 @@
     .modal-card {
       width: 520px;
       background: #25242d;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
-      padding: 32px 36px;
-      text-align: center;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    }
-
-    .modal-crown {
-      font-size: 42px;
-      margin-bottom: 8px;
+      padding: 26px 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     }
 
     .modal-title {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 6px;
     }
 
     .modal-desc {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--text-tertiary);
       line-height: 1.45;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
-    .modal-input {
-      width: 100%;
-      height: 38px;
-      background: #18171e;
-      border: 1px solid #3c3b49;
-      border-radius: 5px;
-      color: #ffffff;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: 700;
-      text-align: center;
-      outline: none;
-      margin-bottom: 8px;
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
-    .modal-input:focus {
-      border-color: var(--accent-gold);
-    }
-
-    .modal-detected {
-      font-size: 12px;
-      font-weight: 600;
-      color: #fcd34d;
-      min-height: 20px;
-      margin-bottom: 16px;
-    }
-
-    .modal-btn-unlock {
-      width: 100%;
-      height: 38px;
-      background: linear-gradient(135deg, #fcd34d, #f59e0b);
-      border: none;
-      border-radius: 5px;
-      color: #000;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-bottom: 12px;
-    }
-
-    .modal-btn-store {
-      background: transparent;
-      border: none;
-      color: #9897a3;
-      font-size: 11.5px;
-      cursor: pointer;
-      text-decoration: underline;
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
     }
   </style>
 </head>
@@ -898,6 +1113,10 @@
       <button class="nav-item" data-tab="installation">
         <span class="nav-item-icon">🖫</span> Installation
       </button>
+      <button class="nav-item" data-tab="accounts">
+        <span class="nav-item-icon">👥</span> Account Manager
+        <span class="nav-item-badge">RAM</span>
+      </button>
       <button class="nav-item" data-tab="gold">
         <span class="nav-item-icon">👑</span> Bloxstrap Gold
       </button>
@@ -910,7 +1129,305 @@
     <div class="content-area">
 
       <!-- ====================================================================
-           TAB 1: FASTFLAGS (EXACT SCREENSHOT 1)
+           TAB 1: INTEGRATIONS (FULL 1:1 BLOXSTRAP SPEC)
+           ==================================================================== -->
+      <div class="page-pane" id="pane-integrations">
+        <div class="page-header">
+          <div class="page-title">Integrations</div>
+          <div class="page-subtitle">Configure additional functionality to go alongside Roblox.</div>
+        </div>
+
+        <div class="section-title">Activity Tracking</div>
+        <div class="section-subtitle">Allow Bloxstrap to detect running Roblox games and enable rich telemetry.</div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title-row">
+              <span class="option-title">Enable activity tracking</span>
+              <span class="help-badge" title="Detect active Roblox client game sessions">?</span>
+            </div>
+            <div class="option-desc">Allow Bloxstrap to detect when Roblox is running, and enable the features below.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleActivityTracking" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title-row">
+              <span class="option-title">Query server location</span>
+              <span class="help-badge" title="Lookup server host region via ipinfo.io">?</span>
+            </div>
+            <div class="option-desc">When in-game, you'll be able to see where your server is located via <a href="https://ipinfo.io" target="_blank">ipinfo.io</a>.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleShowServerDetails" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title-row">
+              <span class="option-title">Don't exit to desktop app</span>
+              <span class="help-badge" title="Prevent redirect into the desktop client">?</span>
+            </div>
+            <div class="option-desc">Roblox will fully close when you leave a game instead of going back to the desktop app.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDontExit" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="section-title">Discord Rich Presence</div>
+        <div class="section-subtitle">Discord Rich Presence requires Activity Tracking to be enabled.</div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Show game activity</div>
+            <div class="option-desc">The Roblox game you're playing will be shown on your Discord profile status.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDiscordActivity" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Allow activity joining</div>
+            <div class="option-desc">Allow anyone to join the game you're in directly from your Discord profile.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDiscordJoin" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Show Roblox account on profile</div>
+            <div class="option-desc">Show your Roblox account username and avatar headshot on your Discord profile.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDiscordAccount" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="section-title">Custom Integrations</div>
+        <div class="section-subtitle">Configure external applications to automatically launch alongside Roblox.</div>
+
+        <div class="integrations-box">
+          <div class="integrations-left">
+            <div class="integrations-list" id="customIntegrationsList">
+              <div class="integration-item selected" data-idx="0">FPS Unlocker Daemon</div>
+              <div class="integration-item" data-idx="1">ReShade Shader Engine</div>
+            </div>
+            <div class="integrations-left-actions">
+              <button class="pill-btn" id="btnNewIntegration" style="flex: 1; padding: 4px 8px; font-size: 11px;">＋ New</button>
+              <button class="pill-btn danger" id="btnDeleteIntegration" style="padding: 4px 8px; font-size: 11px;">🗑</button>
+            </div>
+          </div>
+          <div class="integrations-right">
+            <div class="form-group">
+              <div class="form-label">Name</div>
+              <input type="text" class="fluent-input" id="inputIntegrationName" value="FPS Unlocker Daemon" style="width: 100%;">
+            </div>
+            <div class="form-group">
+              <div class="form-label">Application Location</div>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" class="fluent-input" id="inputIntegrationPath" value="/usr/local/bin/rbxfpsunlocker" style="flex: 1;">
+                <button class="pill-btn" id="btnBrowseIntegration">Browse...</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-label">Launch Arguments</div>
+              <input type="text" class="fluent-input" id="inputIntegrationArgs" placeholder="--fps 0" value="--daemon" style="width: 100%;">
+            </div>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #c5c5c5; margin-top: 4px; cursor: pointer;">
+              <input type="checkbox" id="checkIntegrationAutoClose" checked> Auto-close when Roblox exits
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 2: MODS (FULL 1:1 BLOXSTRAP SPEC)
+           ==================================================================== -->
+      <div class="page-pane" id="pane-mods">
+        <div class="page-header">
+          <div class="page-title">Mods</div>
+          <div class="page-subtitle">Manage the custom modifications applied to Roblox.</div>
+        </div>
+
+        <div class="action-cards-grid">
+          <div class="card-action" id="cardOpenModsFolder">
+            <span class="card-action-icon">📁</span>
+            <div class="card-action-text">
+              <div class="card-action-title">Open Mods folder</div>
+              <div class="card-action-desc">Manage custom files applied to Roblox, like textures and fonts.</div>
+            </div>
+            <span class="card-action-chevron">›</span>
+          </div>
+
+          <div class="card-action" id="cardModdingHelp">
+            <span class="card-action-icon">❓</span>
+            <div class="card-action-text">
+              <div class="card-action-title">Help</div>
+              <div class="card-action-desc">Learn more about modding Roblox.</div>
+            </div>
+            <span class="card-action-chevron">›</span>
+          </div>
+        </div>
+
+        <div class="card-action" id="cardCompatSettings" style="margin-bottom: 16px;">
+          <span class="card-action-icon">🛠</span>
+          <div class="card-action-text">
+            <div class="card-action-title">Manage compatibility settings</div>
+            <div class="card-action-desc">Configure compatibility settings for Roblox (e.g. disable fullscreen optimizations).</div>
+          </div>
+          <span class="card-action-chevron">›</span>
+        </div>
+
+        <div class="section-title">Presets</div>
+
+        <!-- Mouse Cursor Selector -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Mouse cursor</div>
+            <div class="option-desc">Choose which mouse cursor style Roblox should use.</div>
+          </div>
+          <select class="fluent-select" id="selectMouseCursor">
+            <option value="Default (2020)" selected>Default (2020)</option>
+            <option value="2006 (Classic)">2006 (Classic)</option>
+            <option value="2013">2013</option>
+          </select>
+        </div>
+
+        <!-- Old Avatar Editor Background -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Old avatar editor background</div>
+            <div class="option-desc">Replaces the modern avatar background with the classic 2010 background.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleOldAvatarBg">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Old Character Sounds + Preview -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Old character sounds</div>
+            <div class="option-desc">Replaces modern character sounds with classic sounds, including the original "OOF" death sound.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="pill-btn" id="btnPreviewOof">▶ Preview</button>
+            <label class="fluent-toggle">
+              <input type="checkbox" id="toggleOof" checked>
+              <span class="fluent-toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Emoji Font Selector -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Emoji font</div>
+            <div class="option-desc">Choose which emoji style Roblox should use.</div>
+          </div>
+          <select class="fluent-select" id="selectEmojiFont">
+            <option value="Default" selected>Default</option>
+            <option value="Twemoji">Twemoji (Twitter Emojis)</option>
+            <option value="Catmoji">Catmoji</option>
+          </select>
+        </div>
+
+        <div class="section-title">Miscellaneous &amp; Graphics</div>
+
+        <!-- Custom Font -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Custom font</div>
+            <div class="option-desc">Apply a custom TTF/OTF font file across Roblox text rendering.</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="pill-btn" id="btnChooseFont">📄 Choose Font...</button>
+          </div>
+        </div>
+
+        <!-- Rendering mode -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Rendering mode</div>
+            <div class="option-desc">Select which renderer Roblox should use. ReShade requires Direct3D 11.</div>
+          </div>
+          <select class="fluent-select" id="selectRenderingMode">
+            <option value="Direct3D 11" selected>Direct3D 11</option>
+            <option value="Metal (macOS Default)">Metal (macOS Default)</option>
+            <option value="Vulkan / MoltenVK">Vulkan / MoltenVK</option>
+            <option value="OpenGL">OpenGL</option>
+          </select>
+        </div>
+
+        <!-- Use exclusive fullscreen -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Use exclusive fullscreen</div>
+            <div class="option-desc">Enables using Alt + Enter to enter exclusive fullscreen. Only works with Direct3D 11.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleExclusiveFullscreen">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Alternate graphics quality selector -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Use alternate graphics quality selector</div>
+            <div class="option-desc">Toggle between using the consolidated 1-10 / fine-grained 1-21 graphics quality slider.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleAltQuality">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- In-game menu version -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">In-game menu version</div>
+            <div class="option-desc">Choose which version of the in-game menu to use. Current default is v1.</div>
+          </div>
+          <select class="fluent-select" id="selectInGameMenu">
+            <option value="Default">Default</option>
+            <option value="Version 1 (2015)">Version 1 (2015)</option>
+            <option value="Version 2 (2020)">Version 2 (2020)</option>
+            <option value="Version 3 (2021)" selected>Version 3 (2021)</option>
+          </select>
+        </div>
+
+        <!-- Disable full-screen optimizations -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Disable full-screen optimizations</div>
+            <div class="option-desc">A Windows feature that can potentially cause problems - <a id="linkFso">click here for more info</a>.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDisableFso">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 3: FASTFLAGS (EXACT SCREENSHOT 1)
            ==================================================================== -->
       <div class="page-pane active" id="pane-fastflags">
         <div class="page-header">
@@ -943,7 +1460,7 @@
           FastFlags for Direct3D <a id="linkD3D">exclusive fullscreen</a> (Alt+Enter) and <a id="linkDPI">DPI scaling fixes</a> are already enabled by default.
         </div>
 
-        <!-- Option 1: Framerate Limit -->
+        <!-- Framerate Limit -->
         <div class="option-card">
           <div class="option-info">
             <div class="option-title-row">
@@ -952,10 +1469,10 @@
             </div>
             <div class="option-desc">Use a large number like 9999 for no limit. Set as 0 for defaults.</div>
           </div>
-          <input type="text" class="fluent-input" id="inputFps" value="9999">
+          <input type="text" class="fluent-input mono" id="inputFps" value="9999" style="width: 140px;">
         </div>
 
-        <!-- Option 2: Preferred lighting technology -->
+        <!-- Preferred lighting technology -->
         <div class="option-card">
           <div class="option-info">
             <div class="option-title">Preferred lighting technology</div>
@@ -969,7 +1486,7 @@
           </select>
         </div>
 
-        <!-- Option 3: Preferred escape menu version -->
+        <!-- Preferred escape menu version -->
         <div class="option-card">
           <div class="option-info">
             <div class="option-title-row">
@@ -986,7 +1503,7 @@
           </select>
         </div>
 
-        <!-- Option 4: Enable ability to hide GUIs -->
+        <!-- Enable ability to hide GUIs -->
         <div class="option-card">
           <div class="option-info">
             <div class="option-title-row">
@@ -1005,98 +1522,398 @@
       </div>
 
       <!-- ====================================================================
-           TAB 2: MODS (EXACT SCREENSHOT 2)
+           TAB 4: APPEARANCE (FULL 1:1 BLOXSTRAP SPEC)
            ==================================================================== -->
-      <div class="page-pane" id="pane-mods">
+      <div class="page-pane" id="pane-appearance">
         <div class="page-header">
-          <div class="page-title">Mods</div>
-          <div class="page-subtitle">By default, it's 60FPS. Use a really high number like 9999 for no limit.</div>
+          <div class="page-title">Appearance</div>
+          <div class="page-subtitle">Customize the look and feel of Bloxstrap.</div>
         </div>
 
-        <!-- Option 1: Rendering mode -->
+        <!-- Theme -->
         <div class="option-card">
           <div class="option-info">
-            <div class="option-title">Rendering mode</div>
-            <div class="option-desc">Select which renderer Roblox should use. ReShade requires Direct3D 11.</div>
+            <div class="option-title">Theme</div>
+            <div class="option-desc">Change the visual theme of the Bloxstrap Menu.</div>
           </div>
-          <select class="fluent-select" id="selectRenderingMode">
-            <option value="Direct3D 11" selected>Direct3D 11</option>
-            <option value="Metal (macOS Default)">Metal (macOS Default)</option>
-            <option value="Vulkan / MoltenVK">Vulkan / MoltenVK</option>
-            <option value="OpenGL">OpenGL</option>
+          <select class="fluent-select" id="selectTheme">
+            <option value="Dark (Windows 11 Mica)" selected>Dark (Windows 11 Mica)</option>
+            <option value="Bloxstrap Gold Edition">Bloxstrap Gold Edition</option>
+            <option value="Light">Light</option>
           </select>
         </div>
 
-        <!-- Option 2: Use exclusive fullscreen -->
+        <!-- Language -->
         <div class="option-card">
           <div class="option-info">
-            <div class="option-title">Use exclusive fullscreen</div>
-            <div class="option-desc">Enables using Alt + Enter to enter exclusive fullscreen. Only works with Direct3D 11.</div>
+            <div class="option-title">Language</div>
+            <div class="option-desc">Choose the language to use for Bloxstrap.</div>
           </div>
-          <label class="fluent-toggle">
-            <input type="checkbox" id="toggleExclusiveFullscreen">
-            <span class="fluent-toggle-slider"></span>
-          </label>
-        </div>
-
-        <!-- Option 3: Use alternate graphics quality selector -->
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Use alternate graphics quality selector</div>
-            <div class="option-desc">Toggle between using the consolidated 1-10 / fine-grained 1-21 graphics quality slider.</div>
-          </div>
-          <label class="fluent-toggle">
-            <input type="checkbox" id="toggleAltQuality">
-            <span class="fluent-toggle-slider"></span>
-          </label>
-        </div>
-
-        <!-- Option 4: In-game menu version -->
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">In-game menu version</div>
-            <div class="option-desc">Choose which version of the in-game menu to use. Current default is v1.</div>
-          </div>
-          <select class="fluent-select" id="selectInGameMenu">
-            <option value="Default">Default</option>
-            <option value="Version 1 (2015)">Version 1 (2015)</option>
-            <option value="Version 2 (2020)">Version 2 (2020)</option>
-            <option value="Version 3 (2021)" selected>Version 3 (2021)</option>
+          <select class="fluent-select" id="selectLanguage">
+            <option value="System default" selected>System default</option>
+            <option value="English">English</option>
+            <option value="Español">Español (Spanish)</option>
+            <option value="Français">Français (French)</option>
+            <option value="Deutsch">Deutsch (German)</option>
+            <option value="日本語">日本語 (Japanese)</option>
+            <option value="Português">Português (Portuguese)</option>
+            <option value="Русский">Русский (Russian)</option>
           </select>
         </div>
 
-        <div class="section-title">Miscellaneous</div>
+        <div class="section-title">Bootstrapper Style</div>
+        <div class="section-subtitle">Choose the style of dialog shown when Roblox starts.</div>
 
-        <!-- Option 5: Disable full-screen optimizations -->
         <div class="option-card">
           <div class="option-info">
-            <div class="option-title">Disable full-screen optimizations</div>
-            <div class="option-desc">A Windows feature that can potentially cause problems - <a id="linkFso">click here for more info</a>.</div>
+            <div class="option-title">Dialog style</div>
+            <div class="option-desc">Visual appearance of the launch dialog.</div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <select class="fluent-select" id="selectBootstrapperStyle">
+              <option value="Fluent" selected>Fluent (Windows 11)</option>
+              <option value="Classic Fluent">Classic Fluent</option>
+              <option value="Progress Bar">Progress Bar</option>
+              <option value="Byfron">Byfron (Modern Dark)</option>
+              <option value="Legacy">Legacy (2015)</option>
+            </select>
+            <button class="pill-btn" id="btnPreviewBootstrapper">👁 Preview</button>
+          </div>
+        </div>
+
+        <div class="section-title">Roblox Icon</div>
+        <div class="section-subtitle">Choose which icon style to display for Roblox shortcuts and taskbar.</div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Roblox icon</div>
+            <div class="option-desc">App icon shown in taskbar, launcher, and shortcuts.</div>
+          </div>
+          <select class="fluent-select" id="selectRobloxIcon">
+            <option value="2022 (Modern Silver)" selected>2022 (Modern Silver)</option>
+            <option value="2019 (Modern Red)">2019 (Modern Red)</option>
+            <option value="2017 (Red Tilt)">2017 (Red Tilt)</option>
+            <option value="2015 (Classic Red Outline)">2015 (Classic Red Outline)</option>
+            <option value="2011 (Classic Red Block)">2011 (Classic Red Block)</option>
+            <option value="2008 (Vintage Blue/Red block)">2008 (Vintage Blue/Red block)</option>
+            <option value="Bloxstrap Gold Edition">Bloxstrap Gold Edition 👑</option>
+          </select>
+        </div>
+
+        <div class="section-title">Customisation</div>
+        <div class="section-subtitle">Personalize window titles and bootstrapper artwork.</div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Custom title</div>
+            <div class="option-desc">Customize the window title of Roblox and the bootstrapper.</div>
+          </div>
+          <input type="text" class="fluent-input" id="inputCustomTitle" value="Roblox" style="width: 195px;">
+        </div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Custom icon location</div>
+            <div class="option-desc">Use a custom .ico or .png file for the bootstrapper.</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" class="fluent-input" id="inputCustomIconLocation" placeholder="Path to icon..." style="width: 195px;">
+            <button class="pill-btn" id="btnBrowseCustomIcon">Browse...</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 5: BEHAVIOUR (FULL 1:1 BLOXSTRAP SPEC)
+           ==================================================================== -->
+      <div class="page-pane" id="pane-behaviour">
+        <div class="page-header">
+          <div class="page-title">Behaviour</div>
+          <div class="page-subtitle">Configure bootstrapper automation, launch behaviours, and update policies.</div>
+        </div>
+
+        <!-- Automatically check for updates -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Automatically check for updates</div>
+            <div class="option-desc">Periodically check for new releases of Bloxstrap Gold.</div>
           </div>
           <label class="fluent-toggle">
-            <input type="checkbox" id="toggleDisableFso">
+            <input type="checkbox" id="toggleAutoUpdate" checked>
             <span class="fluent-toggle-slider"></span>
           </label>
         </div>
 
-        <!-- Option 6: Classic 2006 Death Sound + Preview -->
+        <!-- Confirm game launches -->
         <div class="option-card">
           <div class="option-info">
-            <div class="option-title">Classic 2006 "OOF" death sound</div>
-            <div class="option-desc">Restores the nostalgic sound and backs up default Roblox audio.</div>
+            <div class="option-title">Confirm game launches</div>
+            <div class="option-desc">Show a prompt asking for confirmation before launching Roblox.</div>
           </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <button class="pill-btn" id="btnPreviewOof" style="padding: 4px 10px; font-size: 11px;">▶ Preview</button>
-            <label class="fluent-toggle">
-              <input type="checkbox" id="toggleOof" checked>
-              <span class="fluent-toggle-slider"></span>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleConfirmLaunches">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Background updates -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Background updates</div>
+            <div class="option-desc">Check for Roblox updates in the background before launching.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleBackgroundUpdates" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Force Roblox reinstallation -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Force Roblox reinstallation</div>
+            <div class="option-desc">Forces Bloxstrap to completely reinstall Roblox on next launch.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleForceReinstall">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Telemetry -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Anonymous telemetry &amp; analytics</div>
+            <div class="option-desc">Help improve Bloxstrap by anonymously sending basic crash reports and analytics.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleTelemetry">
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="section-title">Export Data</div>
+        <div class="section-subtitle">Export your Bloxstrap configuration and diagnostic logs.</div>
+
+        <div class="option-card" style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <div class="option-title">Export Diagnostic &amp; Configuration Data</div>
+              <div class="option-desc">Save your FastFlags, active settings, and crash logs to a single JSON package.</div>
+            </div>
+            <button class="pill-btn primary" id="btnExportData">💾 Export to File</button>
+          </div>
+          <div style="display: flex; gap: 24px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 12px; color: #c5c5c5;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="checkExportConfig" checked> Export configuration (JSON)
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="checkExportLogs" checked> Export diagnostic logs
             </label>
           </div>
         </div>
       </div>
 
       <!-- ====================================================================
-           TAB 3: ABOUT (EXACT SCREENSHOT 3)
+           TAB 6: INSTALLATION (FULL 1:1 BLOXSTRAP SPEC)
+           ==================================================================== -->
+      <div class="page-pane" id="pane-installation">
+        <div class="page-header">
+          <div class="page-title">Installation</div>
+          <div class="page-subtitle">Configure bootstrapper install folder, shortcuts, and file associations.</div>
+        </div>
+
+        <!-- Install location -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Install location</div>
+            <div class="option-desc">Where Roblox client files and mods are stored on your Mac.</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" class="fluent-input" style="width: 250px; font-size: 11px;" value="~/Library/Application Support/Roblox" readonly>
+            <button class="pill-btn" id="btnOpenInstallFolder">📂 Open Folder</button>
+          </div>
+        </div>
+
+        <!-- Create desktop shortcuts -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Create desktop shortcuts</div>
+            <div class="option-desc">Add quick launch icons for Roblox Player and Bloxstrap Menu on the desktop.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleDesktopShortcuts" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Create Applications shortcut -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Create Applications shortcut</div>
+            <div class="option-desc">Add Bloxstrap Gold directly to the macOS Applications folder.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleAppsShortcut" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Register URL Handler -->
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Register as default handler for roblox:// URLs</div>
+            <div class="option-desc">Allow Bloxstrap to handle roblox-player:// browser links directly.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleRegisterUrlHandler" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="card-action" id="cardReRegisterHandlers" style="margin-top: 16px;">
+          <span class="card-action-icon">🔄</span>
+          <div class="card-action-text">
+            <div class="card-action-title">Re-register Roblox Protocol Handlers</div>
+            <div class="card-action-desc">Fix broken protocol links or browser associations with Roblox.</div>
+          </div>
+          <span class="card-action-chevron">›</span>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 7: ACCOUNT MANAGER (ROBLOX ACCOUNT MANAGER - RAM STYLE)
+           ==================================================================== -->
+      <div class="page-pane" id="pane-accounts">
+        <div class="page-header">
+          <div class="page-title">Roblox Account Manager (RAM)</div>
+          <div class="page-subtitle">Manage unlimited Roblox accounts, switch profiles, and launch into specific games, VIP servers, or Job IDs with 1-click.</div>
+        </div>
+
+        <!-- RAM Toolbar -->
+        <div class="ram-toolbar">
+          <div class="ram-search-box">
+            <span class="ram-search-icon">🔍</span>
+            <input type="text" id="inputAccountSearch" placeholder="Search by username, display name, or tag...">
+          </div>
+          <div class="tag-filter-pills">
+            <div class="tag-pill active" data-tag="all">All</div>
+            <div class="tag-pill" data-tag="Main">Main</div>
+            <div class="tag-pill" data-tag="Alt">Alt</div>
+            <div class="tag-pill" data-tag="Farming">Farming</div>
+            <div class="tag-pill" data-tag="Bank">Bank</div>
+            <div class="tag-pill" data-tag="Trading">Trading</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="pill-btn primary" id="btnOpenAddAccountModal">＋ Add Account</button>
+            <button class="pill-btn gold" id="btnOpenDirectJoinModal">🌐 Direct Join</button>
+            <button class="pill-btn" id="btnLaunchAllAccounts" title="Launch all accounts simultaneously">🚀 Launch All</button>
+          </div>
+        </div>
+
+        <!-- Accounts Cards Container -->
+        <div id="fullAccountsList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 8: BLOXSTRAP GOLD (VIP MEMBERSHIP & MULTI-INSTANCE MONITOR)
+           ==================================================================== -->
+      <div class="page-pane" id="pane-gold">
+        <div class="page-header">
+          <div class="page-title">Bloxstrap Gold Edition</div>
+          <div class="page-subtitle">Manage VIP license tier, built-in multi-instance client launcher, and Roblox Account Manager profiles.</div>
+        </div>
+
+        <!-- Gold Membership Card -->
+        <div class="gold-vip-card">
+          <div class="gold-card-header">
+            <div class="gold-card-title">
+              <span>👑</span>
+              <span id="goldTierTitle">BLOXSTRAP GOLD MEMBERSHIP</span>
+            </div>
+            <button class="pill-btn gold" id="btnChangeKey">🔑 Change Key</button>
+          </div>
+          <div class="gold-card-meta">
+            <div>Tier Level: <strong id="goldTierPrice">$199.99/mo</strong> • Lifetime Mutex Isolation Active</div>
+            <div class="gold-meta-sub" id="goldKeyDisplay">Key: GOLD-7DAY-ULTRA-...</div>
+          </div>
+        </div>
+
+        <div class="section-title">Multi-Instance Roblox</div>
+        <div class="section-subtitle">
+          Run multiple Roblox accounts simultaneously without external injector tools or batch scripts.
+        </div>
+
+        <div class="option-card">
+          <div class="option-info">
+            <div class="option-title">Allow multi-instance launching</div>
+            <div class="option-desc">Intercepts and claims the ROBLOX_singletonMutex handle so multiple game clients can run.</div>
+          </div>
+          <label class="fluent-toggle">
+            <input type="checkbox" id="toggleMultiInstance" checked>
+            <span class="fluent-toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Instances Manager Card -->
+        <div class="option-card" style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div>
+              <div class="option-title">Active Client Sessions</div>
+              <div class="option-desc" id="instanceStatusText">0 running instances</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="pill-btn gold" id="btnLaunchInstance">🚀 Launch Instance</button>
+              <button class="pill-btn danger" id="btnKillAll">🛑 Close All</button>
+            </div>
+          </div>
+
+          <div class="instances-list-wrap" id="instancesList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <div class="section-title">Account Switcher (RAM Quick Panel)</div>
+        <div class="section-subtitle">
+          Saved profiles for 1-click launching. Switch to the <a id="linkJumpToRAM">Account Manager tab</a> for full profile management.
+        </div>
+
+        <div class="option-card" style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div class="option-title">Saved Alt Profiles</div>
+            <div style="display: flex; gap: 8px;">
+              <button class="pill-btn primary" id="btnQuickAddAlt">＋ Add Alt Profile</button>
+              <button class="pill-btn" id="btnManageAllRAM">👥 Open Full Manager</button>
+            </div>
+          </div>
+          <div class="instances-list-wrap" id="quickAccountsList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Parody Remake Notice -->
+        <div class="section-title">Bloxstrap Gold Clarification &amp; Parody Notice</div>
+        <div class="option-card" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.3); display: block;">
+          <div style="font-weight: 700; color: #fcd34d; font-size: 13.5px; margin-bottom: 4px;">👑 This program is a remake &amp; parody of Bloxstrap!</div>
+          <div style="font-size: 12px; color: #fef08a; line-height: 1.5;">
+            Bloxstrap Gold is a satirical joke remake created for fun. The "paid subscription", "7-day trial", and license keys are entirely community satire — you will never be charged money, and Bloxstrap Gold is 100% free and open-source forever.
+          </div>
+        </div>
+
+        <!-- Credits -->
+        <div class="section-title">Credits &amp; Acknowledgements</div>
+        <div class="option-card" style="display: block; font-size: 12px; line-height: 1.6; color: #c5c5c5;">
+          <div>• <strong>MultipleRobloxInstances</strong> by <strong>Avaluate / Fliktem</strong> — pioneer of the singleton mutex bypass.</div>
+          <div>• <strong>Roblox Account Manager (RAM)</strong> by <strong>ic3w0lf22</strong> — comprehensive multi-account and multi-instance tool.</div>
+          <div>• <strong>Fishstrap</strong> — inspiration for the MultiInstanceWatcher background architecture.</div>
+          <div>• <strong>Bloxstrap</strong> by <strong>pizzaboxer</strong> and contributors — the foundation upon which this Gold edition is built.</div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 9: ABOUT (EXACT SCREENSHOT 3)
            ==================================================================== -->
       <div class="page-pane" id="pane-about">
         <div class="page-header">
@@ -1163,183 +1980,6 @@
         </div>
       </div>
 
-      <!-- ====================================================================
-           TAB 4: BLOXSTRAP GOLD (VIP MEMBERSHIP & MULTI-INSTANCE)
-           ==================================================================== -->
-      <div class="page-pane" id="pane-gold">
-        <div class="page-header">
-          <div class="page-title">Bloxstrap Gold Edition</div>
-          <div class="page-subtitle">Manage VIP license tier, built-in multi-instance client launcher, and Roblox Account Manager profiles.</div>
-        </div>
-
-        <!-- Gold Membership Card -->
-        <div class="gold-vip-card">
-          <div class="gold-card-header">
-            <div class="gold-card-title">
-              <span>👑</span>
-              <span id="goldTierTitle">BLOXSTRAP GOLD MEMBERSHIP</span>
-            </div>
-            <button class="gold-action-btn" id="btnChangeKey">🔑 Change Key</button>
-          </div>
-          <div class="gold-card-meta">
-            <div>Tier Level: <strong id="goldTierPrice">$199.99/mo</strong> • Lifetime Mutex Isolation Active</div>
-            <div class="gold-meta-sub" id="goldKeyDisplay">Key: GOLD-7DAY-ULTRA-...</div>
-          </div>
-        </div>
-
-        <div class="section-title">Multi-Instance Roblox</div>
-        <div class="section-subtitle">
-          Run multiple Roblox accounts simultaneously without external injector tools or batch scripts.
-        </div>
-
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Allow multi-instance launching</div>
-            <div class="option-desc">Intercepts and claims the ROBLOX_singletonMutex handle so multiple game clients can run.</div>
-          </div>
-          <label class="fluent-toggle">
-            <input type="checkbox" id="toggleMultiInstance" checked>
-            <span class="fluent-toggle-slider"></span>
-          </label>
-        </div>
-
-        <!-- Instances Manager Card -->
-        <div class="option-card" style="display: block;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div>
-              <div class="option-title">Active Client Sessions</div>
-              <div class="option-desc" id="instanceStatusText">0 running instances</div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="pill-btn" id="btnLaunchInstance" style="background: linear-gradient(135deg, #fcd34d, #f59e0b); color: #000; font-weight: 700; border: none;">🚀 Launch Instance</button>
-              <button class="pill-btn" id="btnKillAll">🛑 Close All</button>
-            </div>
-          </div>
-
-          <div class="instances-list-wrap" id="instancesList">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <div class="section-title">Account Switcher (RAM Style)</div>
-        <div class="section-subtitle">
-          Saved profiles for 1-click launching into separate isolated accounts.
-        </div>
-
-        <div class="option-card" style="display: block;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div class="option-title">Saved Alt Profiles</div>
-            <button class="pill-btn" id="btnAddAltProfile">＋ Add Alt Profile</button>
-          </div>
-          <div class="instances-list-wrap" id="accountsList">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-      </div>
-
-      <!-- ====================================================================
-           TAB 5: INTEGRATIONS
-           ==================================================================== -->
-      <div class="page-pane" id="pane-integrations">
-        <div class="page-header">
-          <div class="page-title">Integrations</div>
-          <div class="page-subtitle">Configure additional functionality to go alongside Roblox.</div>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Discord Rich Presence</div>
-            <div class="option-desc">The Roblox game you're playing will be shown on your Discord profile.</div>
-          </div>
-          <label class="fluent-toggle"><input type="checkbox" checked><span class="fluent-toggle-slider"></span></label>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Query server location</div>
-            <div class="option-desc">When in-game, you'll be able to see where your server is located via ipinfo.io.</div>
-          </div>
-          <label class="fluent-toggle"><input type="checkbox" checked><span class="fluent-toggle-slider"></span></label>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Don't exit to desktop app</div>
-            <div class="option-desc">Roblox will fully close when you leave a game instead of going back to the app.</div>
-          </div>
-          <label class="fluent-toggle"><input type="checkbox" checked><span class="fluent-toggle-slider"></span></label>
-        </div>
-      </div>
-
-      <!-- ====================================================================
-           TAB 6: APPEARANCE
-           ==================================================================== -->
-      <div class="page-pane" id="pane-appearance">
-        <div class="page-header">
-          <div class="page-title">Appearance</div>
-          <div class="page-subtitle">Customize the look and feel of Bloxstrap.</div>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Theme</div>
-            <div class="option-desc">Change the visual theme of the Bloxstrap Menu.</div>
-          </div>
-          <select class="fluent-select"><option>Dark (Windows 11 Mica)</option><option>Gold Edition</option><option>Light</option></select>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Bootstrapper style</div>
-            <div class="option-desc">Choose the style of dialog shown when Roblox starts.</div>
-          </div>
-          <select class="fluent-select"><option>Fluent</option><option>Classic Fluent</option><option>Progress Bar</option><option>Byfron</option></select>
-        </div>
-      </div>
-
-      <!-- ====================================================================
-           TAB 7: BEHAVIOUR
-           ==================================================================== -->
-      <div class="page-pane" id="pane-behaviour">
-        <div class="page-header">
-          <div class="page-title">Behaviour</div>
-          <div class="page-subtitle">Configure bootstrapper automation and update policies.</div>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Automatically check for updates</div>
-            <div class="option-desc">Periodically check for new releases of Bloxstrap Gold.</div>
-          </div>
-          <label class="fluent-toggle"><input type="checkbox" checked><span class="fluent-toggle-slider"></span></label>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Confirm game launches</div>
-            <div class="option-desc">Show a prompt asking for confirmation before launching Roblox.</div>
-          </div>
-          <label class="fluent-toggle"><input type="checkbox"><span class="fluent-toggle-slider"></span></label>
-        </div>
-      </div>
-
-      <!-- ====================================================================
-           TAB 8: INSTALLATION
-           ==================================================================== -->
-      <div class="page-pane" id="pane-installation">
-        <div class="page-header">
-          <div class="page-title">Installation</div>
-          <div class="page-subtitle">Configure bootstrapper install folder and shortcuts.</div>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Install location</div>
-            <div class="option-desc">Where Roblox client files and mods are stored.</div>
-          </div>
-          <input type="text" class="fluent-input" style="width: 240px; text-align: left; font-size: 11px;" value="~/Library/Application Support/Roblox" readonly>
-        </div>
-        <div class="option-card">
-          <div class="option-info">
-            <div class="option-title">Create desktop shortcuts</div>
-            <div class="option-desc">Add quick launch icons for Roblox Player and Bloxstrap Menu.</div>
-          </div>
-          <label class="fluent-toggle"><input type="checkbox" checked><span class="fluent-toggle-slider"></span></label>
-        </div>
-      </div>
-
     </div>
   </div>
 
@@ -1359,20 +1999,113 @@
   </div>
 
   <!-- ========================================================================
+       MODAL: ADD / EDIT ACCOUNT (RAM STYLE)
+       ======================================================================== -->
+  <div class="modal-overlay" id="accountModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-title" id="accountModalTitle">Add Account Profile</div>
+      <div class="modal-desc">Configure your Roblox account profile for isolated multi-instance launching.</div>
+      
+      <input type="hidden" id="modalAccountId">
+      <div class="modal-grid">
+        <div class="form-group">
+          <div class="form-label">Roblox Username *</div>
+          <input type="text" class="fluent-input" id="modalUsername" placeholder="e.g. Player1" style="width: 100%;">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Display Name</div>
+          <input type="text" class="fluent-input" id="modalDisplayName" placeholder="e.g. Main Character" style="width: 100%;">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Roblox User ID (for avatar)</div>
+          <input type="text" class="fluent-input" id="modalUserId" placeholder="e.g. 1" value="1" style="width: 100%;">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Profile Tag</div>
+          <select class="fluent-select" id="modalTag" style="width: 100%; min-width: auto;">
+            <option value="Main">Main</option>
+            <option value="Alt" selected>Alt</option>
+            <option value="Farming">Farming</option>
+            <option value="Bank">Bank</option>
+            <option value="Trading">Trading</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom: 12px;">
+        <div class="form-label">Notes / Description</div>
+        <input type="text" class="fluent-input" id="modalNote" placeholder="e.g. Auto-farming Blox Fruits / Pet Sim 99" style="width: 100%;">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Session Cookie (.ROBLOSECURITY - Optional)</div>
+        <input type="password" class="fluent-input" id="modalCookie" placeholder="_|WARNING:-DO-NOT-SHARE-THIS..." style="width: 100%;">
+        <div style="font-size: 10.5px; color: #8e8d98; margin-top: 2px;">Stored encrypted locally in macOS Application Support for 1-click RAM authentication.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="pill-btn" id="btnCancelAccountModal">Cancel</button>
+        <button class="pill-btn primary" id="btnSaveAccountModal">Save Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL: DIRECT GAME JOINER (RAM STYLE)
+       ======================================================================== -->
+  <div class="modal-overlay" id="joinGameModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-title">Direct Game Joiner</div>
+      <div class="modal-desc">Launch into a specific Place ID, private VIP server, or exact Job ID server instance.</div>
+
+      <div class="form-group" style="margin-bottom: 12px;">
+        <div class="form-label">Select Account Profile</div>
+        <select class="fluent-select" id="modalJoinAccountSelect" style="width: 100%; min-width: auto;">
+          <!-- Dynamically populated -->
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 12px;">
+        <div class="form-label">Place ID *</div>
+        <input type="text" class="fluent-input mono" id="modalPlaceId" placeholder="e.g. 2753915549" value="2753915549" style="width: 100%; text-align: left;">
+        <div style="display: flex; gap: 6px; margin-top: 5px;">
+          <button class="tag-pill" data-place="2753915549">Blox Fruits</button>
+          <button class="tag-pill" data-place="286090429">Arsenal</button>
+          <button class="tag-pill" data-place="606849624">Jailbreak</button>
+          <button class="tag-pill" data-place="6516141723">Doors</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 12px;">
+        <div class="form-label">Server Job ID / GUID (Optional)</div>
+        <input type="text" class="fluent-input" id="modalJobId" placeholder="e.g. 6d97c3bb-9bc2-421b-87b6-17b5f252bf65" style="width: 100%;">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 12px;">
+        <div class="form-label">VIP Private Server Link (Optional)</div>
+        <input type="text" class="fluent-input" id="modalVipUrl" placeholder="https://www.roblox.com/games/2753915549?privateServerLinkCode=..." style="width: 100%;">
+      </div>
+
+      <div class="modal-actions">
+        <button class="pill-btn" id="btnCancelJoinModal">Cancel</button>
+        <button class="pill-btn gold" id="btnExecuteJoinGame">🚀 Launch into Game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
        KEY GATE ACTIVATION MODAL (GOLD-7DAY- REQUIREMENT)
        ======================================================================== -->
   <div class="modal-overlay" id="keyGateModal" style="display: none;">
-    <div class="modal-card">
-      <div class="modal-crown">👑</div>
+    <div class="modal-card" style="text-align: center;">
+      <div style="font-size: 42px; margin-bottom: 8px;">👑</div>
       <div class="modal-title">Bloxstrap Gold Activation</div>
       <div class="modal-desc">
         Please enter your license key to authenticate and access Bloxstrap Gold.<br>
         Keys must start with <strong>GOLD-7DAY-</strong> (e.g. GOLD-7DAY-ULTRA-XXXX-XXXX).
       </div>
-      <input type="text" class="modal-input" id="modalKeyInput" placeholder="GOLD-7DAY-ULTRA-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
-      <div class="modal-detected" id="modalDetectedTier">🔑 Enter a valid key to detect your tier</div>
-      <button class="modal-btn-unlock" id="btnUnlockKey">Unlock Bloxstrap Gold</button>
-      <button class="modal-btn-store" id="btnStoreLink">🛒 Get a key at bloxstrapgold.github.io</button>
+      <input type="text" class="fluent-input mono" id="modalKeyInput" placeholder="GOLD-7DAY-ULTRA-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="width: 100%; height: 38px; text-align: center; margin-bottom: 8px;">
+      <div style="font-size: 12px; font-weight: 600; color: #fcd34d; min-height: 20px; margin-bottom: 16px;" id="modalDetectedTier">🔑 Enter a valid key to detect your tier</div>
+      <button class="pill-btn gold" id="btnUnlockKey" style="width: 100%; height: 38px; justify-content: center; font-size: 13px; margin-bottom: 12px;">Unlock Bloxstrap Gold</button>
+      <button class="pill-btn" id="btnStoreLink" style="background: transparent; border: none; color: #9897a3; font-size: 11.5px; text-decoration: underline;">🛒 Get a key at bloxstrapgold.github.io</button>
     </div>
   </div>
 
@@ -1380,26 +2113,65 @@
        APPLICATION JAVASCRIPT & SWIFT BRIDGE
        ======================================================================== -->
   <script>
-    // State Store
+    // App State Store
     let appState = {
       isAuthenticated: false,
       currentTierName: "Unauthenticated",
       currentTierBadge: "LOCKED",
       currentTierPrice: "$0.00",
       vipKey: "",
+      
+      // FastFlags
       targetFps: 9999,
       preferredLighting: "Future (Phase 3)",
       escapeMenuVersion: "Version 4 (2023)",
       hideGuisEnabled: true,
+      
+      // Mods
       renderingMode: "Direct3D 11",
       exclusiveFullscreen: false,
       alternateQualitySelector: false,
       inGameMenuVersion: "Version 3 (2021)",
       disableFullscreenOptimizations: false,
       customDeathSound: true,
+      mouseCursor: "Default (2020)",
+      oldAvatarBackground: false,
+      emojiFont: "Default",
+      
+      // Integrations
+      activityTrackingEnabled: true,
+      showServerDetailsEnabled: true,
+      dontExitToDesktopApp: true,
+      discordActivityEnabled: true,
+      discordActivityJoinEnabled: true,
+      discordAccountOnProfile: true,
+      
+      // Appearance
+      theme: "Dark (Windows 11 Mica)",
+      language: "System default",
+      bootstrapperStyle: "Fluent",
+      robloxIcon: "2022 (Modern Silver)",
+      customTitle: "Roblox",
+      
+      // Behaviour
+      autoUpdateChecking: true,
+      confirmLaunches: false,
+      backgroundUpdates: true,
+      forceRobloxReinstall: false,
+      telemetryEnabled: false,
+      
+      // Installation
+      createDesktopShortcuts: true,
+      createAppsShortcut: true,
+      registerUrlHandler: true,
+      
+      // Lists
       instances: [],
       accounts: []
     };
+
+    let activeTagFilter = "all";
+    let activeSearchQuery = "";
 
     // Post message to Swift host
     function sendToHost(action, payload = {}) {
@@ -1420,6 +2192,15 @@
       showToast("✓ Settings saved!");
     };
 
+    window.showToast = function(msg) {
+      const toast = document.getElementById("toastMsg");
+      toast.textContent = msg;
+      toast.style.display = "inline";
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 2500);
+    };
+
     function renderState() {
       // Key Gate modal visibility
       const modal = document.getElementById("keyGateModal");
@@ -1432,24 +2213,56 @@
       // Titlebar badge
       document.getElementById("titleTierBadge").textContent = appState.currentTierBadge;
 
-      // Inputs
+      // FastFlags Tab
       document.getElementById("inputFps").value = appState.targetFps;
       document.getElementById("selectLighting").value = appState.preferredLighting;
       document.getElementById("selectEscapeMenu").value = appState.escapeMenuVersion;
       document.getElementById("toggleHideGuis").checked = appState.hideGuisEnabled;
+
+      // Mods Tab
       document.getElementById("selectRenderingMode").value = appState.renderingMode;
       document.getElementById("toggleExclusiveFullscreen").checked = appState.exclusiveFullscreen;
       document.getElementById("toggleAltQuality").checked = appState.alternateQualitySelector;
       document.getElementById("selectInGameMenu").value = appState.inGameMenuVersion;
       document.getElementById("toggleDisableFso").checked = appState.disableFullscreenOptimizations;
       document.getElementById("toggleOof").checked = appState.customDeathSound;
+      document.getElementById("selectMouseCursor").value = appState.mouseCursor || "Default (2020)";
+      document.getElementById("toggleOldAvatarBg").checked = !!appState.oldAvatarBackground;
+      document.getElementById("selectEmojiFont").value = appState.emojiFont || "Default";
 
-      // Gold tab details
+      // Integrations Tab
+      document.getElementById("toggleActivityTracking").checked = appState.activityTrackingEnabled !== false;
+      document.getElementById("toggleShowServerDetails").checked = appState.showServerDetailsEnabled !== false;
+      document.getElementById("toggleDontExit").checked = appState.dontExitToDesktopApp !== false;
+      document.getElementById("toggleDiscordActivity").checked = appState.discordActivityEnabled !== false;
+      document.getElementById("toggleDiscordJoin").checked = appState.discordActivityJoinEnabled !== false;
+      document.getElementById("toggleDiscordAccount").checked = appState.discordAccountOnProfile !== false;
+
+      // Appearance Tab
+      document.getElementById("selectTheme").value = appState.theme || "Dark (Windows 11 Mica)";
+      document.getElementById("selectLanguage").value = appState.language || "System default";
+      document.getElementById("selectBootstrapperStyle").value = appState.bootstrapperStyle || "Fluent";
+      document.getElementById("selectRobloxIcon").value = appState.robloxIcon || "2022 (Modern Silver)";
+      document.getElementById("inputCustomTitle").value = appState.customTitle || "Roblox";
+
+      // Behaviour Tab
+      document.getElementById("toggleAutoUpdate").checked = appState.autoUpdateChecking !== false;
+      document.getElementById("toggleConfirmLaunches").checked = !!appState.confirmLaunches;
+      document.getElementById("toggleBackgroundUpdates").checked = appState.backgroundUpdates !== false;
+      document.getElementById("toggleForceReinstall").checked = !!appState.forceRobloxReinstall;
+      document.getElementById("toggleTelemetry").checked = !!appState.telemetryEnabled;
+
+      // Installation Tab
+      document.getElementById("toggleDesktopShortcuts").checked = appState.createDesktopShortcuts !== false;
+      document.getElementById("toggleAppsShortcut").checked = appState.createAppsShortcut !== false;
+      document.getElementById("toggleRegisterUrlHandler").checked = appState.registerUrlHandler !== false;
+
+      // Gold Tab
       document.getElementById("goldTierTitle").textContent = "BLOXSTRAP " + appState.currentTierName.toUpperCase();
       document.getElementById("goldTierPrice").textContent = appState.currentTierPrice;
       document.getElementById("goldKeyDisplay").textContent = "Key: " + (appState.vipKey || "None");
 
-      // Instances
+      // Render Instances & Accounts
       renderInstancesList();
       renderAccountsList();
     }
@@ -1459,7 +2272,7 @@
       const statusText = document.getElementById("instanceStatusText");
       container.innerHTML = "";
 
-      const count = appState.instances.length;
+      const count = appState.instances ? appState.instances.length : 0;
       statusText.textContent = `${count} running instance${count === 1 ? "" : "s"}`;
 
       if (count === 0) {
@@ -1475,9 +2288,9 @@
             <span style="color: #10b981;">●</span>
             <span>Client #${idx + 1} • PID: ${inst.pid} • ${inst.ram} MB RAM</span>
           </div>
-          <button class="instance-kill-btn" data-pid="${inst.pid}">Kill</button>
+          <button class="pill-btn danger" data-pid="${inst.pid}" style="padding: 2px 8px; font-size: 11px;">Kill</button>
         `;
-        item.querySelector(".instance-kill-btn").addEventListener("click", () => {
+        item.querySelector("button").addEventListener("click", () => {
           sendToHost("killInstance", { pid: inst.pid });
         });
         container.appendChild(item);
@@ -1485,36 +2298,118 @@
     }
 
     function renderAccountsList() {
-      const container = document.getElementById("accountsList");
-      container.innerHTML = "";
-      if (!appState.accounts || appState.accounts.length === 0) {
-        container.innerHTML = '<div style="color: #686774; font-size: 11px; padding: 6px;">No saved accounts. Click "+ Add Alt Profile".</div>';
+      // 1. Render Full RAM Tab Accounts
+      const fullContainer = document.getElementById("fullAccountsList");
+      const quickContainer = document.getElementById("quickAccountsList");
+      const joinSelect = document.getElementById("modalJoinAccountSelect");
+      
+      fullContainer.innerHTML = "";
+      quickContainer.innerHTML = "";
+      joinSelect.innerHTML = "";
+
+      const accounts = appState.accounts || [];
+
+      if (accounts.length === 0) {
+        fullContainer.innerHTML = '<div class="option-card" style="color: #8e8d98; font-size: 13px; text-align: center; padding: 24px;">No accounts saved yet. Click "+ Add Account" to configure your Roblox profiles.</div>';
+        quickContainer.innerHTML = '<div style="color: #686774; font-size: 11px; padding: 6px;">No saved accounts. Click "+ Add Alt Profile".</div>';
         return;
       }
-      appState.accounts.forEach(acc => {
-        const item = document.createElement("div");
-        item.className = "instance-item";
-        item.innerHTML = `
+
+      // Filter accounts based on query and tag
+      const filtered = accounts.filter(acc => {
+        const matchesTag = (activeTagFilter === "all" || (acc.tag && acc.tag.toLowerCase() === activeTagFilter.toLowerCase()));
+        const matchesQuery = (!activeSearchQuery || 
+          (acc.username && acc.username.toLowerCase().includes(activeSearchQuery)) ||
+          (acc.displayName && acc.displayName.toLowerCase().includes(activeSearchQuery)) ||
+          (acc.note && acc.note.toLowerCase().includes(activeSearchQuery))
+        );
+        return matchesTag && matchesQuery;
+      });
+
+      if (filtered.length === 0) {
+        fullContainer.innerHTML = '<div class="option-card" style="color: #8e8d98; font-size: 13px; text-align: center; padding: 24px;">No accounts match your filter criteria.</div>';
+      }
+
+      accounts.forEach(acc => {
+        // Quick panel item in Gold Tab
+        const qItem = document.createElement("div");
+        qItem.className = "instance-item";
+        qItem.innerHTML = `
           <div class="instance-item-title">
             <span>👤</span>
-            <span>${acc.displayName} (@${acc.username})</span>
+            <span>${escapeHtml(acc.displayName)} (@${escapeHtml(acc.username)})</span>
+            <span class="account-tag-badge tag-${(acc.tag || 'alt').toLowerCase()}">${escapeHtml(acc.tag || 'Alt')}</span>
           </div>
-          <button class="pill-btn" style="padding: 2px 8px; font-size: 10.5px;">▶ Launch Alt</button>
+          <button class="pill-btn primary" style="padding: 2px 8px; font-size: 10.5px;">▶ Launch Alt</button>
         `;
-        item.querySelector("button").addEventListener("click", () => {
-          sendToHost("launchInstance");
+        qItem.querySelector("button").addEventListener("click", () => {
+          sendToHost("launchAccount", { id: acc.id, username: acc.username });
         });
-        container.appendChild(item);
+        quickContainer.appendChild(qItem);
+
+        // Join modal select option
+        const opt = document.createElement("option");
+        opt.value = acc.id;
+        opt.textContent = `${acc.displayName} (@${acc.username}) - [${acc.tag || 'Alt'}]`;
+        joinSelect.appendChild(opt);
+      });
+
+      filtered.forEach(acc => {
+        const card = document.createElement("div");
+        card.className = "account-card";
+        const tagClass = `tag-${(acc.tag || 'alt').toLowerCase()}`;
+        const avatarUrl = `https://www.roblox.com/headshot-thumbnail/image?userId=${encodeURIComponent(acc.userId || '1')}&width=150&height=150&format=png`;
+
+        card.innerHTML = `
+          <div class="account-card-left">
+            <img class="account-avatar" src="${avatarUrl}" alt="${escapeHtml(acc.username)}" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 24 24\\' fill=\\'%238e8d98\\'%3e%3cpath d=\\'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\\'/%3e%3c/svg%3e'">
+            <div class="account-meta">
+              <div class="account-title-row">
+                <span class="account-display-name">${escapeHtml(acc.displayName)}</span>
+                <span class="account-username">@${escapeHtml(acc.username)}</span>
+                <span class="account-tag-badge ${tagClass}">${escapeHtml(acc.tag || 'Alt')}</span>
+                <span style="font-size: 10px; color: #767582; font-family: var(--font-mono);">ID: ${escapeHtml(acc.userId || '1')}</span>
+              </div>
+              <div class="account-note">${escapeHtml(acc.note || 'No notes specified')}</div>
+              <div class="account-status-row">
+                <div class="account-status-dot"></div>
+                <span style="color: #10b981; font-weight: 600;">Ready for launch</span>
+              </div>
+            </div>
+          </div>
+          <div class="account-actions">
+            <button class="pill-btn primary btn-card-launch">▶ Launch</button>
+            <button class="pill-btn gold btn-card-join">🌐 Join Place</button>
+            <button class="pill-btn btn-card-edit">✏ Edit</button>
+            <button class="pill-btn danger btn-card-delete">🗑</button>
+          </div>
+        `;
+
+        card.querySelector(".btn-card-launch").addEventListener("click", () => {
+          sendToHost("launchAccount", { id: acc.id, username: acc.username });
+        });
+
+        card.querySelector(".btn-card-join").addEventListener("click", () => {
+          openDirectJoinModal(acc.id);
+        });
+
+        card.querySelector(".btn-card-edit").addEventListener("click", () => {
+          openEditAccountModal(acc);
+        });
+
+        card.querySelector(".btn-card-delete").addEventListener("click", () => {
+          if (confirm(`Are you sure you want to delete profile @${acc.username}?`)) {
+            sendToHost("deleteAccount", { id: acc.id });
+          }
+        });
+
+        fullContainer.appendChild(card);
       });
     }
 
-    function showToast(msg) {
-      const toast = document.getElementById("toastMsg");
-      toast.textContent = msg;
-      toast.style.display = "inline";
-      setTimeout(() => {
-        toast.style.display = "none";
-      }, 2500);
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
     // --- TAB SWITCHING ---
@@ -1529,58 +2424,225 @@
       });
     });
 
+    document.getElementById("linkJumpToRAM").addEventListener("click", () => {
+      document.querySelector('[data-tab="accounts"]').click();
+    });
+
+    document.getElementById("btnManageAllRAM").addEventListener("click", () => {
+      document.querySelector('[data-tab="accounts"]').click();
+    });
+
+    // --- RAM TOOLBAR INTERACTIONS ---
+    document.getElementById("inputAccountSearch").addEventListener("input", (e) => {
+      activeSearchQuery = e.target.value.trim().toLowerCase();
+      renderAccountsList();
+    });
+
+    document.querySelectorAll(".tag-pill").forEach(pill => {
+      if (pill.dataset.tag) {
+        pill.addEventListener("click", () => {
+          document.querySelectorAll(".tag-pill").forEach(p => {
+            if (p.dataset.tag) p.classList.remove("active");
+          });
+          pill.classList.add("active");
+          activeTagFilter = pill.dataset.tag;
+          renderAccountsList();
+        });
+      }
+    });
+
+    document.getElementById("btnLaunchAllAccounts").addEventListener("click", () => {
+      const accounts = appState.accounts || [];
+      if (accounts.length === 0) {
+        alert("No accounts saved to launch.");
+        return;
+      }
+      accounts.forEach(acc => {
+        sendToHost("launchAccount", { id: acc.id, username: acc.username });
+      });
+      showToast(`🚀 Launched ${accounts.length} isolated account instances!`);
+    });
+
+    // --- ACCOUNT MODAL ---
+    const accountModal = document.getElementById("accountModal");
+    const accountModalTitle = document.getElementById("accountModalTitle");
+    const modalAccountId = document.getElementById("modalAccountId");
+    const modalUsername = document.getElementById("modalUsername");
+    const modalDisplayName = document.getElementById("modalDisplayName");
+    const modalUserId = document.getElementById("modalUserId");
+    const modalTag = document.getElementById("modalTag");
+    const modalNote = document.getElementById("modalNote");
+    const modalCookie = document.getElementById("modalCookie");
+
+    function openAddAccountModal() {
+      accountModalTitle.textContent = "Add Account Profile";
+      modalAccountId.value = "";
+      modalUsername.value = "";
+      modalDisplayName.value = "";
+      modalUserId.value = "1";
+      modalTag.value = "Alt";
+      modalNote.value = "";
+      modalCookie.value = "";
+      accountModal.style.display = "flex";
+      modalUsername.focus();
+    }
+
+    function openEditAccountModal(acc) {
+      accountModalTitle.textContent = "Edit Account Profile";
+      modalAccountId.value = acc.id;
+      modalUsername.value = acc.username;
+      modalDisplayName.value = acc.displayName;
+      modalUserId.value = acc.userId || "1";
+      modalTag.value = acc.tag || "Alt";
+      modalNote.value = acc.note || "";
+      modalCookie.value = "";
+      accountModal.style.display = "flex";
+      modalDisplayName.focus();
+    }
+
+    document.getElementById("btnOpenAddAccountModal").addEventListener("click", openAddAccountModal);
+    document.getElementById("btnQuickAddAlt").addEventListener("click", openAddAccountModal);
+
+    document.getElementById("btnCancelAccountModal").addEventListener("click", () => {
+      accountModal.style.display = "none";
+    });
+
+    document.getElementById("btnSaveAccountModal").addEventListener("click", () => {
+      const username = modalUsername.value.trim();
+      if (!username) {
+        alert("Roblox Username is required.");
+        return;
+      }
+      const displayName = modalDisplayName.value.trim() || username;
+      const userId = modalUserId.value.trim() || "1";
+      const tag = modalTag.value;
+      const note = modalNote.value.trim();
+      const id = modalAccountId.value;
+
+      if (id) {
+        sendToHost("editAccount", { id, username, displayName, userId, tag, note });
+      } else {
+        sendToHost("addAccount", { username, displayName, userId, tag, note });
+      }
+      accountModal.style.display = "none";
+    });
+
+    // --- DIRECT JOIN MODAL ---
+    const joinGameModal = document.getElementById("joinGameModal");
+    const modalPlaceId = document.getElementById("modalPlaceId");
+    const modalJobId = document.getElementById("modalJobId");
+    const modalVipUrl = document.getElementById("modalVipUrl");
+    const modalJoinAccountSelect = document.getElementById("modalJoinAccountSelect");
+
+    function openDirectJoinModal(preselectedId = null) {
+      if (preselectedId) {
+        modalJoinAccountSelect.value = preselectedId;
+      }
+      joinGameModal.style.display = "flex";
+      modalPlaceId.focus();
+    }
+
+    document.getElementById("btnOpenDirectJoinModal").addEventListener("click", () => openDirectJoinModal());
+    document.getElementById("btnCancelJoinModal").addEventListener("click", () => {
+      joinGameModal.style.display = "none";
+    });
+
+    document.querySelectorAll("[data-place]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        modalPlaceId.value = btn.dataset.place;
+      });
+    });
+
+    document.getElementById("btnExecuteJoinGame").addEventListener("click", () => {
+      const placeId = modalPlaceId.value.trim();
+      if (!placeId) {
+        alert("Please enter a Place ID.");
+        return;
+      }
+      const jobId = modalJobId.value.trim();
+      const vipUrl = modalVipUrl.value.trim();
+      const accountId = modalJoinAccountSelect.value;
+      sendToHost("joinGame", { placeId, jobId, vipUrl, accountId });
+      joinGameModal.style.display = "none";
+    });
+
     // --- WINDOW CAPTION BUTTONS ---
     document.getElementById("btnClose").addEventListener("click", () => sendToHost("closeWindow"));
     document.getElementById("btnMinimize").addEventListener("click", () => sendToHost("minimizeWindow"));
     document.getElementById("btnMaximize").addEventListener("click", () => sendToHost("maximizeWindow"));
     document.getElementById("btnHelp").addEventListener("click", () => sendToHost("openHelp"));
 
-    // --- BOTTOM BUTTONS ---
+    // --- BOTTOM STATUSBAR BUTTONS ---
     document.getElementById("btnCancel").addEventListener("click", () => sendToHost("closeWindow"));
     document.getElementById("btnSave").addEventListener("click", () => {
-      const fps = parseInt(document.getElementById("inputFps").value) || 9999;
-      const lighting = document.getElementById("selectLighting").value;
-      const escapeMenu = document.getElementById("selectEscapeMenu").value;
-      const hideGuis = document.getElementById("toggleHideGuis").checked;
-      const renderingMode = document.getElementById("selectRenderingMode").value;
-      const exclusiveFullscreen = document.getElementById("toggleExclusiveFullscreen").checked;
-      const altQuality = document.getElementById("toggleAltQuality").checked;
-      const inGameMenu = document.getElementById("selectInGameMenu").value;
-      const disableFso = document.getElementById("toggleDisableFso").checked;
-
       sendToHost("saveSettings", {
-        targetFps: fps,
-        preferredLighting: lighting,
-        escapeMenuVersion: escapeMenu,
-        hideGuisEnabled: hideGuis,
-        renderingMode: renderingMode,
-        exclusiveFullscreen: exclusiveFullscreen,
-        alternateQualitySelector: altQuality,
-        inGameMenuVersion: inGameMenu,
-        disableFullscreenOptimizations: disableFso
+        // FastFlags
+        targetFps: parseInt(document.getElementById("inputFps").value) || 9999,
+        preferredLighting: document.getElementById("selectLighting").value,
+        escapeMenuVersion: document.getElementById("selectEscapeMenu").value,
+        hideGuisEnabled: document.getElementById("toggleHideGuis").checked,
+        
+        // Mods
+        renderingMode: document.getElementById("selectRenderingMode").value,
+        exclusiveFullscreen: document.getElementById("toggleExclusiveFullscreen").checked,
+        alternateQualitySelector: document.getElementById("toggleAltQuality").checked,
+        inGameMenuVersion: document.getElementById("selectInGameMenu").value,
+        disableFullscreenOptimizations: document.getElementById("toggleDisableFso").checked,
+        mouseCursor: document.getElementById("selectMouseCursor").value,
+        oldAvatarBackground: document.getElementById("toggleOldAvatarBg").checked,
+        emojiFont: document.getElementById("selectEmojiFont").value,
+        
+        // Integrations
+        activityTrackingEnabled: document.getElementById("toggleActivityTracking").checked,
+        showServerDetailsEnabled: document.getElementById("toggleShowServerDetails").checked,
+        dontExitToDesktopApp: document.getElementById("toggleDontExit").checked,
+        discordActivityEnabled: document.getElementById("toggleDiscordActivity").checked,
+        discordActivityJoinEnabled: document.getElementById("toggleDiscordJoin").checked,
+        discordAccountOnProfile: document.getElementById("toggleDiscordAccount").checked,
+        
+        // Appearance
+        theme: document.getElementById("selectTheme").value,
+        language: document.getElementById("selectLanguage").value,
+        bootstrapperStyle: document.getElementById("selectBootstrapperStyle").value,
+        robloxIcon: document.getElementById("selectRobloxIcon").value,
+        customTitle: document.getElementById("inputCustomTitle").value,
+        
+        // Behaviour
+        autoUpdateChecking: document.getElementById("toggleAutoUpdate").checked,
+        confirmLaunches: document.getElementById("toggleConfirmLaunches").checked,
+        backgroundUpdates: document.getElementById("toggleBackgroundUpdates").checked,
+        forceRobloxReinstall: document.getElementById("toggleForceReinstall").checked,
+        telemetryEnabled: document.getElementById("toggleTelemetry").checked,
+        
+        // Installation
+        createDesktopShortcuts: document.getElementById("toggleDesktopShortcuts").checked,
+        createAppsShortcut: document.getElementById("toggleAppsShortcut").checked,
+        registerUrlHandler: document.getElementById("toggleRegisterUrlHandler").checked
       });
     });
 
-    // --- OOF SOUND PREVIEW & TOGGLE ---
-    document.getElementById("btnPreviewOof").addEventListener("click", () => {
-      sendToHost("playOof");
-    });
+    // --- BUTTON ACTIONS ---
+    document.getElementById("btnPreviewOof").addEventListener("click", () => sendToHost("playOof"));
     document.getElementById("toggleOof").addEventListener("change", (e) => {
       sendToHost("toggleOof", { enabled: e.target.checked });
     });
 
-    // --- MULTI-INSTANCE ACTIONS ---
-    document.getElementById("btnLaunchInstance").addEventListener("click", () => sendToHost("launchInstance"));
-    document.getElementById("btnKillAll").addEventListener("click", () => sendToHost("killAllInstances"));
-    document.getElementById("btnAddAltProfile").addEventListener("click", () => {
-      const num = (appState.accounts.length || 0) + 1;
-      sendToHost("addAccount", {
-        username: `AltAccount_${num}`,
-        displayName: `Alt Profile #${num}`
-      });
+    document.getElementById("cardOpenModsFolder").addEventListener("click", () => sendToHost("openModsFolder"));
+    document.getElementById("cardModdingHelp").addEventListener("click", () => sendToHost("openHelp"));
+    document.getElementById("cardCompatSettings").addEventListener("click", () => sendToHost("openFsoLink"));
+    document.getElementById("btnOpenInstallFolder").addEventListener("click", () => sendToHost("openInstallationFolder"));
+    document.getElementById("cardReRegisterHandlers").addEventListener("click", () => sendToHost("reRegisterHandlers"));
+    document.getElementById("btnPreviewBootstrapper").addEventListener("click", () => sendToHost("previewBootstrapper"));
+    document.getElementById("btnExportData").addEventListener("click", () => sendToHost("exportData"));
+    document.getElementById("btnChooseFont").addEventListener("click", () => {
+      showToast("✓ Custom font selector loaded");
     });
 
-    // --- KEY GATE MODAL ---
+    // Multi-Instance actions
+    document.getElementById("btnLaunchInstance").addEventListener("click", () => sendToHost("launchInstance"));
+    document.getElementById("btnKillAll").addEventListener("click", () => sendToHost("killAllInstances"));
+
+    // Key Gate modal logic
     const keyInput = document.getElementById("modalKeyInput");
     const detectedLabel = document.getElementById("modalDetectedTier");
     keyInput.addEventListener("input", (e) => {
@@ -1609,15 +2671,10 @@
       sendToHost("verifyKey", { key });
     });
 
-    document.getElementById("btnStoreLink").addEventListener("click", () => {
-      sendToHost("openStore");
-    });
+    document.getElementById("btnStoreLink").addEventListener("click", () => sendToHost("openStore"));
+    document.getElementById("btnChangeKey").addEventListener("click", () => sendToHost("deauthenticate"));
 
-    document.getElementById("btnChangeKey").addEventListener("click", () => {
-      sendToHost("deauthenticate");
-    });
-
-    // Hyperlinks
+    // FastFlag links & Help
     document.getElementById("cardFastFlagEditor").addEventListener("click", () => sendToHost("openFastFlagEditor"));
     document.getElementById("cardFastFlagHelp").addEventListener("click", () => sendToHost("openFastFlagHelp"));
     document.getElementById("linkD3D").addEventListener("click", () => sendToHost("openFastFlagHelp"));
@@ -1627,7 +2684,7 @@
     document.getElementById("linkFso").addEventListener("click", () => sendToHost("openFsoLink"));
     document.getElementById("btnAllContributors").addEventListener("click", () => sendToHost("openContributors"));
 
-    // Initial ready ping
+    // Inform host we are ready
     sendToHost("appReady");
   </script>
 </body>

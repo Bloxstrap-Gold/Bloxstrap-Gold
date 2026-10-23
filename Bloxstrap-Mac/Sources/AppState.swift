@@ -3,6 +3,49 @@ import Foundation
 public class AppState {
     public static let shared = AppState()
     
+    public struct AccountProfile: Codable, Identifiable {
+        public var id: String
+        public var username: String
+        public var displayName: String
+        public var userId: String
+        public var tag: String // "Main", "Alt", "Farming", "Bank", "Trading"
+        public var note: String
+        public var addedDate: String
+        
+        public init(
+            id: String = UUID().uuidString,
+            username: String,
+            displayName: String,
+            userId: String = "1",
+            tag: String = "Main",
+            note: String = "",
+            addedDate: String = "2026-10-23"
+        ) {
+            self.id = id
+            self.username = username
+            self.displayName = displayName
+            self.userId = userId
+            self.tag = tag
+            self.note = note
+            self.addedDate = addedDate
+        }
+        
+        enum CodingKeys: String, CodingKey {
+            case id, username, displayName, userId, tag, note, addedDate
+        }
+        
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.id = try container.decodeIfPresent(String.self, forKey: .id) ?? UUID().uuidString
+            self.username = try container.decodeIfPresent(String.self, forKey: .username) ?? "Player"
+            self.displayName = try container.decodeIfPresent(String.self, forKey: .displayName) ?? self.username
+            self.userId = try container.decodeIfPresent(String.self, forKey: .userId) ?? "1"
+            self.tag = try container.decodeIfPresent(String.self, forKey: .tag) ?? "Main"
+            self.note = try container.decodeIfPresent(String.self, forKey: .note) ?? ""
+            self.addedDate = try container.decodeIfPresent(String.self, forKey: .addedDate) ?? "2026-10-23"
+        }
+    }
+    
     public struct StateData: Codable {
         public var firstRunDate: Date?
         public var hasSeenGoldGreeting: Bool = false
@@ -12,30 +55,134 @@ public class AppState {
         public var vipKey: String? = nil
         public var isFastFlagsUnlocked: Bool = false
         public var multiInstanceEnabled: Bool = true
+        
+        // FastFlags
         public var targetFps: Int = 9999
         public var preferredLighting: String = "Future (Phase 3)"
         public var escapeMenuVersion: String = "Version 4 (2023)"
         public var hideGuisEnabled: Bool = true
+        
+        // Mods & Engine
         public var renderingMode: String = "Direct3D 11"
         public var exclusiveFullscreen: Bool = false
         public var alternateQualitySelector: Bool = false
         public var inGameMenuVersion: String = "Version 3 (2021)"
         public var disableFullscreenOptimizations: Bool = false
         public var customDeathSound: Bool = true
-        public var accounts: [AccountProfile] = [
-            AccountProfile(username: "Player1", displayName: "Primary Account", addedDate: "2026-10-22")
-        ]
-    }
-    
-    public struct AccountProfile: Codable {
-        public var username: String
-        public var displayName: String
-        public var addedDate: String
+        public var mouseCursor: String = "Default"
+        public var oldAvatarBackground: Bool = false
+        public var emojiFont: String = "Default"
         
-        public init(username: String, displayName: String, addedDate: String) {
-            self.username = username
-            self.displayName = displayName
-            self.addedDate = addedDate
+        // Integrations
+        public var activityTrackingEnabled: Bool = true
+        public var showServerDetailsEnabled: Bool = true
+        public var dontExitToDesktopApp: Bool = true
+        public var discordActivityEnabled: Bool = true
+        public var discordActivityJoinEnabled: Bool = true
+        public var discordAccountOnProfile: Bool = true
+        
+        // Appearance
+        public var theme: String = "Dark (Windows 11 Mica)"
+        public var language: String = "System default"
+        public var bootstrapperStyle: String = "Fluent"
+        public var robloxIcon: String = "2022 (Modern Silver)"
+        public var customTitle: String = "Roblox"
+        
+        // Behaviour
+        public var autoUpdateChecking: Bool = true
+        public var confirmLaunches: Bool = false
+        public var backgroundUpdates: Bool = true
+        public var forceRobloxReinstall: Bool = false
+        public var telemetryEnabled: Bool = false
+        
+        // Installation
+        public var createDesktopShortcuts: Bool = true
+        public var createAppsShortcut: Bool = true
+        public var registerUrlHandler: Bool = true
+        
+        // Account Manager (RAM Profiles)
+        public var accounts: [AccountProfile] = [
+            AccountProfile(id: "1", username: "Player1", displayName: "Primary Account", userId: "1", tag: "Main", note: "Primary account profile", addedDate: "2026-10-22"),
+            AccountProfile(id: "2", username: "BloxFarmer_99", displayName: "Blox Farmer", userId: "156", tag: "Farming", note: "Auto-farming alt account", addedDate: "2026-10-23"),
+            AccountProfile(id: "3", username: "TradeMaster_VIP", displayName: "Trade Master", userId: "261", tag: "Trading", note: "Trading hub & rare items", addedDate: "2026-10-23"),
+            AccountProfile(id: "4", username: "VaultStorage", displayName: "Vault Storage", userId: "480", tag: "Bank", note: "Safe storage & backup currency", addedDate: "2026-10-23")
+        ]
+        
+        enum CodingKeys: String, CodingKey {
+            case firstRunDate, hasSeenGoldGreeting, forceTrialExpired, isPaymentIgnored, isBannerDismissed
+            case vipKey, isFastFlagsUnlocked, multiInstanceEnabled
+            case targetFps, preferredLighting, escapeMenuVersion, hideGuisEnabled
+            case renderingMode, exclusiveFullscreen, alternateQualitySelector, inGameMenuVersion, disableFullscreenOptimizations, customDeathSound, mouseCursor, oldAvatarBackground, emojiFont
+            case activityTrackingEnabled, showServerDetailsEnabled, dontExitToDesktopApp, discordActivityEnabled, discordActivityJoinEnabled, discordAccountOnProfile
+            case theme, language, bootstrapperStyle, robloxIcon, customTitle
+            case autoUpdateChecking, confirmLaunches, backgroundUpdates, forceRobloxReinstall, telemetryEnabled
+            case createDesktopShortcuts, createAppsShortcut, registerUrlHandler
+            case accounts
+        }
+        
+        public init() {}
+        
+        public init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            self.firstRunDate = try c.decodeIfPresent(Date.self, forKey: .firstRunDate)
+            self.hasSeenGoldGreeting = try c.decodeIfPresent(Bool.self, forKey: .hasSeenGoldGreeting) ?? false
+            self.forceTrialExpired = try c.decodeIfPresent(Bool.self, forKey: .forceTrialExpired) ?? false
+            self.isPaymentIgnored = try c.decodeIfPresent(Bool.self, forKey: .isPaymentIgnored) ?? false
+            self.isBannerDismissed = try c.decodeIfPresent(Bool.self, forKey: .isBannerDismissed) ?? false
+            self.vipKey = try c.decodeIfPresent(String.self, forKey: .vipKey)
+            self.isFastFlagsUnlocked = try c.decodeIfPresent(Bool.self, forKey: .isFastFlagsUnlocked) ?? false
+            self.multiInstanceEnabled = try c.decodeIfPresent(Bool.self, forKey: .multiInstanceEnabled) ?? true
+            self.targetFps = try c.decodeIfPresent(Int.self, forKey: .targetFps) ?? 9999
+            self.preferredLighting = try c.decodeIfPresent(String.self, forKey: .preferredLighting) ?? "Future (Phase 3)"
+            self.escapeMenuVersion = try c.decodeIfPresent(String.self, forKey: .escapeMenuVersion) ?? "Version 4 (2023)"
+            self.hideGuisEnabled = try c.decodeIfPresent(Bool.self, forKey: .hideGuisEnabled) ?? true
+            self.renderingMode = try c.decodeIfPresent(String.self, forKey: .renderingMode) ?? "Direct3D 11"
+            self.exclusiveFullscreen = try c.decodeIfPresent(Bool.self, forKey: .exclusiveFullscreen) ?? false
+            self.alternateQualitySelector = try c.decodeIfPresent(Bool.self, forKey: .alternateQualitySelector) ?? false
+            self.inGameMenuVersion = try c.decodeIfPresent(String.self, forKey: .inGameMenuVersion) ?? "Version 3 (2021)"
+            self.disableFullscreenOptimizations = try c.decodeIfPresent(Bool.self, forKey: .disableFullscreenOptimizations) ?? false
+            self.customDeathSound = try c.decodeIfPresent(Bool.self, forKey: .customDeathSound) ?? true
+            self.mouseCursor = try c.decodeIfPresent(String.self, forKey: .mouseCursor) ?? "Default"
+            self.oldAvatarBackground = try c.decodeIfPresent(Bool.self, forKey: .oldAvatarBackground) ?? false
+            self.emojiFont = try c.decodeIfPresent(String.self, forKey: .emojiFont) ?? "Default"
+            self.activityTrackingEnabled = try c.decodeIfPresent(Bool.self, forKey: .activityTrackingEnabled) ?? true
+            self.showServerDetailsEnabled = try c.decodeIfPresent(Bool.self, forKey: .showServerDetailsEnabled) ?? true
+            self.dontExitToDesktopApp = try c.decodeIfPresent(Bool.self, forKey: .dontExitToDesktopApp) ?? true
+            self.discordActivityEnabled = try c.decodeIfPresent(Bool.self, forKey: .discordActivityEnabled) ?? true
+            self.discordActivityJoinEnabled = try c.decodeIfPresent(Bool.self, forKey: .discordActivityJoinEnabled) ?? true
+            self.discordAccountOnProfile = try c.decodeIfPresent(Bool.self, forKey: .discordAccountOnProfile) ?? true
+            self.theme = try c.decodeIfPresent(String.self, forKey: .theme) ?? "Dark (Windows 11 Mica)"
+            self.language = try c.decodeIfPresent(String.self, forKey: .language) ?? "System default"
+            self.bootstrapperStyle = try c.decodeIfPresent(String.self, forKey: .bootstrapperStyle) ?? "Fluent"
+            self.robloxIcon = try c.decodeIfPresent(String.self, forKey: .robloxIcon) ?? "2022 (Modern Silver)"
+            self.customTitle = try c.decodeIfPresent(String.self, forKey: .customTitle) ?? "Roblox"
+            self.autoUpdateChecking = try c.decodeIfPresent(Bool.self, forKey: .autoUpdateChecking) ?? true
+            self.confirmLaunches = try c.decodeIfPresent(Bool.self, forKey: .confirmLaunches) ?? false
+            self.backgroundUpdates = try c.decodeIfPresent(Bool.self, forKey: .backgroundUpdates) ?? true
+            self.forceRobloxReinstall = try c.decodeIfPresent(Bool.self, forKey: .forceRobloxReinstall) ?? false
+            self.telemetryEnabled = try c.decodeIfPresent(Bool.self, forKey: .telemetryEnabled) ?? false
+            self.createDesktopShortcuts = try c.decodeIfPresent(Bool.self, forKey: .createDesktopShortcuts) ?? true
+            self.createAppsShortcut = try c.decodeIfPresent(Bool.self, forKey: .createAppsShortcut) ?? true
+            self.registerUrlHandler = try c.decodeIfPresent(Bool.self, forKey: .registerUrlHandler) ?? true
+            
+            let decodedAccounts = try c.decodeIfPresent([AccountProfile].self, forKey: .accounts) ?? []
+            if decodedAccounts.isEmpty {
+                self.accounts = [
+                    AccountProfile(id: "1", username: "Player1", displayName: "Primary Account", userId: "1", tag: "Main", note: "Primary account profile", addedDate: "2026-10-22"),
+                    AccountProfile(id: "2", username: "BloxFarmer_99", displayName: "Blox Farmer", userId: "156", tag: "Farming", note: "Auto-farming alt account", addedDate: "2026-10-23"),
+                    AccountProfile(id: "3", username: "TradeMaster_VIP", displayName: "Trade Master", userId: "261", tag: "Trading", note: "Trading hub & rare items", addedDate: "2026-10-23"),
+                    AccountProfile(id: "4", username: "VaultStorage", displayName: "Vault Storage", userId: "480", tag: "Bank", note: "Safe storage & backup currency", addedDate: "2026-10-23")
+                ]
+            } else if decodedAccounts.count == 1 && decodedAccounts[0].username == "Player1" && (decodedAccounts[0].tag.isEmpty || decodedAccounts[0].tag == "Main") && decodedAccounts[0].note.isEmpty {
+                self.accounts = [
+                    AccountProfile(id: decodedAccounts[0].id, username: decodedAccounts[0].username, displayName: decodedAccounts[0].displayName, userId: "1", tag: "Main", note: "Primary account profile", addedDate: decodedAccounts[0].addedDate),
+                    AccountProfile(id: "2", username: "BloxFarmer_99", displayName: "Blox Farmer", userId: "156", tag: "Farming", note: "Auto-farming alt account", addedDate: "2026-10-23"),
+                    AccountProfile(id: "3", username: "TradeMaster_VIP", displayName: "Trade Master", userId: "261", tag: "Trading", note: "Trading hub & rare items", addedDate: "2026-10-23"),
+                    AccountProfile(id: "4", username: "VaultStorage", displayName: "Vault Storage", userId: "480", tag: "Bank", note: "Safe storage & backup currency", addedDate: "2026-10-23")
+                ]
+            } else {
+                self.accounts = decodedAccounts
+            }
         }
     }
     
@@ -153,6 +300,43 @@ public class AppState {
         data.vipKey = nil
         data.isFastFlagsUnlocked = false
         data.isPaymentIgnored = false
+        save()
+    }
+    
+    // MARK: - Account Management (RAM)
+    
+    public func addAccount(username: String, displayName: String, userId: String, tag: String, note: String) {
+        let cleanUsername = username.trimmingCharacters(in: .whitespacesAndNewlines)
+        let cleanDisplayName = displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? cleanUsername : displayName
+        let cleanUserId = userId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "1" : userId
+        let cleanTag = tag.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Alt" : tag
+        
+        let newAcc = AccountProfile(
+            id: UUID().uuidString,
+            username: cleanUsername,
+            displayName: cleanDisplayName,
+            userId: cleanUserId,
+            tag: cleanTag,
+            note: note,
+            addedDate: "2026-10-23"
+        )
+        data.accounts.append(newAcc)
+        save()
+    }
+    
+    public func editAccount(id: String, username: String, displayName: String, userId: String, tag: String, note: String) {
+        if let idx = data.accounts.firstIndex(where: { $0.id == id }) {
+            data.accounts[idx].username = username.trimmingCharacters(in: .whitespacesAndNewlines)
+            data.accounts[idx].displayName = displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? data.accounts[idx].username : displayName
+            data.accounts[idx].userId = userId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "1" : userId
+            data.accounts[idx].tag = tag.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Alt" : tag
+            data.accounts[idx].note = note
+            save()
+        }
+    }
+    
+    public func deleteAccount(id: String) {
+        data.accounts.removeAll(where: { $0.id == id })
         save()
     }
     
