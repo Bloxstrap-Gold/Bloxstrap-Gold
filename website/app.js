@@ -283,6 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupModals();
   setupFaq();
   setupWingetCopy();
+  setupSpecularCards();
+  setupScrollReveal();
 
   // Initial render of the tier cards side-by-side
   renderTierCards();
@@ -628,20 +630,41 @@ function setupPayingWindow() {
     });
   }
 
-  // Click-to-copy handler on generated license key
+  // Click-to-copy handler on generated license key and VIP copy button
+  const vipCopyBtn = document.getElementById('vipCopyBtn');
   const licenseKeyBox = document.getElementById('generatedLicenseKey');
   const copyFeedback = document.getElementById('copyKeyFeedback');
-  if (licenseKeyBox) {
-    licenseKeyBox.addEventListener('click', () => {
-      const keyText = licenseKeyBox.textContent.trim();
-      navigator.clipboard.writeText(keyText).then(() => {
-        if (copyFeedback) {
-          copyFeedback.textContent = '✓ Copied license key to clipboard!';
-          setTimeout(() => { if (copyFeedback) copyFeedback.textContent = ''; }, 2500);
+
+  const copyLicenseKey = () => {
+    const keyText = licenseKeyBox ? licenseKeyBox.textContent.trim() : '';
+    if (!keyText) return;
+    navigator.clipboard.writeText(keyText).then(() => {
+      playTactileClick();
+      const textSpan = document.getElementById('vipCopyText');
+      const iconSpan = document.getElementById('vipCopyIcon');
+      if (textSpan) textSpan.textContent = 'COPIED!';
+      if (iconSpan) iconSpan.textContent = '✓';
+      if (vipCopyBtn) {
+        vipCopyBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        vipCopyBtn.style.color = '#fff';
+      }
+      if (copyFeedback) {
+        copyFeedback.textContent = '✓ Sovereign cryptographic key copied!';
+      }
+      setTimeout(() => {
+        if (textSpan) textSpan.textContent = 'COPY KEY';
+        if (iconSpan) iconSpan.textContent = '📋';
+        if (vipCopyBtn) {
+          vipCopyBtn.style.background = '';
+          vipCopyBtn.style.color = '';
         }
-      });
+        if (copyFeedback) copyFeedback.textContent = '';
+      }, 2200);
     });
-  }
+  };
+
+  if (licenseKeyBox) licenseKeyBox.addEventListener('click', copyLicenseKey);
+  if (vipCopyBtn) vipCopyBtn.addEventListener('click', copyLicenseKey);
 
   // Unified Payment Processing Simulation (Card, Apple Pay, Google Pay)
   window.triggerPaymentSimulation = function(gatewayName = 'Clearinghouse') {
@@ -765,16 +788,123 @@ function setupPayingWindow() {
 
   if (successUnlockVaultBtn) {
     successUnlockVaultBtn.addEventListener('click', () => {
-      const generatedKey = document.getElementById('generatedLicenseKey')?.textContent || 'GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN';
-      unlockVaultWithKey(generatedKey);
+      const generatedKey = document.getElementById('generatedLicenseKey')?.textContent.trim() || 'GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN';
+      sessionStorage.setItem('bloxstrap_gold_vault_key', generatedKey);
+      const vaultKeyInput = document.getElementById('vaultKeyInput');
+      if (vaultKeyInput) vaultKeyInput.value = generatedKey;
+      unlockVaultWithKey(generatedKey, true);
       closeCheckout();
       const vaultSec = document.getElementById('fastflags');
-      if (vaultSec) vaultSec.scrollIntoView({ behavior: 'smooth' });
+      if (vaultSec) {
+        vaultSec.scrollIntoView({ behavior: 'smooth' });
+        const card = document.getElementById('vaultUnlockedCard');
+        if (card) {
+          card.animate([
+            { boxShadow: '0 0 0 rgba(255,215,0,0)' },
+            { boxShadow: '0 0 50px rgba(255,215,0,0.65)' },
+            { boxShadow: '0 0 0 rgba(255,215,0,0)' }
+          ], { duration: 1200, easing: 'ease-out' });
+        }
+      }
     });
+  }
+
+  // Set up 3D perspective tilt on the virtual gold card
+  setup3DTilt('virtualGoldCard');
+}
+
+// =============================================================================
+// WEB AUDIO SYNTHESIZER: HARMONIC CHIMES & TACTILE CLICKS
+// =============================================================================
+function playSovereignChime() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+
+    // Luxurious 5-harmonic ascending golden arpeggio: C5, E5, G5, B5, C6
+    const notes = [523.25, 659.25, 783.99, 987.77, 1046.50];
+    const startTime = ctx.currentTime;
+
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = idx === notes.length - 1 ? 'sine' : 'triangle';
+      osc.frequency.setValueAtTime(freq, startTime + idx * 0.08);
+
+      gain.gain.setValueAtTime(0, startTime + idx * 0.08);
+      gain.gain.linearRampToValueAtTime(0.18, startTime + idx * 0.08 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + idx * 0.08 + 1.8);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(startTime + idx * 0.08);
+      osc.stop(startTime + idx * 0.08 + 1.85);
+    });
+  } catch (e) {
+    // Graceful fallback if browser audio policy restricts playback before user interaction
   }
 }
 
-// Confetti Particle System
+function playTactileClick() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    if (ctx.state === 'suspended') ctx.resume();
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1020, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(2200, ctx.currentTime + 0.05);
+
+    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.06);
+  } catch (e) {}
+}
+
+function playClassicOof() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    if (ctx.state === 'suspended') ctx.resume();
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sawtooth';
+    // Pitch drops from 280Hz down to 130Hz
+    osc.frequency.setValueAtTime(280, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(130, ctx.currentTime + 0.22);
+
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.24);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.25);
+  } catch (e) {}
+}
+
+// =============================================================================
+// CELEBRATORY MULTI-LAYER 3D PARTICLE CANNON
+// =============================================================================
 function launchConfetti() {
   const canvas = document.getElementById('confettiCanvas');
   if (!canvas) return;
@@ -783,21 +913,66 @@ function launchConfetti() {
   canvas.height = window.innerHeight;
 
   const particles = [];
-  const colors = ['#ffd700', '#f5d796', '#e2c076', '#10b981', '#ffffff', '#caa452'];
+  const colors = [
+    '#ffd700', '#fff4cc', '#f5d796', '#caa452',
+    '#e2c076', '#ffffff', '#10b981', '#4ade80'
+  ];
 
-  for (let i = 0; i < 65; i++) {
+  const totalParticles = 135;
+  for (let i = 0; i < totalParticles; i++) {
+    const angle = (Math.PI * 2 * i) / totalParticles + (Math.random() - 0.5) * 0.6;
+    const speed = Math.random() * 15 + 5;
+    const types = ['ribbon', 'star', 'disc'];
+    const pType = types[Math.floor(Math.random() * types.length)];
+
     particles.push({
-      x: canvas.width / 2 + (Math.random() - 0.5) * 220,
-      y: canvas.height / 2 + (Math.random() - 0.5) * 80,
-      vx: (Math.random() - 0.5) * 14,
-      vy: Math.random() * -12 - 4,
-      size: Math.random() * 8 + 4,
+      x: canvas.width / 2 + (Math.random() - 0.5) * 180,
+      y: canvas.height / 2 + (Math.random() - 0.5) * 90,
+      vx: Math.cos(angle) * speed * (0.8 + Math.random() * 0.5),
+      vy: Math.sin(angle) * speed - Math.random() * 6 - 2,
+      size: Math.random() * 9 + 4,
       color: colors[Math.floor(Math.random() * colors.length)],
-      rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 10,
+      type: pType,
+      rotX: Math.random() * 360,
+      rotY: Math.random() * 360,
+      rotZ: Math.random() * 360,
+      rotSpeedX: (Math.random() - 0.5) * 14,
+      rotSpeedY: (Math.random() - 0.5) * 16,
+      rotSpeedZ: (Math.random() - 0.5) * 8,
       life: 1.0,
-      decay: Math.random() * 0.015 + 0.009
+      decay: Math.random() * 0.012 + 0.007,
+      drag: 0.985
     });
+  }
+
+  function drawStar(c, cx, cy, spikes, outerRadius, innerRadius, color, alpha) {
+    let rot = (Math.PI / 2) * 3;
+    let x = cx;
+    let y = cy;
+    const step = Math.PI / spikes;
+
+    c.save();
+    c.beginPath();
+    c.moveTo(cx, cy - outerRadius);
+    for (let i = 0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outerRadius;
+      y = cy + Math.sin(rot) * outerRadius;
+      c.lineTo(x, y);
+      rot += step;
+
+      x = cx + Math.cos(rot) * innerRadius;
+      y = cy + Math.sin(rot) * innerRadius;
+      c.lineTo(x, y);
+      rot += step;
+    }
+    c.lineTo(cx, cy - outerRadius);
+    c.closePath();
+    c.fillStyle = color;
+    c.globalAlpha = alpha;
+    c.shadowBlur = 8;
+    c.shadowColor = color;
+    c.fill();
+    c.restore();
   }
 
   function render() {
@@ -807,19 +982,41 @@ function launchConfetti() {
     particles.forEach((p) => {
       p.x += p.vx;
       p.y += p.vy;
-      p.vy += 0.35;
-      p.rotation += p.rotSpeed;
+      p.vx *= p.drag;
+      p.vy = p.vy * p.drag + 0.32;
+      p.rotX += p.rotSpeedX;
+      p.rotY += p.rotSpeedY;
+      p.rotZ += p.rotSpeedZ;
       p.life -= p.decay;
 
-      if (p.life > 0 && p.y < canvas.height) {
+      if (p.life > 0 && p.y < canvas.height + 25) {
         active = true;
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate((p.rotation * Math.PI) / 180);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = Math.max(0, p.life);
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
-        ctx.restore();
+        const currentAlpha = Math.max(0, p.life);
+
+        if (p.type === 'star') {
+          drawStar(ctx, p.x, p.y, 4, p.size * 1.25, p.size * 0.45, p.color, currentAlpha);
+        } else if (p.type === 'disc') {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 0.45, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = currentAlpha;
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = p.color;
+          ctx.fill();
+          ctx.restore();
+        } else {
+          // 3D Fluttering Ribbon
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotZ * Math.PI) / 180);
+          const scaleY = Math.cos((p.rotX * Math.PI) / 180);
+          ctx.scale(1, Math.abs(scaleY));
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = currentAlpha;
+          ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.65);
+          ctx.restore();
+        }
       }
     });
 
@@ -939,20 +1136,49 @@ function startFreeTrial(isApproved = false) {
   const deepLinkActivateBtn = document.getElementById('deepLinkActivateBtn');
   const titleEl = document.getElementById('checkoutSuccessTitle');
   const subtitleEl = document.getElementById('checkoutSuccessSubtitle');
+  const vipPassTierName = document.getElementById('vipPassTierName');
+  const vipPassTierSub = document.getElementById('vipPassTierSub');
+  const vipPassStatusBadge = document.getElementById('vipPassStatusBadge');
+  const vipHolderVal = document.getElementById('vipHolderVal');
+  const cardNameInput = document.getElementById('cardName');
 
   const meta = TIERS_META[selectedCheckoutTier] || TIERS_META[2];
-
-  // Generate tier-tagged multi-segment enterprise key
   const generatedKey = generateEnterpriseKey(selectedCheckoutTier);
 
+  // Play prestigious golden chime & celebratory 3D particles
+  playSovereignChime();
+  launchConfetti();
+
   if (titleEl) {
-    titleEl.textContent = isApproved ? 'Payment Approved!' : 'Your 7-day free trial has started.';
+    titleEl.textContent = isApproved ? 'Sovereign Payment Authorized.' : 'Sovereign License Provisioned.';
   }
 
   if (subtitleEl) {
     subtitleEl.textContent = isApproved
-      ? `Transaction authorized at $0.00. Your Bloxstrap Gold ${meta.name} license is provisioned below:`
-      : 'Download Bloxstrap Gold below and enjoy built-in multi-instance support and the gold theme.';
+      ? `Transaction authorized at $0.00. Your Bloxstrap Gold ${meta.name} enterprise license is provisioned below:`
+      : `Zero-deposit invoice authorized. Your Bloxstrap Gold ${meta.name} trial is live with full privileges:`;
+  }
+
+  if (vipPassTierName) {
+    vipPassTierName.textContent = `${meta.name.toUpperCase()} SOVEREIGN`;
+  }
+
+  if (vipPassTierSub) {
+    const cycleDesc = selectedCheckoutCycle === 'lifetime' 
+      ? 'Perpetual Sovereign Privilege • Mutex Isolation' 
+      : '7-Day Zero Deposit Access • Mutex Isolation';
+    vipPassTierSub.textContent = `${meta.badge} • ${cycleDesc}`;
+  }
+
+  if (vipPassStatusBadge) {
+    vipPassStatusBadge.innerHTML = isApproved 
+      ? '<span class="pulse-status-dot"></span> AUTHENTICATED &bull; $0.00' 
+      : '<span class="pulse-status-dot"></span> PROVISIONED &bull; 7-DAY TRIAL';
+  }
+
+  if (vipHolderVal) {
+    const enteredName = cardNameInput && cardNameInput.value.trim();
+    vipHolderVal.textContent = enteredName ? enteredName.toUpperCase() : 'SOVEREIGN MEMBER';
   }
 
   if (licenseKeyEl) {
@@ -964,7 +1190,102 @@ function startFreeTrial(isApproved = false) {
   }
 
   if (formView) formView.style.display = 'none';
-  if (successView) successView.classList.add('show');
+  if (successView) {
+    successView.classList.add('show');
+    setup3DTilt('vipPassCard', 'vipPassSheen');
+  }
+
+  // Run live terminal provisioning sequence
+  runProvisioningSequence();
+}
+
+// Animated Live Provisioning Console Sequence
+function runProvisioningSequence() {
+  const log1 = document.getElementById('cLog1');
+  const log2 = document.getElementById('cLog2');
+  const log3 = document.getElementById('cLog3');
+  const log4 = document.getElementById('cLog4');
+  const clock = document.getElementById('consoleLiveClock');
+
+  const logs = [log1, log2, log3, log4];
+  logs.forEach(l => {
+    if (l) {
+      l.className = 'console-log-item';
+      const ind = l.querySelector('.log-indicator');
+      if (ind) ind.textContent = '⏳';
+    }
+  });
+
+  if (clock) clock.textContent = '0.04s [INITIALIZING]';
+
+  setTimeout(() => {
+    if (log1) {
+      log1.className = 'console-log-item complete';
+      const ind = log1.querySelector('.log-indicator');
+      if (ind) ind.textContent = '✓';
+    }
+    if (clock) clock.textContent = '0.14s';
+    playTactileClick();
+  }, 140);
+
+  setTimeout(() => {
+    if (log2) {
+      log2.className = 'console-log-item complete';
+      const ind = log2.querySelector('.log-indicator');
+      if (ind) ind.textContent = '✓';
+    }
+    if (clock) clock.textContent = '0.38s';
+    playTactileClick();
+  }, 380);
+
+  setTimeout(() => {
+    if (log3) {
+      log3.className = 'console-log-item complete';
+      const ind = log3.querySelector('.log-indicator');
+      if (ind) ind.textContent = '✓';
+    }
+    if (clock) clock.textContent = '0.64s';
+    playTactileClick();
+  }, 640);
+
+  setTimeout(() => {
+    if (log4) {
+      log4.className = 'console-log-item complete gold-log';
+      const ind = log4.querySelector('.log-indicator');
+      if (ind) ind.textContent = '👑';
+    }
+    if (clock) clock.textContent = '0.91s [PROVISIONED]';
+    playTactileClick();
+  }, 920);
+}
+
+// 3D Parallax Tilt with Specular Sheen Tracker
+function setup3DTilt(elementId, sheenId) {
+  const card = document.getElementById(elementId);
+  if (!card) return;
+  const sheen = sheenId ? document.getElementById(sheenId) : null;
+
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotX = ((y - centerY) / centerY) * -9;
+    const rotY = ((x - centerX) / centerX) * 9;
+
+    card.style.transform = `perspective(900px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+
+    if (sheen) {
+      card.style.setProperty('--pass-sheen-x', `${x}px`);
+      card.style.setProperty('--pass-sheen-y', `${y}px`);
+    }
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  });
 }
 
 // =============================================================================
@@ -1222,7 +1543,74 @@ function setupAppThemePreview() {
       document.querySelectorAll('.app-tab-content').forEach((pane) => {
         pane.style.display = (pane.id === `tab-${targetTab}`) ? 'block' : 'none';
       });
+      playTactileClick();
     });
+  });
+
+  // Framerate limit slider in App Preview
+  const appFpsSlider = document.getElementById('appFpsSlider');
+  const appFpsDisplay = document.getElementById('appFpsDisplay');
+  if (appFpsSlider && appFpsDisplay) {
+    const fpsLabels = ['60 FPS', '144 FPS', '240 FPS', 'Uncapped (9999)'];
+    const fpsColors = ['#4ade80', '#38bdf8', '#ffd700', '#c084fc'];
+    appFpsSlider.addEventListener('input', (e) => {
+      const idx = parseInt(e.target.value, 10);
+      appFpsDisplay.textContent = fpsLabels[idx] || '240 FPS';
+      appFpsDisplay.style.color = fpsColors[idx] || '#ffd700';
+      playTactileClick();
+    });
+  }
+
+  // Classic Oof sound preview in App Preview
+  const playOofBtn = document.getElementById('playOofBtn');
+  if (playOofBtn) {
+    playOofBtn.addEventListener('click', () => {
+      playClassicOof();
+      const orig = playOofBtn.innerHTML;
+      playOofBtn.innerHTML = '🔊 Playing Oof...';
+      playOofBtn.style.borderColor = 'var(--gold)';
+      setTimeout(() => {
+        playOofBtn.innerHTML = orig;
+        playOofBtn.style.borderColor = '';
+      }, 450);
+    });
+  }
+}
+
+// =============================================================================
+// SPECULAR CARDS & SCROLL REVEAL ANIMATIONS
+// =============================================================================
+function setupSpecularCards() {
+  const cards = document.querySelectorAll('.pricing-card, .vault-locked-card, .vault-unlocked-card, .mock-window');
+  cards.forEach((card) => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+}
+
+function setupScrollReveal() {
+  if (!('IntersectionObserver' in window)) return;
+  const targets = document.querySelectorAll(
+    '.section-title-wrap, .pricing-card, .faq-item, .comparison-table-wrapper, .vault-locked-card, .mock-window'
+  );
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal-active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  targets.forEach((el) => {
+    el.classList.add('reveal-on-scroll');
+    observer.observe(el);
   });
 }
 
