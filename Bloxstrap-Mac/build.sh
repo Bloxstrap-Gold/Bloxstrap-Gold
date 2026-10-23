@@ -34,6 +34,10 @@ if [ -f "${SCRIPT_DIR}/../Images/Bloxstrap.png" ]; then
     cp "${SCRIPT_DIR}/../Images/Bloxstrap.png" "${RESOURCES_DIR}/Bloxstrap.png"
 fi
 
+if [ -d "${SCRIPT_DIR}/Resources/ui" ]; then
+    cp -r "${SCRIPT_DIR}/Resources/ui" "${RESOURCES_DIR}/"
+fi
+
 if [ -d "${SCRIPT_DIR}/../website" ]; then
     echo "📦 Bundling website for in-app store preview..."
     rm -rf "${RESOURCES_DIR}/website"
