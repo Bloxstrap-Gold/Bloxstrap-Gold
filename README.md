@@ -94,39 +94,6 @@ dotnet build Bloxstrap.sln -c Release
 
 The output executable is generated at `Bloxstrap/bin/Release/net6.0-windows/Bloxstrap.exe`.
 
----
-
-### 🌐 Website (GitHub Pages)
-
-The website in `website/` is fully static (HTML, CSS, JS) and hosted on [GitHub Pages](https://bloxstrapgold.github.io).
-
-To deploy or publish updates:
-```bash
-# 1-Click publish script:
-./publish_website.sh https://github.com/<USERNAME>/<REPO>.git
-```
-Or simply push to `main` — the included GitHub Actions workflow [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) automatically publishes updates to GitHub Pages.
-
----
-
-## 📂 Repository Structure
-
-```
-bloxstrapgold/
-├── Bloxstrap/                 # Windows C# / WPF source code
-├── Bloxstrap-Mac/             # macOS Swift / AppKit source code
-│   ├── Sources/               # Swift source files (AppState, FastFlags, MultiInstance, UI)
-│   ├── build.sh               # Fast compilation script
-│   ├── package_dmg.sh         # macOS DMG packager
-│   └── AppIcon.icns           # Gold Crown icon asset
-├── website/                   # bloxstrapgold.github.io website source
-│   ├── index.html             # Landing page, pricing matrix, tier selector
-│   ├── app.js                 # Cart simulation, audio player, deep link generator
-│   └── style.css              # Obsidian and gold styling
-├── bridge/                    # IPC specs and synchronization utilities
-├── .github/workflows/         # Automated GitHub Actions (Pages deployment)
-└── README.md
-```
 
 ---
 
