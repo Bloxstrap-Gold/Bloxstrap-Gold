@@ -35,31 +35,32 @@ jobs:
 
   release:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
-      - name: Sign and download artifact
-        uses: signpath/github-action-submit-signing-request@v3.0
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v7
         with:
-          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '107b3de5-057b-42fc-a985-3546e4261775'
-          project-slug: 'bloxstrap'
-          signing-policy-slug: 'release-signing'
-          artifact-configuration-slug: 'github-ci'
-          github-artifact-id: '${{ needs.build.outputs.artifact-id }}'
-          wait-for-completion: true
-          output-artifact-directory: 'release'
+          name: Bloxstrap (Release) (${{ github.sha }})
+          path: publish
 
-      - name: Rename binaries
-        run: mv release/Bloxstrap.exe Bloxstrap-${{ github.ref_name }}.exe
+      - name: Prepare Binaries
+        shell: pwsh
+        run: |
+          Copy-Item "publish\Bloxstrap.exe" "Bloxstrap.exe"
+          Compress-Archive -Path "publish\Bloxstrap.exe" -DestinationPath "Bloxstrap-${{ github.ref_name }}-Windows.zip"
 
-      - name: Create release
+      - name: Create / Update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
-          files: Bloxstrap-${{ github.ref_name }}.exe
-          name: Bloxstrap ${{ github.ref_name }}
+          draft: false
+          files: |
+            Bloxstrap.exe
+            Bloxstrap-${{ github.ref_name }}-Windows.zip
+          name: Bloxstrap Gold ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release-test:
     needs: build
