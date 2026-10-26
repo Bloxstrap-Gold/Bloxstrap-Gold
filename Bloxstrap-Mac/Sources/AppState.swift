@@ -2,6 +2,7 @@ import Foundation
 
 public class AppState {
     public static let shared = AppState()
+    public static let currentVersion: String = "2.11.5"
     
     public struct AccountProfile: Codable, Identifiable {
         public var id: String
@@ -132,6 +133,8 @@ public class AppState {
         public var forceRobloxReinstall: Bool = false
         public var telemetryEnabled: Bool = false
         public var disableTelemetry: Bool = false
+        public var appVersion: String = "2.11.5"
+        public var lastCheckedUpdateDate: String = "Never"
         
         // Bootstrapper Debug & Diagnostic Options
         public var developerMode: Bool = false
@@ -217,6 +220,7 @@ public class AppState {
             case developerMode, robloxChannel, debugDisablePackageCleanup, bypassConnectivityChecks, verboseBootstrapperLogging
             case createDesktopShortcuts, createAppsShortcut, registerUrlHandler
             case accounts
+            case appVersion, lastCheckedUpdateDate
         }
         
         public init() {}
@@ -282,6 +286,8 @@ public class AppState {
             self.createDesktopShortcuts = try c.decodeIfPresent(Bool.self, forKey: .createDesktopShortcuts) ?? true
             self.createAppsShortcut = try c.decodeIfPresent(Bool.self, forKey: .createAppsShortcut) ?? true
             self.registerUrlHandler = try c.decodeIfPresent(Bool.self, forKey: .registerUrlHandler) ?? true
+            self.appVersion = try c.decodeIfPresent(String.self, forKey: .appVersion) ?? AppState.currentVersion
+            self.lastCheckedUpdateDate = try c.decodeIfPresent(String.self, forKey: .lastCheckedUpdateDate) ?? "Never"
             
             let decodedAccounts = try c.decodeIfPresent([AccountProfile].self, forKey: .accounts) ?? []
             if decodedAccounts.isEmpty {
@@ -371,12 +377,25 @@ public class AppState {
             self.data.firstRunDate = Date()
             save()
         }
+        
+        if self.data.appVersion != AppState.currentVersion {
+            self.data.appVersion = AppState.currentVersion
+            save()
+        }
     }
     
     public func save() {
         if let encoded = try? JSONEncoder().encode(data) {
             try? encoded.write(to: stateURL)
         }
+    }
+    
+    public func setLastCheckedUpdate(date: Date = Date()) {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        data.lastCheckedUpdateDate = formatter.string(from: date)
+        save()
     }
     
     // MARK: - Key Authentication & Tier Detection

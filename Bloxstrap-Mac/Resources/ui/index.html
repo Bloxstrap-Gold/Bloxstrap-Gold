@@ -2421,6 +2421,23 @@
           </label>
         </div>
 
+        <!-- Software Updates Actions & Info -->
+        <div class="option-card" style="display: flex; flex-direction: column; align-items: stretch; gap: 10px; background: rgba(30, 27, 45, 0.45); border-color: rgba(96, 165, 250, 0.2);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div class="option-info">
+              <div class="option-title" style="display: flex; align-items: center; gap: 6px;">
+                <span>Software Update Policy</span>
+                <span style="font-size: 11px; padding: 2px 7px; border-radius: 4px; background: rgba(37, 99, 235, 0.18); border: 1px solid rgba(96, 165, 250, 0.35); color: #93c5fd; font-family: monospace;">v2.11.5</span>
+              </div>
+              <div class="option-desc" id="updateStatusText">Current version: v2.11.5 • Last checked: Never</div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button type="button" class="pill-btn" id="btnSimulateOutdated" title="Simulate an outdated version prompt to test the update dialog" style="font-size: 11.5px; border-color: rgba(245, 158, 11, 0.4); color: #fcd34d;">Simulate Outdated Version</button>
+              <button type="button" class="pill-btn primary" id="btnCheckForUpdates" style="font-size: 11.5px; padding: 6px 14px; font-weight: 600;">Check for Updates</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Confirm game launches -->
         <div class="option-card">
           <div class="option-info">
@@ -2882,20 +2899,21 @@
         </div>
 
         <div class="about-hero">
-          <img src="Bloxstrap.png" alt="Bloxstrap" class="about-logo">
+          <img src="Bloxstrap.png" alt="Bloxstrap Gold" class="about-logo">
           <div class="about-meta">
             <div class="about-title-row">
-              <span class="about-app-name">Bloxstrap</span>
-              <span class="about-app-version">Version 2.3.0</span>
+              <span class="about-app-name">Bloxstrap Gold</span>
+              <span class="about-app-version" id="aboutAppVersion">Version 2.11.5</span>
             </div>
             <div class="about-app-desc">
-              An open-source, feature-packed alternative bootstrapper for Roblox<br>
-              Developed by pizzaboxer - if you like this, please consider leaving a star on GitHub!
+              The premier open-source bootstrapper for Roblox, reimagined for macOS and Windows.<br>
+              Featuring Account Manager (RAM), multi-instance mutex isolation, and FastFlag presets. Free forever.
             </div>
           </div>
         </div>
 
         <div class="about-pills-row">
+          <button class="pill-btn primary" id="btnAboutCheckUpdates" style="font-weight: 600;">🔄 Check for Updates</button>
           <a class="pill-btn" id="btnRepo" href="https://github.com/Bloxstrap-Gold/Bloxstrap-Gold" target="_blank">&lt;/&gt; GitHub repository</a>
           <a class="pill-btn" id="btnReport" href="https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/issues" target="_blank">⊙ Report an issue</a>
           <a class="pill-btn" id="btnHelpTopics" href="https://bloxstraplabs.com" target="_blank">📖 Help topics</a>
@@ -2955,6 +2973,9 @@
       <span class="toast-msg" id="toastMsg">✓ Settings saved!</span>
     </div>
     <div class="statusbar-actions">
+      <button type="button" class="pill-btn primary" id="btnStatusBarUpdate" style="display: none; padding: 4px 12px; font-size: 11px; font-weight: 600; background: rgba(37, 99, 235, 0.25); border-color: rgba(96, 165, 250, 0.55); color: #93c5fd; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);">
+        <span style="font-size: 12px; margin-right: 4px;">🚀</span> Update Available (<span id="statusBarUpdateVer">v2.11.5</span>)
+      </button>
       <button class="btn-cancel" id="btnCancel">Cancel</button>
       <button class="btn-save" id="btnSave">Save</button>
     </div>
@@ -3397,6 +3418,52 @@
   </div>
 
   <!-- ========================================================================
+       MODAL: SOFTWARE UPDATE PROMPT (FLUENT 2 MICA)
+       ======================================================================== -->
+  <div class="modal-overlay" id="updateModal" style="display: none; z-index: 2500;">
+    <div class="modal-card" style="width: 520px; border-color: rgba(96, 165, 250, 0.45); box-shadow: 0 24px 60px rgba(0,0,0,0.85); background: #1f1e27;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+            🚀
+          </div>
+          <div>
+            <div class="modal-title" style="margin-bottom: 2px;">Update Available</div>
+            <div class="modal-desc" style="margin-bottom: 0;">A new version of Bloxstrap Gold is ready to install!</div>
+          </div>
+        </div>
+        <button type="button" class="pill-btn" id="btnCloseUpdateModal" style="padding: 4px 10px; font-size: 13px;">✕</button>
+      </div>
+
+      <!-- Version Transition Badge -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; margin: 14px 0 16px 0;">
+        <div style="text-align: center;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #8e8d9a; margin-bottom: 2px;">Installed</div>
+          <div id="updateModalCurrentVersion" style="font-size: 14px; font-weight: 700; color: #cbd5e1; font-family: monospace;">v2.11.4</div>
+        </div>
+        <div style="font-size: 18px; color: #60a5fa; font-weight: 700;">➔</div>
+        <div style="text-align: center;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #60a5fa; margin-bottom: 2px;">New Release</div>
+          <div id="updateModalRemoteVersion" style="font-size: 14px; font-weight: 700; color: #93c5fd; font-family: monospace;">v2.11.5</div>
+        </div>
+      </div>
+
+      <div style="font-size: 12px; font-weight: 600; color: #d1d5db; margin-bottom: 6px;">What's New in <span id="updateModalReleaseTitle">Bloxstrap Gold v2.11.5</span>:</div>
+      <div id="updateModalChangelog" style="max-height: 140px; overflow-y: auto; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #cbd5e1; line-height: 1.6; margin-bottom: 18px;">
+        <!-- Injected changelog -->
+      </div>
+
+      <div class="modal-actions" style="justify-content: space-between;">
+        <button type="button" class="pill-btn" id="btnDismissUpdate" style="padding: 7px 18px;">Remind Me Later</button>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="pill-btn" id="btnViewReleaseNotes" style="padding: 7px 16px;">View on GitHub</button>
+          <button type="button" class="pill-btn primary" id="btnDownloadUpdate" style="padding: 7px 20px; font-weight: 700; background: #2563eb; border-color: #3b82f6;">Download Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
        APPLICATION JAVASCRIPT & SWIFT BRIDGE
        ======================================================================== -->
   <script>
@@ -3452,6 +3519,9 @@
       forceRobloxReinstall: false,
       telemetryEnabled: false,
       disableTelemetry: false,
+      appVersion: "2.11.5",
+      savedVersion: "2.11.5",
+      lastCheckedUpdateDate: "Never",
       
       // Bootstrapper Debug Options
       developerMode: false,
@@ -3611,6 +3681,16 @@
       document.getElementById("goldTierTitle").textContent = "BLOXSTRAP " + appState.currentTierName.toUpperCase();
       document.getElementById("goldTierPrice").textContent = appState.currentTierPrice;
       document.getElementById("goldKeyDisplay").textContent = "Key: " + (appState.vipKey || "None");
+
+      // Updates info in Behaviour & About tabs
+      const updateStatusText = document.getElementById("updateStatusText");
+      if (updateStatusText) {
+        updateStatusText.textContent = `Current version: v${appState.appVersion || '2.11.5'} • Last checked: ${appState.lastCheckedUpdateDate || 'Never'}`;
+      }
+      const aboutAppVer = document.getElementById("aboutAppVersion");
+      if (aboutAppVer) {
+        aboutAppVer.textContent = `Version ${appState.appVersion || '2.11.5'}`;
+      }
 
       // Render Instances & Accounts
       renderInstancesList();
@@ -4856,6 +4936,107 @@
         sendToHost("openBootstrapperLogs");
       });
     }
+
+    // --- SOFTWARE UPDATE CONTROLLER & EVENT LISTENERS ---
+    let latestUpdateInfo = null;
+
+    window.onUpdateCheckResult = function(data) {
+      if (!data || !data.success) {
+        if (data && data.error) {
+          showToast(`❌ ${data.error}`);
+        } else {
+          showToast("❌ Unable to check for updates. Try again later.");
+        }
+        return;
+      }
+
+      const updateStatusText = document.getElementById("updateStatusText");
+      if (updateStatusText) {
+        updateStatusText.textContent = `Current version: v${data.currentVersion} • Last checked: ${data.lastChecked || 'Just now'}`;
+      }
+
+      if (data.updateAvailable) {
+        latestUpdateInfo = data;
+
+        // Show statusbar indicator button
+        const btnStatusBarUpdate = document.getElementById("btnStatusBarUpdate");
+        const statusBarUpdateVer = document.getElementById("statusBarUpdateVer");
+        if (btnStatusBarUpdate && statusBarUpdateVer) {
+          statusBarUpdateVer.textContent = `v${data.remoteVersion}`;
+          btnStatusBarUpdate.style.display = "inline-flex";
+        }
+
+        // Populate update modal fields
+        document.getElementById("updateModalCurrentVersion").textContent = `v${data.currentVersion}`;
+        document.getElementById("updateModalRemoteVersion").textContent = `v${data.remoteVersion}`;
+        document.getElementById("updateModalReleaseTitle").textContent = data.releaseName || `Bloxstrap Gold v${data.remoteVersion}`;
+
+        const changelogEl = document.getElementById("updateModalChangelog");
+        if (changelogEl) {
+          if (Array.isArray(data.changelog) && data.changelog.length > 0) {
+            changelogEl.innerHTML = data.changelog.map(item => `
+              <div style="margin-bottom: 5px; display: flex; align-items: flex-start; gap: 8px;">
+                <span style="color: #60a5fa; font-size: 14px; line-height: 1;">•</span>
+                <span>${escapeHtml(item)}</span>
+              </div>
+            `).join("");
+          } else {
+            changelogEl.innerHTML = `<div>New release v${escapeHtml(data.remoteVersion)} is now available with enhancements and bug fixes.</div>`;
+          }
+        }
+
+        document.getElementById("updateModal").style.display = "flex";
+      } else {
+        if (data.isManual) {
+          showToast(`✓ Bloxstrap Gold v${data.currentVersion} is up to date!`);
+        }
+      }
+    };
+
+    // Trigger update check from Behaviour tab
+    document.getElementById("btnCheckForUpdates")?.addEventListener("click", () => {
+      showToast("🔍 Checking repository for updates...");
+      sendToHost("checkForUpdates");
+    });
+
+    // Trigger update check from About tab
+    document.getElementById("btnAboutCheckUpdates")?.addEventListener("click", () => {
+      showToast("🔍 Checking repository for updates...");
+      sendToHost("checkForUpdates");
+    });
+
+    // Simulate outdated version for quick testing of the update prompt
+    document.getElementById("btnSimulateOutdated")?.addEventListener("click", () => {
+      sendToHost("simulateOutdatedVersion");
+    });
+
+    // Statusbar update button reopens update modal
+    document.getElementById("btnStatusBarUpdate")?.addEventListener("click", () => {
+      document.getElementById("updateModal").style.display = "flex";
+    });
+
+    // Dismiss update modal
+    document.getElementById("btnCloseUpdateModal")?.addEventListener("click", () => {
+      document.getElementById("updateModal").style.display = "none";
+    });
+
+    document.getElementById("btnDismissUpdate")?.addEventListener("click", () => {
+      document.getElementById("updateModal").style.display = "none";
+      showToast("Update reminder postponed.");
+    });
+
+    // View release notes on GitHub
+    document.getElementById("btnViewReleaseNotes")?.addEventListener("click", () => {
+      const url = latestUpdateInfo?.downloadUrl || "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases";
+      sendToHost("openBrowserUrl", { url });
+    });
+
+    // Download update directly
+    document.getElementById("btnDownloadUpdate")?.addEventListener("click", () => {
+      const url = latestUpdateInfo?.directMacUrl || latestUpdateInfo?.downloadUrl || "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/latest";
+      sendToHost("downloadUpdate", { url });
+      showToast("🚀 Initiating update download...");
+    });
 
     // Inform host we are ready
     sendToHost("appReady");

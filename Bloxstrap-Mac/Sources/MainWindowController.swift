@@ -81,6 +81,11 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         pushStateToWeb()
+        if AppState.shared.data.autoUpdateChecking {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+                self?.checkForUpdates(manual: false)
+            }
+        }
     }
     
     // MARK: - Script Message Handler (Bridge to JS)
@@ -597,9 +602,113 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
                 NSWorkspace.shared.open(u)
             }
             
+        case "checkForUpdates":
+            checkForUpdates(manual: true)
+            
+        case "simulateOutdatedVersion":
+            let payload: [String: Any] = [
+                "success": true,
+                "updateAvailable": true,
+                "currentVersion": "2.11.4",
+                "remoteVersion": "2.11.5",
+                "releaseName": "Bloxstrap Gold v2.11.5",
+                "changelog": [
+                    "Bloxstrap Gold Menu titlebar branding and Windows 11 Fluent 2 & Mica styling",
+                    "Expanded Roblox Account Manager (RAM) with direct join & place presets",
+                    "Multi-instance engine singleton mutex isolation",
+                    "Windows & macOS native releases available for download",
+                    "Automatic update checking and prompt system"
+                ],
+                "downloadUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/latest",
+                "directMacUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.5/BloxstrapGold-macOS.dmg",
+                "directWindowsUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.5/Bloxstrap.exe",
+                "isManual": true,
+                "isSimulated": true,
+                "lastChecked": "Just now (Simulated)"
+            ]
+            if let jsonData = try? JSONSerialization.data(withJSONObject: payload),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                webView.evaluateJavaScript("window.onUpdateCheckResult && window.onUpdateCheckResult(\(jsonString));", completionHandler: nil)
+            }
+            
+        case "downloadUpdate":
+            let urlString = body["url"] as? String ?? "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/latest"
+            if let url = URL(string: urlString) {
+                NSWorkspace.shared.open(url)
+            }
+            
         default:
             break
         }
+    }
+    
+    // MARK: - Software Update Checker
+    public func checkForUpdates(manual: Bool = false) {
+        guard let url = URL(string: "https://raw.githubusercontent.com/Bloxstrap-Gold/Bloxstrap-Gold/main/version.json") else { return }
+        
+        var request = URLRequest(url: url)
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        request.timeoutInterval = 10.0
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("❌ Update check failed: \(error.localizedDescription)")
+                if manual {
+                    DispatchQueue.main.async {
+                        self.webView.evaluateJavaScript("window.onUpdateCheckResult && window.onUpdateCheckResult({ success: false, error: 'Could not connect to update server. Check your internet connection.' });", completionHandler: nil)
+                    }
+                }
+                return
+            }
+            
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let remoteVersion = json["version"] as? String else {
+                if manual {
+                    DispatchQueue.main.async {
+                        self.webView.evaluateJavaScript("window.onUpdateCheckResult && window.onUpdateCheckResult({ success: false, error: 'Invalid update manifest format received from repository.' });", completionHandler: nil)
+                    }
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                AppState.shared.setLastCheckedUpdate()
+            }
+            
+            let currentVersion = AppState.currentVersion
+            let changelog = json["changelog"] as? [String] ?? []
+            let releaseName = json["releaseName"] as? String ?? "Bloxstrap Gold v\(remoteVersion)"
+            let downloadUrl = json["downloadUrl"] as? String ?? "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/latest"
+            let directMacUrl = json["directMacUrl"] as? String ?? "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v\(remoteVersion)/BloxstrapGold-macOS.dmg"
+            let directWindowsUrl = json["directWindowsUrl"] as? String ?? "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v\(remoteVersion)/Bloxstrap.exe"
+            
+            // Check if remote version does not match saved local version
+            let isOutdated = (remoteVersion != currentVersion)
+            
+            let payload: [String: Any] = [
+                "success": true,
+                "updateAvailable": isOutdated,
+                "currentVersion": currentVersion,
+                "remoteVersion": remoteVersion,
+                "releaseName": releaseName,
+                "changelog": changelog,
+                "downloadUrl": downloadUrl,
+                "directMacUrl": directMacUrl,
+                "directWindowsUrl": directWindowsUrl,
+                "isManual": manual,
+                "lastChecked": AppState.shared.data.lastCheckedUpdateDate
+            ]
+            
+            if let jsonData = try? JSONSerialization.data(withJSONObject: payload),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                DispatchQueue.main.async {
+                    self.webView.evaluateJavaScript("window.onUpdateCheckResult && window.onUpdateCheckResult(\(jsonString));", completionHandler: nil)
+                }
+            }
+        }.resume()
     }
     
     // MARK: - Asynchronous Roblox User & Avatar API Lookup
@@ -766,6 +875,9 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             "forceRobloxReinstall": AppState.shared.data.forceRobloxReinstall,
             "telemetryEnabled": AppState.shared.data.telemetryEnabled,
             "disableTelemetry": AppState.shared.data.disableTelemetry,
+            "appVersion": AppState.currentVersion,
+            "savedVersion": AppState.shared.data.appVersion,
+            "lastCheckedUpdateDate": AppState.shared.data.lastCheckedUpdateDate,
             
             // Bootstrapper Debug Options
             "developerMode": AppState.shared.data.developerMode,

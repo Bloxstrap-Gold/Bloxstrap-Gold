@@ -355,6 +355,7 @@ MigrationBackup/
 *.app/
 *.dmg
 Bloxstrap-Mac/BloxstrapGold.app/
+dist/
 
 # Bridge logs & caches
 bridge/__pycache__/

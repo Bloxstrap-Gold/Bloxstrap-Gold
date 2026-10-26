@@ -19,11 +19,11 @@ namespace Bloxstrap
         public const string ProjectName = "Bloxstrap Gold";
 #endif
         public const string OriginalProjectName = "Bloxstrap";
-        public const string ProjectOwner = "Bloxstrap";
-        public const string ProjectRepository = "bloxstraplabs/bloxstrap";
-        public const string ProjectDownloadLink = "https://bloxstraplabs.com";
+        public const string ProjectOwner = "Bloxstrap-Gold";
+        public const string ProjectRepository = "Bloxstrap-Gold/Bloxstrap-Gold";
+        public const string ProjectDownloadLink = "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/latest";
         public const string ProjectHelpLink = "https://bloxstraplabs.com/wiki/help/";
-        public const string ProjectSupportLink = "https://github.com/bloxstraplabs/bloxstrap/issues/new";
+        public const string ProjectSupportLink = "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/issues/new";
 
         public const string RobloxPlayerAppName = "RobloxPlayerBeta";
         public const string RobloxStudioAppName = "RobloxStudioBeta";
