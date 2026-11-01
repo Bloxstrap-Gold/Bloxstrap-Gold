@@ -26,21 +26,21 @@
         <StackPanel Grid.Row="1" Margin="24,12,24,16">
             <!-- Header section with icon -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                <TextBlock Text="👑" FontSize="36" VerticalAlignment="Center" Margin="0,0,16,0" />
+                <ui:SymbolIcon Symbol="ShieldKeyhole24" FontSize="36" VerticalAlignment="Center" Margin="0,0,16,0" Foreground="{StaticResource GoldPrimaryBrush}" />
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="AUTHENTICATION REQUIRED" FontSize="18" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
+                    <TextBlock Text="AUTHENTICATION" FontSize="18" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
                     <TextBlock Text="Enter your Bloxstrap Gold license key to unlock the application." FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0" />
                 </StackPanel>
             </StackPanel>
 
             <!-- Key requirement notice -->
             <Border Padding="12,10" CornerRadius="6" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" Margin="0,0,0,14">
-                <TextBlock Text="All valid keys must start with the prefix GOLD-7DAY- (e.g. GOLD-7DAY-ULTRA-...)." FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
+                <TextBlock Text="Valid license keys begin with the prefix GOLD- (e.g. GOLD-ULTRA-PERPETUAL-ACCESS)." FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
             </Border>
 
             <!-- Input label & box -->
             <TextBlock Text="License Key" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,6" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
-            <ui:TextBox x:Name="KeyTextBox" PlaceholderText="GOLD-7DAY-ULTRA-XXXX-XXXX-XXXX" TextChanged="KeyTextBox_TextChanged" FontFamily="Consolas, Courier New, monospace" FontSize="13" Padding="10,8" />
+            <ui:TextBox x:Name="KeyTextBox" PlaceholderText="GOLD-ULTRA-XXXX-XXXX-XXXX" TextChanged="KeyTextBox_TextChanged" FontFamily="Consolas, Courier New, monospace" FontSize="13" Padding="10,8" />
 
             <!-- Live Tier Detection Card -->
             <Border x:Name="TierBadgeBorder" Margin="0,12,0,0" Padding="12,10" CornerRadius="6" Background="#261E05" BorderBrush="{StaticResource GoldBorderBrush}" BorderThickness="1">
@@ -49,16 +49,16 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="TierIconText" Grid.Column="0" Text="🔒" FontSize="18" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <TextBlock x:Name="TierIconText" Grid.Column="0" Text="●" FontSize="18" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{StaticResource GoldPrimaryBrush}" />
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock x:Name="TierTitleText" Text="Awaiting Key Entry" FontSize="13" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
-                        <TextBlock x:Name="TierDetailText" Text="Please enter a key starting with GOLD-7DAY- to detect your tier." FontSize="11" Foreground="{StaticResource GoldLightBrush}" Margin="0,1,0,0" />
+                        <TextBlock x:Name="TierDetailText" Text="Please enter a key starting with GOLD- to detect your tier." FontSize="11" Foreground="{StaticResource GoldLightBrush}" Margin="0,1,0,0" />
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Quick-Fill helper -->
-            <ui:Button x:Name="QuickFillButton" Margin="0,14,0,0" Content="⚡ Quick-Fill Demo Key (Gold ULTRA)" Appearance="Secondary" HorizontalAlignment="Left" Click="QuickFillButton_Click" />
+            <ui:Button x:Name="QuickFillButton" Margin="0,14,0,0" Content="Quick-Fill License Key (Gold ULTRA)" Appearance="Secondary" HorizontalAlignment="Left" Click="QuickFillButton_Click" />
         </StackPanel>
 
         <!-- Bottom Actions -->

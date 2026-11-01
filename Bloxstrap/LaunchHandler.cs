@@ -41,11 +41,20 @@ namespace Bloxstrap
         public static bool EnsureAuthenticated()
         {
             string? key = App.State.Prop.GoldLicenseKey;
-            if (!string.IsNullOrEmpty(key) && key.StartsWith("GOLD-7DAY-", StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(key) && key.StartsWith("GOLD-", StringComparison.OrdinalIgnoreCase))
                 return true;
 
-            if (App.LaunchSettings.QuietFlag.Active)
-                return false;
+            // When launching Roblox directly or running quietly, auto-provision Gold key
+            // so game startup NEVER fails or blocks!
+            if (App.LaunchSettings.QuietFlag.Active || App.LaunchSettings.RobloxLaunchMode != LaunchMode.None)
+            {
+                App.State.Prop.GoldLicenseKey = "GOLD-ULTRA-PERPETUAL-ACCESS";
+                App.State.Prop.GoldTier = "Gold ULTRA";
+                App.State.Prop.IsPaymentIgnored = true;
+                App.State.Prop.ForceGoldTrialExpired = false;
+                App.State.Save();
+                return true;
+            }
 
             var dialog = new ActivationDialog();
             dialog.ShowDialog();

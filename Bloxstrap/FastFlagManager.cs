@@ -1,4 +1,4 @@
-﻿using Bloxstrap.Enums.FlagPresets;
+using Bloxstrap.Enums.FlagPresets;
 
 namespace Bloxstrap
 {
@@ -24,6 +24,17 @@ namespace Bloxstrap
 
             { "Rendering.TextureQuality.OverrideEnabled", "DFFlagTextureQualityOverrideEnabled" },
             { "Rendering.TextureQuality.Level", "DFIntTextureQualityOverride" },
+
+            { "Rendering.Framerate", "DFIntTaskSchedulerTargetFps" },
+            { "Rendering.DisplayFPS", "FFlagDebugDisplayFPS" },
+            { "Rendering.Lighting.Technology", "DFFlagDebugRenderForceTechnology" },
+            { "Rendering.Lighting.FuturePhase3", "FFlagDebugForceFutureIsBrightPhase3" },
+            { "Rendering.GrassDistance", "FIntFRMMaxGrassDistance" },
+            { "Rendering.ShadowIntensity", "FIntRenderShadowIntensity" },
+            { "UI.FullscreenTitleBarDelay", "FIntFullscreenTitleBarTriggerDelayMillis" },
+            { "UI.HideGuiGroupId", "DFIntCanHideGuiGroupId" },
+            { "UI.InGameMenuVersion", "FStringInGameMenuVersion" },
+            { "Privacy.DisableTelemetry", "FFlagDebugDisableTelemetry" },
         };
 
         public static IReadOnlyDictionary<MSAAMode, string?> MSAAModes => new Dictionary<MSAAMode, string?>

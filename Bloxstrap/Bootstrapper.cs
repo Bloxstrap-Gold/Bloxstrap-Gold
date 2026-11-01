@@ -632,16 +632,53 @@ namespace Bloxstrap
 
             if (String.IsNullOrEmpty(logFileName))
             {
-                App.Logger.WriteLine(LOG_IDENT, "Unable to identify log file");
-                Frontend.ShowPlayerErrorDialog();
-                return;
+                // Fallback: search for the most recent .log written in the logs directory
+                try
+                {
+                    var recentLog = new DirectoryInfo(rbxLogDir)
+                        .GetFiles("*.log")
+                        .OrderByDescending(f => f.LastWriteTimeUtc)
+                        .FirstOrDefault();
+
+                    if (recentLog != null && (DateTime.UtcNow - recentLog.LastWriteTimeUtc).TotalSeconds < 30)
+                    {
+                        logFileName = recentLog.FullName;
+                        App.Logger.WriteLine(LOG_IDENT, $"Recovered log file via fallback search: {logFileName}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, $"Fallback log search failed: {ex.Message}");
+                }
+            }
+
+            bool isProcessAlive = false;
+            try
+            {
+                var proc = Process.GetProcessById(_appPid);
+                isProcessAlive = !proc.HasExited;
+            }
+            catch { }
+
+            if (String.IsNullOrEmpty(logFileName))
+            {
+                if (isProcessAlive)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, $"Log file not found, but Roblox process (PID {_appPid}) is actively running. Continuing launch without showing error.");
+                }
+                else
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Roblox process exited and no log file was created.");
+                    Frontend.ShowPlayerErrorDialog();
+                    return;
+                }
             }
             else
             {
                 App.Logger.WriteLine(LOG_IDENT, $"Got log file as {logFileName}");
             }
 
-            _mutex?.ReleaseAsync();
+            _ = _mutex?.ReleaseAsync();
 
             if (IsStudioLaunch)
                 return;
@@ -709,7 +746,7 @@ namespace Bloxstrap
 
             if (Utilities.DoesMutexExist("ROBLOX_singletonMutex"))
             {
-                App.Logger.WriteLine(LOG_IDENT, "Roblox singleton mutex already exists");
+                App.Logger.WriteLine(LOG_IDENT, "Roblox singleton mutex already exists and is claimed.");
                 return;
             }
 
@@ -718,7 +755,7 @@ namespace Bloxstrap
                 using EventWaitHandle initEventHandle = new EventWaitHandle(false, EventResetMode.AutoReset, "Bloxstrap-MultiInstanceWatcherInitialisationFinished");
                 Process.Start(Paths.Process, "-multiinstancewatcher");
 
-                bool initSuccess = initEventHandle.WaitOne(TimeSpan.FromSeconds(2));
+                bool initSuccess = initEventHandle.WaitOne(TimeSpan.FromSeconds(3));
                 if (initSuccess)
                     App.Logger.WriteLine(LOG_IDENT, "MultiInstanceWatcher initialization finished signalled.");
                 else

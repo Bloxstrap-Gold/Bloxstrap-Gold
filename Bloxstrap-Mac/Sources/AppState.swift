@@ -402,11 +402,11 @@ public class AppState {
     
     public var isAuthenticated: Bool {
         guard let key = data.vipKey else { return false }
-        return key.uppercased().hasPrefix("GOLD-7DAY-")
+        return key.uppercased().hasPrefix("GOLD-") && key.count >= 10
     }
     
     public var currentTierName: String {
-        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-7DAY-") else {
+        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-") else {
             return "Unauthenticated"
         }
         if key.contains("-ULTRA-") {
@@ -418,29 +418,29 @@ public class AppState {
         } else if key.contains("-BASIC-") {
             return "Gold Basic"
         } else {
-            return "Gold VIP Trial"
+            return "Gold VIP"
         }
     }
     
     public var currentTierBadge: String {
-        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-7DAY-") else {
-            return "🔒 LOCKED"
+        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-") else {
+            return "LOCKED"
         }
         if key.contains("-ULTRA-") {
-            return "👑 ULTRA VIP"
+            return "ULTRA VIP"
         } else if key.contains("-DELUXE-") {
-            return "🥇 DELUXE"
+            return "DELUXE"
         } else if key.contains("-PLUS-") {
-            return "🥈 PLUS"
+            return "PLUS"
         } else if key.contains("-BASIC-") {
-            return "🥉 BASIC"
+            return "BASIC"
         } else {
-            return "🟢 VIP TRIAL"
+            return "VIP ACTIVE"
         }
     }
     
     public var currentTierPrice: String {
-        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-7DAY-") else {
+        guard let key = data.vipKey?.uppercased(), key.hasPrefix("GOLD-") else {
             return "$0.00"
         }
         if key.contains("-ULTRA-") {
@@ -458,17 +458,17 @@ public class AppState {
     
     public func detectTier(from key: String) -> String {
         let upper = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        guard upper.hasPrefix("GOLD-7DAY-") else { return "Invalid" }
-        if upper.contains("-ULTRA-") { return "Gold ULTRA ($199.99/mo)" }
-        if upper.contains("-DELUXE-") { return "Gold Deluxe ($109.99/mo)" }
-        if upper.contains("-PLUS-") { return "Gold Plus ($54.99/mo)" }
-        if upper.contains("-BASIC-") { return "Gold Basic ($24.99/mo)" }
-        return "VIP Free Trial (7 Days)"
+        guard upper.hasPrefix("GOLD-") && upper.count >= 10 else { return "Invalid" }
+        if upper.contains("-ULTRA-") { return "Gold ULTRA" }
+        if upper.contains("-DELUXE-") { return "Gold Deluxe" }
+        if upper.contains("-PLUS-") { return "Gold Plus" }
+        if upper.contains("-BASIC-") { return "Gold Basic" }
+        return "Bloxstrap Gold VIP"
     }
     
     public func verifyAndApplyKey(_ key: String) -> Bool {
         let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        guard trimmed.hasPrefix("GOLD-7DAY-") && trimmed.count >= 14 else {
+        guard trimmed.hasPrefix("GOLD-") && trimmed.count >= 10 else {
             return false
         }
         data.vipKey = trimmed

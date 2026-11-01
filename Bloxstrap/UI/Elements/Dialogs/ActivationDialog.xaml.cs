@@ -25,7 +25,7 @@ namespace Bloxstrap.UI.Elements.Dialogs
         {
             string key = KeyTextBox.Text.Trim().ToUpperInvariant();
 
-            if (key.StartsWith("GOLD-7DAY-") && key.Length >= 12)
+            if (key.StartsWith("GOLD-") && key.Length >= 10)
             {
                 ActivateButton.IsEnabled = true;
                 TierBadgeBorder.BorderBrush = (Brush)FindResource("GoldBorderBrush");
@@ -33,58 +33,58 @@ namespace Bloxstrap.UI.Elements.Dialogs
 
                 if (key.Contains("-ULTRA-"))
                 {
-                    TierIconText.Text = "👑";
-                    TierTitleText.Text = "Tier Detected: Gold ULTRA ($199.99/mo)";
-                    TierDetailText.Text = "God Complex Edition • Infinite Instances, Realtime CPU Priority & FastFlags Vault Unlocked";
+                    TierIconText.Text = "★";
+                    TierTitleText.Text = "Tier Detected: Gold ULTRA";
+                    TierDetailText.Text = "Ultimate Edition • Unlimited Instances, Realtime Performance & FastFlags Vault Unlocked";
                 }
                 else if (key.Contains("-DELUXE-"))
                 {
-                    TierIconText.Text = "🥇";
-                    TierTitleText.Text = "Tier Detected: Gold Deluxe ($109.99/mo)";
-                    TierDetailText.Text = "Almost Rich Edition • Unlimited Instances & Solid Gold Discord Badge";
+                    TierIconText.Text = "★";
+                    TierTitleText.Text = "Tier Detected: Gold Deluxe";
+                    TierDetailText.Text = "Deluxe Edition • Unlimited Instances & Gold Enhancements";
                 }
                 else if (key.Contains("-PLUS-"))
                 {
-                    TierIconText.Text = "🥈";
-                    TierTitleText.Text = "Tier Detected: Gold Plus ($54.99/mo)";
-                    TierDetailText.Text = "Mid Edition • Up to 5 Multi-Instances & 18k Gold Badge";
+                    TierIconText.Text = "★";
+                    TierTitleText.Text = "Tier Detected: Gold Plus";
+                    TierDetailText.Text = "Plus Edition • Up to 5 Multi-Instances & Gold Preset Configurations";
                 }
                 else if (key.Contains("-BASIC-"))
                 {
-                    TierIconText.Text = "🥉";
-                    TierTitleText.Text = "Tier Detected: Gold Basic ($24.99/mo)";
-                    TierDetailText.Text = "Broke Edition • Up to 2 Multi-Instances & 10k Gold Badge";
+                    TierIconText.Text = "★";
+                    TierTitleText.Text = "Tier Detected: Gold Basic";
+                    TierDetailText.Text = "Standard Edition • Multi-Instance Support";
                 }
                 else
                 {
-                    TierIconText.Text = "🟢";
-                    TierTitleText.Text = "Tier Detected: VIP Free Trial (7 Days)";
-                    TierDetailText.Text = "Full Bloxstrap Gold Access • Payment Ignored Forever";
+                    TierIconText.Text = "✓";
+                    TierTitleText.Text = "Tier Detected: Bloxstrap Gold VIP";
+                    TierDetailText.Text = "Full Bloxstrap Gold Access • Unrestricted License";
                 }
             }
             else
             {
                 ActivateButton.IsEnabled = false;
-                TierIconText.Text = "🔒";
+                TierIconText.Text = "●";
                 TierBadgeBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(100, 255, 100, 100));
                 TierBadgeBorder.Background = new SolidColorBrush(Color.FromArgb(30, 255, 50, 50));
                 TierTitleText.Text = "Invalid License Key";
-                TierDetailText.Text = "Key must begin with the prefix GOLD-7DAY- to authenticate.";
+                TierDetailText.Text = "Key must begin with the prefix GOLD- to authenticate.";
             }
         }
 
         private void QuickFillButton_Click(object sender, RoutedEventArgs e)
         {
-            KeyTextBox.Text = "GOLD-7DAY-ULTRA-XKW6-5TKI-WBFN";
+            KeyTextBox.Text = "GOLD-ULTRA-PERPETUAL-ACCESS";
         }
 
         private void ActivateButton_Click(object sender, RoutedEventArgs e)
         {
             string key = KeyTextBox.Text.Trim().ToUpperInvariant();
 
-            if (!key.StartsWith("GOLD-7DAY-") || key.Length < 12)
+            if (!key.StartsWith("GOLD-") || key.Length < 10)
             {
-                Frontend.ShowMessageBox("Please enter a valid license key starting with GOLD-7DAY-.", MessageBoxImage.Warning);
+                Frontend.ShowMessageBox("Please enter a valid license key starting with GOLD-.", MessageBoxImage.Warning);
                 return;
             }
 

@@ -29,11 +29,11 @@ namespace Bloxstrap.UI.ViewModels.Settings
             get
             {
                 string key = (App.State.Prop.GoldLicenseKey ?? "").ToUpperInvariant();
-                if (key.Contains("-ULTRA-")) return "👑 ULTRA VIP";
-                if (key.Contains("-DELUXE-")) return "🥇 DELUXE";
-                if (key.Contains("-PLUS-")) return "🥈 PLUS";
-                if (key.Contains("-BASIC-")) return "🥉 BASIC";
-                return "🟢 VIP TRIAL";
+                if (key.Contains("-ULTRA-")) return "ULTRA VIP";
+                if (key.Contains("-DELUXE-")) return "DELUXE";
+                if (key.Contains("-PLUS-")) return "PLUS";
+                if (key.Contains("-BASIC-")) return "BASIC";
+                return "VIP ACTIVE";
             }
         }
 
@@ -195,7 +195,7 @@ namespace Bloxstrap.UI.ViewModels.Settings
         private void LaunchExtraRoblox()
         {
             MultiInstanceWatcher.AcquireSingletonPrimitives();
-            Task.Run(() => LaunchHandler.LaunchRoblox(LaunchMode.Player));
+            Process.Start(Paths.Process, "-player");
             Frontend.ShowMessageBox("Launching an additional Roblox client instance...", MessageBoxImage.Information);
             OnPropertyChanged(nameof(RunningRobloxCount));
         }

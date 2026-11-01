@@ -51,11 +51,11 @@
                 BorderBrush="{StaticResource GoldBorderBrush}" Background="{StaticResource GoldDarkGradientBrush}">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                    <TextBlock Text="👑" FontSize="20" VerticalAlignment="Center" Margin="0,0,8,0" />
-                    <TextBlock Text="Bloxstrap Gold — Parody Remake &amp; Joke Notice" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" VerticalAlignment="Center" />
+                    <ui:SymbolIcon Symbol="ShieldKeyhole24" FontSize="20" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="{StaticResource GoldPrimaryBrush}" />
+                    <TextBlock Text="Bloxstrap Gold — Enhanced Community Edition" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" VerticalAlignment="Center" />
                 </StackPanel>
                 
-                <TextBlock Text="Bloxstrap Gold is a joke remake and parody of the original Bloxstrap. The '7-day free trial' and 'pay for it' prompts are 100% satirical comedy. You never have to pay anything — Bloxstrap Gold is completely free and open-source forever!"
+                <TextBlock Text="Bloxstrap Gold combines multi-instance launching, account profiles, and FastFlag controls into a modern bootstrapper. It is 100% free and open-source forever."
                            TextWrapping="Wrap" Foreground="{StaticResource GoldLightBrush}" Margin="0,0,0,12" FontSize="13" LineHeight="18" />
                 
                 <TextBlock Text="Built-in Multi-Instance Program Credits" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GoldPrimaryBrush}" Margin="0,4,0,4" />

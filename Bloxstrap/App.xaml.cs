@@ -172,13 +172,42 @@ namespace Bloxstrap
             {
                 var releaseInfo = await Http.GetJson<GithubRelease>($"https://api.github.com/repos/{ProjectRepository}/releases/latest");
 
-                if (releaseInfo is null || releaseInfo.Assets is null)
+                if (releaseInfo is not null && releaseInfo.Assets is not null && releaseInfo.Assets.Count > 0)
                 {
-                    Logger.WriteLine(LOG_IDENT, "Encountered invalid data");
-                    return null;
+                    return releaseInfo;
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLine(LOG_IDENT, $"GitHub API check failed: {ex.Message}. Falling back to repository version.json manifest...");
+            }
 
-                return releaseInfo;
+            try
+            {
+                var manifest = await Http.GetJson<VersionManifest>($"https://raw.githubusercontent.com/{ProjectRepository}/main/version.json");
+                if (manifest is not null && !string.IsNullOrEmpty(manifest.Version))
+                {
+                    string tag = manifest.Version.StartsWith('v') ? manifest.Version : $"v{manifest.Version}";
+                    string winUrl = manifest.DirectWindowsUrl ?? $"https://github.com/{ProjectRepository}/releases/download/{tag}/Bloxstrap.exe";
+
+                    Logger.WriteLine(LOG_IDENT, $"Retrieved update info via repository version.json: {tag}");
+
+                    return new GithubRelease
+                    {
+                        TagName = tag,
+                        Name = manifest.ReleaseName ?? $"Bloxstrap Gold {tag}",
+                        Body = "New version update available.",
+                        CreatedAt = DateTime.UtcNow.ToString("o"),
+                        Assets = new List<GithubReleaseAsset>
+                        {
+                            new GithubReleaseAsset
+                            {
+                                Name = "Bloxstrap.exe",
+                                BrowserDownloadUrl = winUrl
+                            }
+                        }
+                    };
+                }
             }
             catch (Exception ex)
             {

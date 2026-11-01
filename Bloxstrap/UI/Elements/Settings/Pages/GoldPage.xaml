@@ -33,7 +33,7 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="👑" FontSize="32" Margin="0,0,12,0" VerticalAlignment="Center" />
+                        <ui:SymbolIcon Symbol="ShieldKeyhole24" FontSize="32" Margin="0,0,12,0" VerticalAlignment="Center" Foreground="{StaticResource GoldPrimaryBrush}" />
                         <StackPanel VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="BLOXSTRAP GOLD MEMBERSHIP" FontSize="16" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" />
@@ -46,7 +46,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <ui:Button Content="🔑 Change License Key" Command="{Binding ChangeKeyCommand}" Appearance="Primary" Background="{StaticResource GoldGradientBrush}" Foreground="Black" FontWeight="SemiBold" ToolTip="Re-authenticate or enter a different license key" />
+                        <ui:Button Content="Change License Key" Command="{Binding ChangeKeyCommand}" Appearance="Primary" Background="{StaticResource GoldGradientBrush}" Foreground="Black" FontWeight="SemiBold" ToolTip="Re-authenticate or enter a different license key" />
                     </StackPanel>
                 </Grid>
 
@@ -131,7 +131,7 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="👤" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center" />
+                                    <ui:SymbolIcon Grid.Column="0" Symbol="Person24" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center" Foreground="{StaticResource GoldPrimaryBrush}" />
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                         <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" FontSize="13" />
                                         <TextBlock Text="{Binding Username}" FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
@@ -149,13 +149,13 @@
             </StackPanel>
         </Border>
 
-        <!-- Parody Remake Notice -->
-        <TextBlock Text="Bloxstrap Gold Clarification &amp; Parody Notice" FontSize="20" FontWeight="Medium" Margin="0,20,0,0" Foreground="{StaticResource GoldPrimaryBrush}" />
+        <!-- Bloxstrap Gold Clarification Notice -->
+        <TextBlock Text="Bloxstrap Gold Clarification" FontSize="20" FontWeight="Medium" Margin="0,20,0,0" Foreground="{StaticResource GoldPrimaryBrush}" />
         <Border Margin="0,8,0,0" Padding="14" CornerRadius="6" BorderThickness="1.5"
                 BorderBrush="{StaticResource GoldBorderBrush}" Background="{StaticResource GoldDarkGradientBrush}">
             <StackPanel>
-                <TextBlock Text="👑 This program is a remake &amp; parody of Bloxstrap!" FontSize="14" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" Margin="0,0,0,6" />
-                <TextBlock Text="Bloxstrap Gold is a satirical joke remake created for fun. The 'paid subscription', '7-day trial', and license keys are entirely community satire — you will never be charged money, and Bloxstrap Gold is 100% free and open-source forever."
+                <TextBlock Text="Bloxstrap Gold Enhanced Community Edition" FontSize="14" FontWeight="Bold" Foreground="{StaticResource GoldPrimaryBrush}" Margin="0,0,0,6" />
+                <TextBlock Text="Bloxstrap Gold combines enhanced multi-instance, account management, and FastFlag controls into a modern bootstrapper. It is 100% free and open-source forever."
                            TextWrapping="Wrap" Foreground="{StaticResource GoldLightBrush}" FontSize="13" LineHeight="18" />
             </StackPanel>
         </Border>

@@ -15,15 +15,18 @@ namespace Bloxstrap
 
             try
             {
-                int count = Process.GetProcesses().Count(x =>
+                int robloxCount = Process.GetProcesses().Count(x =>
                     x.ProcessName.Equals(App.RobloxPlayerAppName, StringComparison.OrdinalIgnoreCase) ||
                     x.ProcessName.Equals("RobloxPlayerBeta", StringComparison.OrdinalIgnoreCase) ||
-                    x.ProcessName.Equals(App.ProjectName, StringComparison.OrdinalIgnoreCase) ||
-                    x.ProcessName.Equals("Bloxstrap", StringComparison.OrdinalIgnoreCase) ||
-                    x.ProcessName.Equals("Bloxstrap Gold", StringComparison.OrdinalIgnoreCase));
+                    x.ProcessName.Equals("RobloxPlayer", StringComparison.OrdinalIgnoreCase));
 
-                count -= 1; // ignore current process
-                return Math.Max(0, count);
+                int bootstrapperCount = Process.GetProcesses().Count(x =>
+                    (x.ProcessName.Equals(App.ProjectName, StringComparison.OrdinalIgnoreCase) ||
+                     x.ProcessName.Equals("Bloxstrap", StringComparison.OrdinalIgnoreCase) ||
+                     x.ProcessName.Equals("Bloxstrap Gold", StringComparison.OrdinalIgnoreCase)) &&
+                    x.Id != Environment.ProcessId);
+
+                return robloxCount + (bootstrapperCount > 0 ? 1 : 0);
             }
             catch (Exception ex)
             {

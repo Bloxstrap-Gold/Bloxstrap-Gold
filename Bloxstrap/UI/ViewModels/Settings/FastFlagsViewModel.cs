@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Input;
 
 using CommunityToolkit.Mvvm.Input;
@@ -59,6 +59,44 @@ namespace Bloxstrap.UI.ViewModels.Settings
                 }
             }
         }
+
+        public int FramerateLimit
+        {
+            get
+            {
+                string? val = App.FastFlags.GetPreset("Rendering.Framerate");
+                return int.TryParse(val, out int fps) ? fps : 0;
+            }
+            set
+            {
+                if (value <= 0)
+                    App.FastFlags.SetPreset("Rendering.Framerate", null);
+                else
+                    App.FastFlags.SetPreset("Rendering.Framerate", value.ToString());
+                OnPropertyChanged(nameof(FramerateLimit));
+            }
+        }
+
+        public bool DisplayFPS
+        {
+            get => App.FastFlags.GetPreset("Rendering.DisplayFPS") == "True";
+            set
+            {
+                App.FastFlags.SetPreset("Rendering.DisplayFPS", value ? "True" : null);
+                OnPropertyChanged(nameof(DisplayFPS));
+            }
+        }
+
+        public bool DisableTelemetry
+        {
+            get => App.FastFlags.GetPreset("Privacy.DisableTelemetry") == "True";
+            set
+            {
+                App.FastFlags.SetPreset("Privacy.DisableTelemetry", value ? "True" : null);
+                OnPropertyChanged(nameof(DisableTelemetry));
+            }
+        }
+
         public bool ResetConfiguration
         {
             get => _preResetFlags is not null;
