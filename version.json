@@ -1,16 +1,16 @@
 {
-  "version": "2.11.5",
-  "versionCode": 21105,
-  "releaseName": "Bloxstrap Gold v2.11.5",
-  "releaseDate": "2026-10-26",
+  "version": "2.11.6",
+  "versionCode": 21106,
+  "releaseName": "Bloxstrap Gold v2.11.6",
+  "releaseDate": "2026-11-01",
   "changelog": [
-    "Bloxstrap Gold Menu titlebar branding and Windows 11 Fluent 2 & Mica styling",
-    "Expanded Roblox Account Manager (RAM) with direct join & place presets",
-    "Multi-instance engine singleton mutex isolation",
-    "Windows & macOS native releases available for download",
-    "Automatic update checking and prompt system"
+    "Fix settings crash caused by invalid SymbolRegular icon in GoldPage",
+    "Fix update check redirecting and downloading standard Bloxstrap",
+    "Ensure release update only downloads matching .exe executables",
+    "Fix duplicate process collision when launching Roblox on Windows",
+    "Enable automatic Gold license authentication on browser launch"
   ],
   "downloadUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/latest",
-  "directWindowsUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.5/Bloxstrap.exe",
-  "directMacUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.5/BloxstrapGold-macOS.dmg"
+  "directWindowsUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.6/Bloxstrap.exe",
+  "directMacUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.6/BloxstrapGold-macOS.dmg"
 }

@@ -101,7 +101,7 @@
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <ui:Button Margin="0,0,8,0" Icon="Play24" Content="Launch Extra Roblox" Command="{Binding LaunchExtraRobloxCommand}" Appearance="Primary" />
-                    <ui:Button Icon="LockClosedKey24" Content="Toggle Mutex Lock" Command="{Binding UnlockMutexCommand}" />
+                    <ui:Button Icon="LockClosed24" Content="Toggle Mutex Lock" Command="{Binding UnlockMutexCommand}" />
                 </StackPanel>
             </Grid>
         </Border>

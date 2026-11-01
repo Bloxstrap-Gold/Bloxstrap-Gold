@@ -852,10 +852,10 @@ namespace Bloxstrap
 
             var versionComparison = Utilities.CompareVersions(App.Version, releaseInfo.TagName);
 
-            // check if we aren't using a deployed build, so we can update to one if a new version comes out
-            if (App.IsProductionBuild && versionComparison == VersionComparison.Equal || versionComparison == VersionComparison.GreaterThan)
+            // Only update if the remote release is strictly newer than current version
+            if (versionComparison != VersionComparison.LessThan)
             {
-                App.Logger.WriteLine(LOG_IDENT, "No updates found");
+                App.Logger.WriteLine(LOG_IDENT, $"No updates found (Current: {App.Version}, Remote: {releaseInfo.TagName})");
                 return false;
             }
 
@@ -878,7 +878,14 @@ namespace Bloxstrap
 
                 File.Copy(Paths.Process, downloadLocation, true);
 #else
-                var asset = releaseInfo.Assets![0];
+                var asset = releaseInfo.Assets?.FirstOrDefault(x => x.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                    ?? releaseInfo.Assets?[0];
+
+                if (asset is null)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "No assets found in release, aborting update.");
+                    return false;
+                }
 
                 string downloadLocation = Path.Combine(Paths.TempUpdates, asset.Name);
 
