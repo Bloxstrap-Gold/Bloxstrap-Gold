@@ -503,6 +503,10 @@ public class AppState {
         let cleanUserId = userId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "1" : userId
         let cleanTag = tag.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Alt" : tag
         
+        let dateFmt = DateFormatter()
+        dateFmt.dateFormat = "yyyy-MM-dd"
+        let todayStr = dateFmt.string(from: Date())
+        
         let newAcc = AccountProfile(
             id: UUID().uuidString,
             username: cleanUsername,
@@ -511,7 +515,7 @@ public class AppState {
             avatarUrl: avatarUrl,
             tag: cleanTag,
             note: note,
-            addedDate: "2026-10-23",
+            addedDate: todayStr,
             isPinned: isPinned,
             cookie: cookie,
             defaultPlaceId: defaultPlaceId,

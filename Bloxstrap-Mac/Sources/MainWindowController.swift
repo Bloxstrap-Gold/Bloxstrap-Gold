@@ -24,6 +24,7 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
         window.standardWindowButton(.closeButton)?.isHidden = true
         window.standardWindowButton(.miniaturizeButton)?.isHidden = true
         window.standardWindowButton(.zoomButton)?.isHidden = true
+        window.isMovableByWindowBackground = true
         
         super.init(window: window)
         setupWebView()
@@ -912,6 +913,22 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             let ram = MultiInstanceManager.shared.getMemoryForPid(pid: pid)
             instancesPayload.append(["pid": pid, "ram": ram])
         }
+        
+        // If no Roblox processes are running, ensure any active status in accounts transitions back to Ready
+        if pids.isEmpty {
+            var changed = false
+            for i in 0..<AppState.shared.data.accounts.count {
+                if AppState.shared.data.accounts[i].status == "Active" {
+                    AppState.shared.data.accounts[i].status = "Ready"
+                    changed = true
+                }
+            }
+            if changed {
+                AppState.shared.save()
+                pushStateToWeb()
+            }
+        }
+        
         if let jsonData = try? JSONSerialization.data(withJSONObject: instancesPayload, options: []),
            let jsonString = String(data: jsonData, encoding: .utf8) {
             let js = "window.updateInstancesFromHost && window.updateInstancesFromHost(\(jsonString));"

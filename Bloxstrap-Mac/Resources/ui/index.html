@@ -4760,7 +4760,6 @@
     });
 
     // --- BUTTON ACTIONS ---
-    document.getElementById("btnPreviewOof")?.addEventListener("click", () => sendToHost("playOof"));
     document.getElementById("btnPreviewDeathSound")?.addEventListener("click", () => {
       const preset = document.getElementById("selectDeathSoundPreset")?.value || "Classic OOF (2006)";
       playPreviewSoundPreset(preset);
@@ -4772,7 +4771,7 @@
     document.getElementById("cardOpenModsFolder").addEventListener("click", () => sendToHost("openModsFolder"));
     document.getElementById("cardModdingHelp").addEventListener("click", () => sendToHost("openHelp"));
     const compatCard = document.getElementById("cardCompatSettings");
-    if (compatCard) compatCard.addEventListener("click", () => sendToHost("openHelp"));
+    if (compatCard) compatCard.addEventListener("click", () => sendToHost("openFsoLink"));
     document.getElementById("btnOpenInstallFolder").addEventListener("click", () => sendToHost("openInstallationFolder"));
     document.getElementById("cardReRegisterHandlers").addEventListener("click", () => sendToHost("reRegisterHandlers"));
     document.getElementById("btnPreviewBootstrapper").addEventListener("click", () => sendToHost("previewBootstrapper"));
@@ -4797,7 +4796,7 @@
     const linkGroup = document.getElementById("linkGroup");
     if (linkGroup) linkGroup.addEventListener("click", () => sendToHost("openGroupLink"));
     const linkFso = document.getElementById("linkFso");
-    if (linkFso) linkFso.addEventListener("click", () => sendToHost("openHelp"));
+    if (linkFso) linkFso.addEventListener("click", () => sendToHost("openFsoLink"));
     document.getElementById("btnAllContributors").addEventListener("click", () => sendToHost("openContributors"));
 
     // --- FIRST-TIME WELCOME INTRO WIZARD CONTROLLER ---

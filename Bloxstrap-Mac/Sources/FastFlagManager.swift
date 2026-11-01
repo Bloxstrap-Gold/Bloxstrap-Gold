@@ -88,6 +88,30 @@ public class FastFlagManager {
             isAllowed: true,
             category: "UI"
         ),
+        AllowedFlag(
+            key: "DFFlagDebugRenderForceTechnology",
+            name: "Lighting Technology Override",
+            description: "Forces render lighting engine: 1 (Compatibility), 3 (ShadowMap), 4 (Future).",
+            defaultValue: 4,
+            isAllowed: true,
+            category: "Graphics"
+        ),
+        AllowedFlag(
+            key: "FFlagDebugForceFutureIsBrightPhase3",
+            name: "Force Future Is Bright Phase 3",
+            description: "Forces Roblox Future Is Bright lighting technology phase 3.",
+            defaultValue: true,
+            isAllowed: true,
+            category: "Graphics"
+        ),
+        AllowedFlag(
+            key: "FStringInGameMenuVersion",
+            name: "In-Game Escape Menu Version",
+            description: "Controls escape menu design version (v1, v2, v4).",
+            defaultValue: "v4",
+            isAllowed: true,
+            category: "UI"
+        ),
         
         // --- BLOCKED / IGNORED BY ROBLOX ANTI-TAMPER ---
         AllowedFlag(
@@ -148,10 +172,9 @@ public class FastFlagManager {
             try data.write(to: clientSettingsURL)
             
             // Also attempt to write inside Roblox.app bundle if accessible
-            let appBundleSettingsDir = URL(fileURLWithPath: "/Applications/Roblox.app/Contents/MacOS/ClientSettings")
-            if fileManager.fileExists(atPath: "/Applications/Roblox.app") {
-                try? fileManager.createDirectory(at: appBundleSettingsDir, withIntermediateDirectories: true)
-                let appBundleJson = appBundleSettingsDir.appendingPathComponent("ClientAppSettings.json")
+            if let bundleSettings = RobloxPathResolver.appBundleClientSettingsDirectory {
+                try? fileManager.createDirectory(atPath: bundleSettings, withIntermediateDirectories: true)
+                let appBundleJson = URL(fileURLWithPath: bundleSettings).appendingPathComponent("ClientAppSettings.json")
                 try? data.write(to: appBundleJson)
             }
             return true
@@ -190,6 +213,34 @@ public class FastFlagManager {
             current["DFIntCanHideGuiGroupId"] = 34970455
         } else {
             current.removeValue(forKey: "DFIntCanHideGuiGroupId")
+        }
+        
+        // Preferred Lighting Technology
+        switch data.preferredLighting {
+        case "Future (Phase 3)":
+            current["DFFlagDebugRenderForceTechnology"] = 4
+            current["FFlagDebugForceFutureIsBrightPhase3"] = true
+        case "ShadowMap (Phase 2)":
+            current["DFFlagDebugRenderForceTechnology"] = 3
+            current.removeValue(forKey: "FFlagDebugForceFutureIsBrightPhase3")
+        case "Compatibility (Phase 1)":
+            current["DFFlagDebugRenderForceTechnology"] = 1
+            current.removeValue(forKey: "FFlagDebugForceFutureIsBrightPhase3")
+        default:
+            current.removeValue(forKey: "DFFlagDebugRenderForceTechnology")
+            current.removeValue(forKey: "FFlagDebugForceFutureIsBrightPhase3")
+        }
+        
+        // Escape Menu Version
+        switch data.escapeMenuVersion {
+        case "Version 1 (2015)":
+            current["FStringInGameMenuVersion"] = "v1"
+        case "Version 2 (2020)":
+            current["FStringInGameMenuVersion"] = "v2"
+        case "Version 4 (2023)":
+            current["FStringInGameMenuVersion"] = "v4"
+        default:
+            current.removeValue(forKey: "FStringInGameMenuVersion")
         }
         
         switch data.textureQuality {

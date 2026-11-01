@@ -5,15 +5,14 @@ public class SoundManager {
     public static let shared = SoundManager()
     
     private var audioPlayer: AVAudioPlayer?
-    private let robloxSoundPath = "/Applications/Roblox.app/Contents/Resources/content/sounds/ouch.ogg"
-    private let backupSoundPath = "/Applications/Roblox.app/Contents/Resources/content/sounds/ouch.ogg.bak"
     
     public var isRobloxInstalled: Bool {
-        return FileManager.default.fileExists(atPath: robloxSoundPath)
+        return RobloxPathResolver.isRobloxInstalled
     }
     
     public var isCustomSoundInstalled: Bool {
-        return FileManager.default.fileExists(atPath: backupSoundPath)
+        guard let backup = RobloxPathResolver.backupSoundPath else { return false }
+        return FileManager.default.fileExists(atPath: backup)
     }
     
     public func playPreview() {
@@ -37,8 +36,9 @@ public class SoundManager {
     }
     
     public func installOofIntoRoblox() -> (success: Bool, message: String) {
-        guard FileManager.default.fileExists(atPath: "/Applications/Roblox.app") else {
-            return (false, "Roblox.app not found in /Applications.")
+        guard let soundPath = RobloxPathResolver.ouchSoundPath,
+              let backupPath = RobloxPathResolver.backupSoundPath else {
+            return (false, "Roblox.app sounds directory not found in /Applications or ~/Applications.")
         }
         
         let oggSourceURL: URL?
@@ -56,15 +56,15 @@ public class SoundManager {
         let fileManager = FileManager.default
         do {
             // Backup original sound if not already backed up
-            if !fileManager.fileExists(atPath: backupSoundPath) && fileManager.fileExists(atPath: robloxSoundPath) {
-                try fileManager.copyItem(atPath: robloxSoundPath, toPath: backupSoundPath)
+            if !fileManager.fileExists(atPath: backupPath) && fileManager.fileExists(atPath: soundPath) {
+                try fileManager.copyItem(atPath: soundPath, toPath: backupPath)
             }
             
             // Replace ouch.ogg with classic oof
-            if fileManager.fileExists(atPath: robloxSoundPath) {
-                try fileManager.removeItem(atPath: robloxSoundPath)
+            if fileManager.fileExists(atPath: soundPath) {
+                try fileManager.removeItem(atPath: soundPath)
             }
-            try fileManager.copyItem(at: sourceURL, to: URL(fileURLWithPath: robloxSoundPath))
+            try fileManager.copyItem(at: sourceURL, to: URL(fileURLWithPath: soundPath))
             return (true, "Classic 2006 'OOF' sound installed into Roblox! Original sound backed up.")
         } catch {
             return (false, "Failed to install sound: \(error.localizedDescription)")
@@ -72,16 +72,21 @@ public class SoundManager {
     }
     
     public func restoreOriginalSound() -> (success: Bool, message: String) {
+        guard let soundPath = RobloxPathResolver.ouchSoundPath,
+              let backupPath = RobloxPathResolver.backupSoundPath else {
+            return (false, "Roblox.app sounds directory not found.")
+        }
+        
         let fileManager = FileManager.default
-        guard fileManager.fileExists(atPath: backupSoundPath) else {
+        guard fileManager.fileExists(atPath: backupPath) else {
             return (false, "No backup sound found (default sound is already active).")
         }
         
         do {
-            if fileManager.fileExists(atPath: robloxSoundPath) {
-                try fileManager.removeItem(atPath: robloxSoundPath)
+            if fileManager.fileExists(atPath: soundPath) {
+                try fileManager.removeItem(atPath: soundPath)
             }
-            try fileManager.moveItem(atPath: backupSoundPath, toPath: robloxSoundPath)
+            try fileManager.moveItem(atPath: backupPath, toPath: soundPath)
             return (true, "Restored default Roblox sound.")
         } catch {
             return (false, "Failed to restore: \(error.localizedDescription)")

@@ -3,10 +3,12 @@ import Foundation
 public class MultiInstanceManager {
     public static let shared = MultiInstanceManager()
     
-    public let robloxAppPath = "/Applications/Roblox.app"
+    public var robloxAppPath: String {
+        return RobloxPathResolver.robloxAppPath ?? "/Applications/Roblox.app"
+    }
     
     public var isRobloxInstalled: Bool {
-        return FileManager.default.fileExists(atPath: robloxAppPath)
+        return RobloxPathResolver.isRobloxInstalled
     }
     
     public func getRunningInstances() -> [Int] {
@@ -44,18 +46,18 @@ public class MultiInstanceManager {
                 return max(120, kb / 1024)
             }
         } catch {}
-        return 380
+        return 0
     }
     
     public func launchNewInstance() -> (success: Bool, message: String) {
-        guard isRobloxInstalled else {
-            return (false, "Roblox.app not found in /Applications. Please install official Roblox first.")
+        guard let appPath = RobloxPathResolver.robloxAppPath else {
+            return (false, "Roblox.app not found in /Applications or ~/Applications. Please install official Roblox first.")
         }
         
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/open")
         // -n flag opens a brand new, isolated application instance even if one is already running
-        process.arguments = ["-n", "-a", robloxAppPath]
+        process.arguments = ["-n", "-a", appPath]
         
         do {
             try process.run()

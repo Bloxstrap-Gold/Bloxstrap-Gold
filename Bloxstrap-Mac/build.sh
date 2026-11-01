@@ -13,6 +13,7 @@ mkdir -p "${MACOS_DIR}" "${RESOURCES_DIR}"
 
 swiftc -O \
     "${SCRIPT_DIR}/Sources/AppState.swift" \
+    "${SCRIPT_DIR}/Sources/RobloxPathResolver.swift" \
     "${SCRIPT_DIR}/Sources/FastFlagManager.swift" \
     "${SCRIPT_DIR}/Sources/MultiInstanceManager.swift" \
     "${SCRIPT_DIR}/Sources/SoundManager.swift" \
@@ -30,12 +31,22 @@ if [ -f "${SCRIPT_DIR}/oof.wav" ]; then
     cp "${SCRIPT_DIR}/oof.wav" "${RESOURCES_DIR}/oof.wav"
 fi
 
+if [ -f "${SCRIPT_DIR}/oof.ogg" ]; then
+    cp "${SCRIPT_DIR}/oof.ogg" "${RESOURCES_DIR}/oof.ogg"
+fi
+
 if [ -f "${SCRIPT_DIR}/../Images/Bloxstrap.png" ]; then
     cp "${SCRIPT_DIR}/../Images/Bloxstrap.png" "${RESOURCES_DIR}/Bloxstrap.png"
 fi
 
 if [ -d "${SCRIPT_DIR}/Resources/ui" ]; then
     cp -r "${SCRIPT_DIR}/Resources/ui" "${RESOURCES_DIR}/"
+fi
+
+if [ -d "${SCRIPT_DIR}/../Bloxstrap/Resources/Mods" ]; then
+    echo "📦 Bundling Mods directory (Cursors, Sounds, RBXL)..."
+    rm -rf "${RESOURCES_DIR}/Mods"
+    cp -r "${SCRIPT_DIR}/../Bloxstrap/Resources/Mods" "${RESOURCES_DIR}/Mods"
 fi
 
 if [ -d "${SCRIPT_DIR}/../website" ]; then
