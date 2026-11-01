@@ -554,11 +554,11 @@ public class MainWindowController: NSWindowController, WKNavigationDelegate, WKS
             AppState.shared.deauthenticate()
             pushStateToWeb()
             
-        case "expireTrial":
+        case "resetKey":
             AppState.shared.deauthenticate()
             AppState.shared.setForceExpired(true)
             pushStateToWeb()
-            webView.evaluateJavaScript("window.onTrialExpired && window.onTrialExpired();", completionHandler: nil)
+            webView.evaluateJavaScript("window.onLicenseRequired && window.onLicenseRequired();", completionHandler: nil)
             
         case "closeWindow":
             window?.performClose(nil)

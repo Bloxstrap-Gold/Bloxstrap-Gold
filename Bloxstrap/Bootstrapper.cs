@@ -660,6 +660,44 @@ namespace Bloxstrap
             }
             catch { }
 
+            // If initial process handle exited or was replaced (e.g. launcher spawned child process),
+            // check for any active Roblox processes under AppData.ProcessName.
+            if (!isProcessAlive)
+            {
+                try
+                {
+                    var rbxProcesses = Process.GetProcessesByName(AppData.ProcessName);
+                    if (rbxProcesses.Length > 0 && !rbxProcesses[0].HasExited)
+                    {
+                        isProcessAlive = true;
+                        _appPid = rbxProcesses[0].Id;
+                        App.Logger.WriteLine(LOG_IDENT, $"Found active {AppData.ProcessName} process (PID {_appPid})");
+                    }
+                }
+                catch { }
+            }
+
+            // Give a short grace period if Roblox is still initializing
+            if (!isProcessAlive && String.IsNullOrEmpty(logFileName))
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    Thread.Sleep(500);
+                    try
+                    {
+                        var rbxProcesses = Process.GetProcessesByName(AppData.ProcessName);
+                        if (rbxProcesses.Length > 0 && !rbxProcesses[0].HasExited)
+                        {
+                            isProcessAlive = true;
+                            _appPid = rbxProcesses[0].Id;
+                            App.Logger.WriteLine(LOG_IDENT, $"Found active {AppData.ProcessName} (PID {_appPid}) during grace period");
+                            break;
+                        }
+                    }
+                    catch { }
+                }
+            }
+
             if (String.IsNullOrEmpty(logFileName))
             {
                 if (isProcessAlive)
@@ -834,11 +872,14 @@ namespace Bloxstrap
         {
             const string LOG_IDENT = "Bootstrapper::CheckForUpdates";
             
-            // don't update if there's another instance running (likely running in the background)
-            // i don't like this, but there isn't much better way of doing it /shrug
-            if (Process.GetProcessesByName(App.ProjectName).Length > 1)
+            string currentProcName = Path.GetFileNameWithoutExtension(Paths.Process);
+            int runningInstances = Process.GetProcessesByName(currentProcName).Length;
+            if (!currentProcName.Equals(App.ProjectName, StringComparison.OrdinalIgnoreCase))
+                runningInstances += Process.GetProcessesByName(App.ProjectName).Length;
+
+            if (runningInstances > 1)
             {
-                App.Logger.WriteLine(LOG_IDENT, $"More than one Bloxstrap instance running, aborting update check");
+                App.Logger.WriteLine(LOG_IDENT, $"More than one Bloxstrap instance running ({runningInstances}), aborting update check");
                 return false;
             }
 

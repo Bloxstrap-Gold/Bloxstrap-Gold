@@ -1,4 +1,4 @@
-﻿namespace Bloxstrap
+namespace Bloxstrap
 {
     static class Paths
     {
@@ -40,7 +40,9 @@
             Modifications = Path.Combine(Base, "Modifications");
             CustomThemes = Path.Combine(Base, "CustomThemes");
 
-            Application = Path.Combine(Base, $"{App.ProjectName}.exe");
+            string goldExe = Path.Combine(Base, $"{App.ProjectName}.exe");
+            string standardExe = Path.Combine(Base, "Bloxstrap.exe");
+            Application = File.Exists(goldExe) || !File.Exists(standardExe) ? goldExe : standardExe;
         }
     }
 }

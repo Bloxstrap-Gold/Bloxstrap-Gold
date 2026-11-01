@@ -1,4 +1,4 @@
-﻿using System.Media;
+using System.Media;
 using System.Web;
 using System.Windows;
 using System.Windows.Interop;
@@ -27,7 +27,7 @@ namespace Bloxstrap.UI.Elements.Dialogs
                 LocateLogFileButton.Content = Strings.Dialog_Exception_CopyLogContents;
 
             string repoUrl = $"https://github.com/{App.ProjectRepository}";
-            string wikiUrl = $"https://bloxstraplabs.com/wiki/help/";
+            string wikiUrl = App.ProjectHelpLink;
 
             string title = HttpUtility.UrlEncode($"[BUG] {exception.GetType()}: {exception.Message}");
             string log = HttpUtility.UrlEncode(App.Logger.AsDocument);

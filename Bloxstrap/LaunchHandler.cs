@@ -89,7 +89,7 @@ namespace Bloxstrap
             }
             else
             {
-                // Key gate check: require a valid license key starting with GOLD-7DAY-
+                // Key gate check: require a valid license key starting with GOLD-
                 if (!EnsureAuthenticated())
                 {
                     App.Logger.WriteLine(LOG_IDENT, "Authentication failed or cancelled by user, terminating.");
@@ -217,7 +217,12 @@ namespace Bloxstrap
 
             if (interlock.IsAcquired)
             {
-                bool showAlreadyRunningWarning = Process.GetProcessesByName(App.ProjectName).Length > 1;
+                string currentProcName = Path.GetFileNameWithoutExtension(Paths.Process);
+                int runningInstances = Process.GetProcessesByName(currentProcName).Length;
+                if (!currentProcName.Equals(App.ProjectName, StringComparison.OrdinalIgnoreCase))
+                    runningInstances += Process.GetProcessesByName(App.ProjectName).Length;
+
+                bool showAlreadyRunningWarning = runningInstances > 1;
 
                 var window = new UI.Elements.Settings.MainWindow(showAlreadyRunningWarning);
 

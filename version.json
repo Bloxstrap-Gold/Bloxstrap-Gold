@@ -1,16 +1,17 @@
 {
-  "version": "2.11.6",
-  "versionCode": 21106,
-  "releaseName": "Bloxstrap Gold v2.11.6",
+  "version": "2.11.7",
+  "versionCode": 21107,
+  "releaseName": "Bloxstrap Gold v2.11.7",
   "releaseDate": "2026-11-01",
   "changelog": [
-    "Fix settings crash caused by invalid SymbolRegular icon in GoldPage",
-    "Fix update check redirecting and downloading standard Bloxstrap",
-    "Ensure release update only downloads matching .exe executables",
-    "Fix duplicate process collision when launching Roblox on Windows",
-    "Enable automatic Gold license authentication on browser launch"
+    "Fix Roblox startup child process detection and launch grace period",
+    "Support backwards-compatible executable resolution for Bloxstrap Gold and Bloxstrap",
+    "Brand all Windows dialogs, titlebars, and headers to Bloxstrap Gold",
+    "Unlock FastFlag Editor for all users without requiring Studio",
+    "Update all repository, help, and issue reporting links to Bloxstrap Gold",
+    "Purge emojis and streamline VIP license activation"
   ],
   "downloadUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/latest",
-  "directWindowsUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.6/Bloxstrap.exe",
-  "directMacUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.6/BloxstrapGold-macOS.dmg"
+  "directWindowsUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.7/Bloxstrap.exe",
+  "directMacUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.7/BloxstrapGold-macOS.dmg"
 }

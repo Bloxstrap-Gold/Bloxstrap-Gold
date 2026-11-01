@@ -20,7 +20,7 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
         public bool IsPaymentIgnored => App.State.Prop.IsPaymentIgnored;
 
-        public string CurrentLicenseKey => App.State.Prop.GoldLicenseKey ?? "GOLD-7DAY-ULTRA-DEMO-KEY";
+        public string CurrentLicenseKey => App.State.Prop.GoldLicenseKey ?? "GOLD-ULTRA-PERPETUAL-ACCESS";
 
         public string CurrentTierName => App.State.Prop.GoldTier ?? "Gold ULTRA";
 
