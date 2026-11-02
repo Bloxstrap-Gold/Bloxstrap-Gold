@@ -188,7 +188,7 @@ namespace Bloxstrap
                 if (manifest is not null && !string.IsNullOrEmpty(manifest.Version))
                 {
                     string tag = manifest.Version.StartsWith('v') ? manifest.Version : $"v{manifest.Version}";
-                    string winUrl = manifest.DirectWindowsUrl ?? $"https://github.com/{ProjectRepository}/releases/download/{tag}/Bloxstrap.exe";
+                    string winUrl = manifest.DirectWindowsUrl ?? $"https://github.com/{ProjectRepository}/releases/download/{tag}/BloxstrapGold.exe";
 
                     Logger.WriteLine(LOG_IDENT, $"Retrieved update info via repository version.json: {tag}");
 
@@ -308,7 +308,7 @@ namespace Bloxstrap
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            HttpClient.Timeout = TimeSpan.FromSeconds(30);
+            HttpClient.Timeout = TimeSpan.FromSeconds(120);
             HttpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
 
             LaunchSettings = new LaunchSettings(e.Args);

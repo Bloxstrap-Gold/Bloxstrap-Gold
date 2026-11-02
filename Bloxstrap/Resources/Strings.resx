@@ -817,7 +817,7 @@ Selecting 'No' will ignore this warning and continue installation.</value>
     <value>The entry for '{0}' is not valid as the place filter is not formatted correctly.</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
-    <value>Bloxstrap Installer</value>
+    <value>Bloxstrap Gold Installer</value>
   </data>
   <data name="Installer.Welcome.Title" xml:space="preserve">
     <value>Welcome</value>
@@ -836,18 +836,18 @@ Selecting 'No' will ignore this warning and continue installation.</value>
     <value>Next</value>
   </data>
   <data name="Installer.Welcome.MainText" xml:space="preserve">
-    <value>Thank you for downloading Bloxstrap. 
+    <value>Thank you for downloading Bloxstrap Gold. 
 
-The only official websites to download Bloxstrap from are {0} and {1}, so please verify that you got it from an official source.
+The official repository to download Bloxstrap Gold from is {0}, so please verify that you got it from an official source.
 
-This installation process will be quick and simple, and you will be able to configure any of Bloxstrap's settings after installation.</value>
+This installation process will be quick and simple, and you will be able to configure any of Bloxstrap Gold's settings after installation.</value>
     <comment>{0} and {1} are URLs</comment>
   </data>
   <data name="Installer.Welcome.NextToContinue" xml:space="preserve">
     <value>Please click 'Next' to continue.</value>
   </data>
   <data name="Installer.Welcome.UpdateNotice" xml:space="preserve">
-    <value>You are trying to install version {0} of Bloxstrap, but the latest version available is {1}. Would you like to download it?</value>
+    <value>You are trying to install version {0} of Bloxstrap Gold, but the latest version available is {1}. Would you like to download it?</value>
   </data>
   <data name="Installer.Install.Location.Title" xml:space="preserve">
     <value>Choose where to install to</value>
@@ -868,16 +868,16 @@ This installation process will be quick and simple, and you will be able to conf
     <value>Start Menu icon</value>
   </data>
   <data name="Installer.Completion.Text" xml:space="preserve">
-    <value>Bloxstrap has successfully been installed.
+    <value>Bloxstrap Gold has successfully been installed.
 
-Roblox has not yet been installed, that will happen when you launch it with Bloxstrap for the first time. However, before you do that, you may want to configure Bloxstrap's settings first.
+Roblox has not yet been installed, that will happen when you launch it with Bloxstrap Gold for the first time. However, before you do that, you may want to configure Bloxstrap Gold's settings first.
 
-Also, avoid using the "Roblox Player" shortcut to launch Roblox, as Bloxstrap won't launch with Roblox. If you don't see Bloxstrap show when launching from the website, simply launch Roblox with Bloxstrap once from the desktop to fix it.
+Also, avoid using the "Roblox Player" shortcut to launch Roblox, as Bloxstrap Gold won't launch with Roblox. If you don't see Bloxstrap Gold show when launching from the website, simply launch Roblox with Bloxstrap Gold once from the desktop to fix it.
 
 What would you like to do?</value>
   </data>
   <data name="Installer.Completion.Settings.Title" xml:space="preserve">
-    <value>Configure Bloxstrap's settings</value>
+    <value>Configure Bloxstrap Gold settings</value>
   </data>
   <data name="Installer.Completion.Settings.Description" xml:space="preserve">
     <value>Tweak with all the features it has to offer</value>

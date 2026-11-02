@@ -88,7 +88,7 @@ namespace Bloxstrap.UI.Elements.Dialogs
                 return;
             }
 
-            string tierName = "Gold VIP Trial";
+            string tierName = "Gold VIP";
             if (key.Contains("-ULTRA-"))
                 tierName = "Gold ULTRA";
             else if (key.Contains("-DELUXE-"))

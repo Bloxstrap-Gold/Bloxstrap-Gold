@@ -71,9 +71,9 @@ cat << 'EOF' > "${CONTENTS_DIR}/Info.plist"
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>2.11.7</string>
+    <string>2.11.8</string>
     <key>CFBundleVersion</key>
-    <string>2.11.7</string>
+    <string>2.11.8</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>CFBundleURLTypes</key>

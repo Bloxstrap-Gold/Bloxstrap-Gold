@@ -68,15 +68,9 @@ namespace Bloxstrap.UI.ViewModels.Settings
 
         public bool IsTrialExpired => !IsPaymentIgnored && (DaysRemaining == 0 || App.State.Prop.ForceGoldTrialExpired);
 
-        public string TrialStatusText
-        {
-            get
-            {
-                return $"Active Tier: {CurrentTierName} • Lifetime Authenticated";
-            }
-        }
+        public string ActivationStatusText => $"Active Tier: {CurrentTierName} • Lifetime Authenticated";
 
-        public string TrialBadgeText => CurrentTierBadge;
+        public string ActivationBadgeText => CurrentTierBadge;
 
         public bool MultiInstanceEnabled
         {
@@ -140,8 +134,8 @@ namespace Bloxstrap.UI.ViewModels.Settings
             OnPropertyChanged(nameof(CurrentTierPrice));
             OnPropertyChanged(nameof(DaysRemaining));
             OnPropertyChanged(nameof(IsTrialExpired));
-            OnPropertyChanged(nameof(TrialStatusText));
-            OnPropertyChanged(nameof(TrialBadgeText));
+            OnPropertyChanged(nameof(ActivationStatusText));
+            OnPropertyChanged(nameof(ActivationBadgeText));
             OnPropertyChanged(nameof(RunningRobloxCount));
             OnPropertyChanged(nameof(IsMutexHeld));
             OnPropertyChanged(nameof(MutexStatusText));

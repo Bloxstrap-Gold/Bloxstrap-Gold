@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using Microsoft.Win32;
 
 namespace Bloxstrap
@@ -51,6 +51,12 @@ namespace Bloxstrap
                 try
                 {
                     File.Copy(Paths.Process, Paths.Application, true);
+
+                    string altExe = Path.Combine(Paths.Base, "Bloxstrap.exe");
+                    if (!String.Equals(Paths.Application, altExe, StringComparison.OrdinalIgnoreCase))
+                    {
+                        try { File.Copy(Paths.Process, altExe, true); } catch { }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -424,6 +430,12 @@ namespace Bloxstrap
                 try
                 {
                     File.Copy(Paths.Process, Paths.Application, true);
+
+                    string altExe = Path.Combine(Paths.Base, "Bloxstrap.exe");
+                    if (!String.Equals(Paths.Application, altExe, StringComparison.OrdinalIgnoreCase))
+                    {
+                        try { File.Copy(Paths.Process, altExe, true); } catch { }
+                    }
                     break;
                 }
                 catch (Exception ex)

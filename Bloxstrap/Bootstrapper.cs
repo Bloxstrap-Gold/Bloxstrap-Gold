@@ -919,7 +919,8 @@ namespace Bloxstrap
 
                 File.Copy(Paths.Process, downloadLocation, true);
 #else
-                var asset = releaseInfo.Assets?.FirstOrDefault(x => x.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                var asset = releaseInfo.Assets?.FirstOrDefault(x => x.Name.Equals("BloxstrapGold.exe", StringComparison.OrdinalIgnoreCase))
+                    ?? releaseInfo.Assets?.FirstOrDefault(x => x.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
                     ?? releaseInfo.Assets?[0];
 
                 if (asset is null)

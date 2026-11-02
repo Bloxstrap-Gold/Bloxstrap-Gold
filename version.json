@@ -1,17 +1,16 @@
 {
-  "version": "2.11.7",
-  "versionCode": 21107,
-  "releaseName": "Bloxstrap Gold v2.11.7",
-  "releaseDate": "2026-11-01",
+  "version": "2.11.8",
+  "versionCode": 21108,
+  "releaseName": "Bloxstrap Gold v2.11.8",
+  "releaseDate": "2026-11-02",
   "changelog": [
-    "Fix Roblox startup child process detection and launch grace period",
-    "Support backwards-compatible executable resolution for Bloxstrap Gold and Bloxstrap",
-    "Brand all Windows dialogs, titlebars, and headers to Bloxstrap Gold",
-    "Unlock FastFlag Editor for all users without requiring Studio",
-    "Update all repository, help, and issue reporting links to Bloxstrap Gold",
-    "Purge emojis and streamline VIP license activation"
+    "Standalone self-contained Windows executable (BloxstrapGold.exe) requiring zero runtime dependencies",
+    "Dual binary release (BloxstrapGold.exe and Bloxstrap.exe) for maximum compatibility",
+    "Complete Bloxstrap Gold installer rebranding and updated official repository URLs",
+    "Enhanced HTTP client timeouts to guarantee smooth update asset downloads on all networks",
+    "Refined UI license status and streamlined key activation"
   ],
   "downloadUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/latest",
-  "directWindowsUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.7/Bloxstrap.exe",
-  "directMacUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.7/BloxstrapGold-macOS.dmg"
+  "directWindowsUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.8/BloxstrapGold.exe",
+  "directMacUrl": "https://github.com/Bloxstrap-Gold/Bloxstrap-Gold/releases/download/v2.11.8/BloxstrapGold-macOS.dmg"
 }

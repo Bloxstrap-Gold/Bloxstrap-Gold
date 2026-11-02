@@ -41,7 +41,7 @@
                                     <TextBlock Text="{Binding CurrentTierBadge}" FontSize="10" FontWeight="Bold" Foreground="{StaticResource GoldLightBrush}" />
                                 </Border>
                             </StackPanel>
-                            <TextBlock Text="{Binding TrialStatusText}" FontSize="13" Foreground="{StaticResource GoldLightBrush}" Margin="0,3,0,0" />
+                            <TextBlock Text="{Binding ActivationStatusText}" FontSize="13" Foreground="{StaticResource GoldLightBrush}" Margin="0,3,0,0" />
                         </StackPanel>
                     </StackPanel>
 

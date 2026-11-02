@@ -23,15 +23,24 @@ jobs:
     - name: Build
       run: dotnet build -c Release --no-restore
 
-    - name: Publish
-      run: dotnet publish -p:PublishSingleFile=true -p:CommitHash=${{ github.sha }} -p:CommitRef=${{ github.ref_type }}/${{ github.ref_name }} -r win-x64 -c Release --self-contained false .\Bloxstrap\Bloxstrap.csproj
+    - name: Publish (Self-Contained)
+      run: dotnet publish -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:CommitHash=${{ github.sha }} -p:CommitRef=${{ github.ref_type }}/${{ github.ref_name }} -r win-x64 -c Release --self-contained true -o publish-selfcontained .\Bloxstrap\Bloxstrap.csproj
+
+    - name: Publish (Framework-Dependent)
+      run: dotnet publish -p:PublishSingleFile=true -p:CommitHash=${{ github.sha }} -p:CommitRef=${{ github.ref_type }}/${{ github.ref_name }} -r win-x64 -c Release --self-contained false -o publish .\Bloxstrap\Bloxstrap.csproj
 
     - name: Upload Artifact
       id: upload-artifact
       uses: actions/upload-artifact@v7
       with:
         name: Bloxstrap (Release) (${{ github.sha }})
-        path: .\Bloxstrap\bin\Release\net6.0-windows\win-x64\publish\*
+        path: publish\*
+
+    - name: Upload Self-Contained Artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: BloxstrapGold-SelfContained (${{ github.sha }})
+        path: publish-selfcontained\*
 
   release:
     needs: build
@@ -47,10 +56,19 @@ jobs:
           name: Bloxstrap (Release) (${{ github.sha }})
           path: publish
 
+      - name: Download Self-Contained Artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: BloxstrapGold-SelfContained (${{ github.sha }})
+          path: publish-selfcontained
+
       - name: Prepare Binaries
         shell: pwsh
         run: |
+          Copy-Item "publish-selfcontained\Bloxstrap.exe" "BloxstrapGold.exe"
+          Copy-Item "publish-selfcontained\Bloxstrap.exe" "BloxstrapGold-Setup.exe"
           Copy-Item "publish\Bloxstrap.exe" "Bloxstrap.exe"
+          Compress-Archive -Path "publish-selfcontained\Bloxstrap.exe" -DestinationPath "BloxstrapGold-Windows.zip"
           Compress-Archive -Path "publish\Bloxstrap.exe" -DestinationPath "Bloxstrap-${{ github.ref_name }}-Windows.zip"
 
       - name: Create / Update GitHub Release
@@ -58,6 +76,9 @@ jobs:
         with:
           draft: false
           files: |
+            BloxstrapGold.exe
+            BloxstrapGold-Setup.exe
+            BloxstrapGold-Windows.zip
             Bloxstrap.exe
             Bloxstrap-${{ github.ref_name }}-Windows.zip
           name: Bloxstrap Gold ${{ github.ref_name }}
